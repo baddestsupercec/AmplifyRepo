@@ -14,6 +14,12 @@
     "categories": {
       "auth": {
         "amplifyrepo595ced64": {}
+      },
+      "api": {
+        "amplifyrepo": {}
+      },
+      "storage": {
+        "s32af0184c": {}
       }
     }
   }
