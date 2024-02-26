@@ -18,19 +18,23 @@ import {
 } from "./graphql/mutations";
 import { generateClient } from 'aws-amplify/api';
 import { uploadData, getUrl, remove } from 'aws-amplify/storage';
-
+import { getCurrentUser } from 'aws-amplify/auth';
+var user;
 const client = generateClient();
 
 const App = ({ signOut }) => {
   const [notes, setNotes] = useState([]);
-
   useEffect(() => {
     fetchNotes();
   }, []);
-
+  async function currentAuthenticatedUser() {
+      const {username} = await getCurrentUser();
+      user = username;
+  }
   async function fetchNotes() {
+    await currentAuthenticatedUser();
     const apiData = await client.graphql({ query: listNotes });
-    const notesFromAPI = apiData.data.listNotes.items;
+    var notesFromAPI = apiData.data.listNotes.items;
     await Promise.all(
       notesFromAPI.map(async (note) => {
         if (note.image) {
@@ -40,6 +44,7 @@ const App = ({ signOut }) => {
         return note;
       })
     );
+    notesFromAPI = notesFromAPI.filter(note => note.username === user);
     setNotes(notesFromAPI);
   }
 
@@ -47,10 +52,12 @@ const App = ({ signOut }) => {
     event.preventDefault();
     const form = new FormData(event.target);
     const image = form.get("image");
+    console.log("USER: " + user)
     const data = {
       name: form.get("name"),
       description: form.get("description"),
       image: image.name,
+      username: user,
     };
     if (!!data.image) await uploadData({
       key: data.name,
@@ -119,6 +126,9 @@ const App = ({ signOut }) => {
               {note.name}
             </Text>
             <Text as="span">{note.description}</Text>
+            <Text as="span">{note.username}</Text>
+            <Text as="span">{new Date(note.createdAt).toLocaleString()}</Text>
+            
             {note.image && (
               <Image
                 src={note.image}
