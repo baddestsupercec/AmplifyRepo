@@ -4,8 +4,16 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { Amplify } from 'aws-amplify';
-import config from './aws-exports';
-Amplify.configure(config);
+Amplify.configure({
+  API: {
+    GraphQL: {
+      endpoint: 'https://a2qcsfn6bfdoxnfnvjvs5jgl7e.appsync-api.us-east-2.amazonaws.com/graphql',
+      region: 'us-east-2',
+      defaultAuthMode: 'apiKey',
+      apiKey: 'da2-ldutb*********************'
+    }
+  }
+});
 
 
 const root = ReactDOM.createRoot(document.getElementById('root'));

@@ -9,3 +9,10 @@ type Note @model @auth(rules: [ { allow: public } ] ){
   image: String
   username: String
 }
+
+type sensorDataTable @model @auth(rules: [ { allow: public } ] ){
+  sensorID: String!
+  dateTime: String!
+  plantID: String
+  data: Float
+}
