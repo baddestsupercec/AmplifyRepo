@@ -19,8 +19,14 @@ import {
 import { generateClient } from 'aws-amplify/api';
 import { uploadData, getUrl, remove } from 'aws-amplify/storage';
 import { getCurrentUser } from 'aws-amplify/auth';
+import GaugeChart from 'react-gauge-chart'
 var user;
 const client = generateClient();
+
+const chartStyle = {
+    height: '100%',
+    width: '100%',
+}
 
 const App = ({ signOut }) => {
   const [notes, setNotes] = useState([]);
@@ -113,6 +119,32 @@ const App = ({ signOut }) => {
           </Button>
         </Flex>
       </View>
+      <Flex direction="row" justifyContent="left">
+        <View style={{
+            flexDirection: 'row',
+            height: 300,
+            paddingTop: 80,
+            width: 300,
+            marginLeft:50,
+        }}>
+        <Heading level={2} width={300}>pH</Heading>
+        <GaugeChart 
+            id="ph-chart1" 
+            style={chartStyle} 
+            hideText='True'
+            percent='0.1'
+            justifyContent='left'/>
+        </View>
+        <View style={{
+            flexDirection: 'row',
+            height: 300,
+            paddingTop: 80,
+            width: 300,
+        }}>
+        <Heading level={2} width={300}>Temperature</Heading>
+        <GaugeChart id="temperature-chart1" style={chartStyle} hideText='True'/>
+        </View>
+      </Flex>
       <Heading level={2}>Plant Data</Heading>
       <View margin="3rem 0">
         {notes.map((note) => (
