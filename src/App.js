@@ -83,21 +83,21 @@ const App = ({ signOut }) => {
 
   return (
     <View className="App">
-      <Heading level={1}>My Notes App with CI/CD</Heading>
+      <Heading level={1}>Nature Nanny</Heading>
       <View as="form" margin="3rem 0" onSubmit={createNote}>
         <Flex direction="row" justifyContent="center">
           <TextField
             name="name"
-            placeholder="Note Name"
-            label="Note Name"
+            placeholder="Plant Name"
+            label="Plant Name"
             labelHidden
             variation="quiet"
             required
           />
           <TextField
             name="description"
-            placeholder="Note Description"
-            label="Note Description"
+            placeholder="Plant Description"
+            label="Plant Description"
             labelHidden
             variation="quiet"
             required
@@ -109,11 +109,11 @@ const App = ({ signOut }) => {
             style={{ alignSelf: "end" }}
           />
           <Button type="submit" variation="primary">
-            Create Note
+            Upload Plant
           </Button>
         </Flex>
       </View>
-      <Heading level={2}>Current Notes</Heading>
+      <Heading level={2}>Plant Data</Heading>
       <View margin="3rem 0">
         {notes.map((note) => (
           <Flex
@@ -137,7 +137,7 @@ const App = ({ signOut }) => {
               />
             )}
             <Button variation="link" onClick={() => deleteNote(note)}>
-              Delete note
+              Delete Plant
             </Button>
           </Flex>
         ))}
