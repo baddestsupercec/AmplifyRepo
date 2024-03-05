@@ -21,8 +21,8 @@ import { uploadData, getUrl, remove } from 'aws-amplify/storage';
 import { getCurrentUser } from 'aws-amplify/auth';
 import GaugeChart from 'react-gauge-chart'
 var user;
-var tempPercent = "0";
-var pHPercent = "0";
+var tempPercent = 0;
+var pHPercent = 0;
 const client = generateClient();
 
 const chartStyle = {
@@ -53,7 +53,36 @@ const App = ({ signOut }) => {
       })
     );
     notesFromAPI = notesFromAPI.filter(note => note.username === user);
-    
+    var pHCount = 0;
+    var pHSum = 0;
+    var tempCount = 0;
+    var tempSum = 0;
+    var maxpH = 7.5
+    var maxTemp = 75;
+    await Promise.all(
+      notesFromAPI.map(async (note) => {
+        if (note.pH) {
+          pHCount++;
+          pHSum+=note.pH;
+        }
+        return note;
+      })
+    );
+    pHPercent = ((pHSum/pHCount))/maxpH;
+    await Promise.all(
+      notesFromAPI.map(async (note) => {
+        if (note.temperature) {
+          tempCount++;
+          console.log("TC: " + tempCount)
+          tempSum+=note.temperature;
+        }
+        return note;
+      })
+    );
+    tempPercent = ((tempSum/tempCount))/maxTemp;
+    console.log("TEMP: "+tempPercent);
+    console.log("pH: "+pHPercent);
+
 
     setNotes(notesFromAPI);
   }
@@ -67,7 +96,7 @@ const App = ({ signOut }) => {
       name: form.get("name"),
       description: form.get("description"),
       pH: form.get("pH"),
-      pH: form.get("Temperature"),
+      temperature: form.get("Temperature"),
       image: image.name,
       username: user,
     };
@@ -120,6 +149,7 @@ const App = ({ signOut }) => {
             label="pH"
             labelHidden
             variation="quiet"
+            required
           />
           <TextField
             name="Temperature"
@@ -127,6 +157,7 @@ const App = ({ signOut }) => {
             label="Temperature"
             labelHidden
             variation="quiet"
+            required
           />
           <View
             name="image"
@@ -151,8 +182,7 @@ const App = ({ signOut }) => {
         <GaugeChart 
             id="ph-chart1" 
             style={chartStyle} 
-            hideText='True'
-            percent='0.1'
+            percent={Number(pHPercent)}
             justifyContent='left'/>
         </View>
         <View style={{
@@ -162,7 +192,7 @@ const App = ({ signOut }) => {
             width: 300,
         }}>
         <Heading level={2} width={300}>Temperature</Heading>
-        <GaugeChart id="temperature-chart1" style={chartStyle} hideText='True' percent='0.8'/>
+        <GaugeChart id="temperature-chart1" style={chartStyle} hideText='True' percent={Number(tempPercent)}/>
         </View>
       </Flex>
       <Heading level={2}>Plant Data</Heading>
