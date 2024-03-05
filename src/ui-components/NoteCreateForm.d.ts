@@ -26,12 +26,16 @@ export declare type NoteCreateFormInputValues = {
     description?: string;
     image?: string;
     username?: string;
+    pH?: number;
+    temperature?: number;
 };
 export declare type NoteCreateFormValidationValues = {
     name?: ValidationFunction<string>;
     description?: ValidationFunction<string>;
     image?: ValidationFunction<string>;
     username?: ValidationFunction<string>;
+    pH?: ValidationFunction<number>;
+    temperature?: ValidationFunction<number>;
 };
 export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
 export declare type NoteCreateFormOverridesProps = {
@@ -40,6 +44,8 @@ export declare type NoteCreateFormOverridesProps = {
     description?: PrimitiveOverrideProps<TextFieldProps>;
     image?: PrimitiveOverrideProps<TextFieldProps>;
     username?: PrimitiveOverrideProps<TextFieldProps>;
+    pH?: PrimitiveOverrideProps<TextFieldProps>;
+    temperature?: PrimitiveOverrideProps<TextFieldProps>;
 } & EscapeHatchProps;
 export declare type NoteCreateFormProps = React.PropsWithChildren<{
     overrides?: NoteCreateFormOverridesProps | undefined | null;

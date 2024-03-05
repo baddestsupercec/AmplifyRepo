@@ -21,6 +21,8 @@ import { uploadData, getUrl, remove } from 'aws-amplify/storage';
 import { getCurrentUser } from 'aws-amplify/auth';
 import GaugeChart from 'react-gauge-chart'
 var user;
+var tempPercent = "0";
+var pHPercent = "0";
 const client = generateClient();
 
 const chartStyle = {
@@ -51,6 +53,8 @@ const App = ({ signOut }) => {
       })
     );
     notesFromAPI = notesFromAPI.filter(note => note.username === user);
+    
+
     setNotes(notesFromAPI);
   }
 
@@ -62,6 +66,8 @@ const App = ({ signOut }) => {
     const data = {
       name: form.get("name"),
       description: form.get("description"),
+      pH: form.get("pH"),
+      pH: form.get("Temperature"),
       image: image.name,
       username: user,
     };
@@ -108,6 +114,20 @@ const App = ({ signOut }) => {
             variation="quiet"
             required
           />
+          <TextField
+            name="pH"
+            placeholder="pH"
+            label="pH"
+            labelHidden
+            variation="quiet"
+          />
+          <TextField
+            name="Temperature"
+            placeholder="Temperature"
+            label="Temperature"
+            labelHidden
+            variation="quiet"
+          />
           <View
             name="image"
             as="input"
@@ -142,7 +162,7 @@ const App = ({ signOut }) => {
             width: 300,
         }}>
         <Heading level={2} width={300}>Temperature</Heading>
-        <GaugeChart id="temperature-chart1" style={chartStyle} hideText='True'/>
+        <GaugeChart id="temperature-chart1" style={chartStyle} hideText='True' percent='0.8'/>
         </View>
       </Flex>
       <Heading level={2}>Plant Data</Heading>
@@ -159,6 +179,8 @@ const App = ({ signOut }) => {
             </Text>
             <Text as="span">{note.description}</Text>
             <Text as="span">{note.username}</Text>
+            <Text as="span">{note.pH}</Text>
+            <Text as="span">{note.temperature}</Text>
             <Text as="span">{new Date(note.createdAt).toLocaleString()}</Text>
             
             {note.image && (

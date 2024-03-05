@@ -9,6 +9,8 @@ export const getNote = /* GraphQL */ `
       description
       image
       username
+      pH
+      temperature
       createdAt
       updatedAt
       __typename
@@ -28,6 +30,8 @@ export const listNotes = /* GraphQL */ `
         description
         image
         username
+        pH
+        temperature
         createdAt
         updatedAt
         __typename

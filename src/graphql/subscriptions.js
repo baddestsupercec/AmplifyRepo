@@ -9,6 +9,8 @@ export const onCreateNote = /* GraphQL */ `
       description
       image
       username
+      pH
+      temperature
       createdAt
       updatedAt
       __typename
@@ -23,6 +25,8 @@ export const onUpdateNote = /* GraphQL */ `
       description
       image
       username
+      pH
+      temperature
       createdAt
       updatedAt
       __typename
@@ -37,6 +41,8 @@ export const onDeleteNote = /* GraphQL */ `
       description
       image
       username
+      pH
+      temperature
       createdAt
       updatedAt
       __typename

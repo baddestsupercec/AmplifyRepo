@@ -29,6 +29,8 @@ export default function NoteUpdateForm(props) {
     description: "",
     image: "",
     username: "",
+    pH: "",
+    temperature: "",
   };
   const [name, setName] = React.useState(initialValues.name);
   const [description, setDescription] = React.useState(
@@ -36,6 +38,10 @@ export default function NoteUpdateForm(props) {
   );
   const [image, setImage] = React.useState(initialValues.image);
   const [username, setUsername] = React.useState(initialValues.username);
+  const [pH, setPH] = React.useState(initialValues.pH);
+  const [temperature, setTemperature] = React.useState(
+    initialValues.temperature
+  );
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
     const cleanValues = noteRecord
@@ -45,6 +51,8 @@ export default function NoteUpdateForm(props) {
     setDescription(cleanValues.description);
     setImage(cleanValues.image);
     setUsername(cleanValues.username);
+    setPH(cleanValues.pH);
+    setTemperature(cleanValues.temperature);
     setErrors({});
   };
   const [noteRecord, setNoteRecord] = React.useState(noteModelProp);
@@ -68,6 +76,8 @@ export default function NoteUpdateForm(props) {
     description: [],
     image: [],
     username: [],
+    pH: [],
+    temperature: [],
   };
   const runValidationTasks = async (
     fieldName,
@@ -99,6 +109,8 @@ export default function NoteUpdateForm(props) {
           description: description ?? null,
           image: image ?? null,
           username: username ?? null,
+          pH: pH ?? null,
+          temperature: temperature ?? null,
         };
         const validationResponses = await Promise.all(
           Object.keys(validations).reduce((promises, fieldName) => {
@@ -163,6 +175,8 @@ export default function NoteUpdateForm(props) {
               description,
               image,
               username,
+              pH,
+              temperature,
             };
             const result = onChange(modelFields);
             value = result?.name ?? value;
@@ -190,6 +204,8 @@ export default function NoteUpdateForm(props) {
               description: value,
               image,
               username,
+              pH,
+              temperature,
             };
             const result = onChange(modelFields);
             value = result?.description ?? value;
@@ -217,6 +233,8 @@ export default function NoteUpdateForm(props) {
               description,
               image: value,
               username,
+              pH,
+              temperature,
             };
             const result = onChange(modelFields);
             value = result?.image ?? value;
@@ -244,6 +262,8 @@ export default function NoteUpdateForm(props) {
               description,
               image,
               username: value,
+              pH,
+              temperature,
             };
             const result = onChange(modelFields);
             value = result?.username ?? value;
@@ -257,6 +277,72 @@ export default function NoteUpdateForm(props) {
         errorMessage={errors.username?.errorMessage}
         hasError={errors.username?.hasError}
         {...getOverrideProps(overrides, "username")}
+      ></TextField>
+      <TextField
+        label="P h"
+        isRequired={false}
+        isReadOnly={false}
+        type="number"
+        step="any"
+        value={pH}
+        onChange={(e) => {
+          let value = isNaN(parseFloat(e.target.value))
+            ? e.target.value
+            : parseFloat(e.target.value);
+          if (onChange) {
+            const modelFields = {
+              name,
+              description,
+              image,
+              username,
+              pH: value,
+              temperature,
+            };
+            const result = onChange(modelFields);
+            value = result?.pH ?? value;
+          }
+          if (errors.pH?.hasError) {
+            runValidationTasks("pH", value);
+          }
+          setPH(value);
+        }}
+        onBlur={() => runValidationTasks("pH", pH)}
+        errorMessage={errors.pH?.errorMessage}
+        hasError={errors.pH?.hasError}
+        {...getOverrideProps(overrides, "pH")}
+      ></TextField>
+      <TextField
+        label="Temperature"
+        isRequired={false}
+        isReadOnly={false}
+        type="number"
+        step="any"
+        value={temperature}
+        onChange={(e) => {
+          let value = isNaN(parseFloat(e.target.value))
+            ? e.target.value
+            : parseFloat(e.target.value);
+          if (onChange) {
+            const modelFields = {
+              name,
+              description,
+              image,
+              username,
+              pH,
+              temperature: value,
+            };
+            const result = onChange(modelFields);
+            value = result?.temperature ?? value;
+          }
+          if (errors.temperature?.hasError) {
+            runValidationTasks("temperature", value);
+          }
+          setTemperature(value);
+        }}
+        onBlur={() => runValidationTasks("temperature", temperature)}
+        errorMessage={errors.temperature?.errorMessage}
+        hasError={errors.temperature?.hasError}
+        {...getOverrideProps(overrides, "temperature")}
       ></TextField>
       <Flex
         justifyContent="space-between"
