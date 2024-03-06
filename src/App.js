@@ -20,6 +20,11 @@ import { generateClient } from 'aws-amplify/api';
 import { uploadData, getUrl, remove } from 'aws-amplify/storage';
 import { getCurrentUser } from 'aws-amplify/auth';
 import GaugeChart from 'react-gauge-chart'
+import Chart from "chart.js/auto";
+import { CategoryScale } from "chart.js";
+import { Line } from "react-chartjs-2";
+
+const labels = ["January", "February", "March", "April", "May", "June"];
 var user;
 var tempPercent = 0;
 var pHPercent = 0;
@@ -29,6 +34,18 @@ const chartStyle = {
     height: '100%',
     width: '100%',
 }
+
+const chartData = {
+  labels: labels,
+  datasets: [
+    {
+      label: "Plant Chart Test",
+      backgroundColor: "rgb(255, 99, 132)",
+      borderColor: "rgb(255, 99, 132)",
+      data: [0, 10, 5, 2, 20, 30, 45],
+    },
+  ],
+};
 
 const App = ({ signOut }) => {
   const [notes, setNotes] = useState([]);
@@ -122,6 +139,16 @@ const App = ({ signOut }) => {
     });
   }
 
+  const LineChart = () => {
+    return (
+      <div>
+        <Line data={chartData} 
+        width={"30%"}
+        options={{ maintainAspectRatio: false }}/>
+      </div>
+    );
+  };
+
   return (
     <View className="App">
       <Heading level={1}>Nature Nanny</Heading>
@@ -197,6 +224,7 @@ const App = ({ signOut }) => {
       </Flex>
       <Heading level={2}>Plant Data</Heading>
       <View margin="3rem 0">
+      {LineChart()}
         {notes.map((note) => (
           <Flex
             key={note.id || note.name}
