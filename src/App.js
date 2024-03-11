@@ -24,7 +24,9 @@ import Chart from "chart.js/auto";
 import { CategoryScale } from "chart.js";
 import { Line } from "react-chartjs-2";
 
-const labels = ["January", "February", "March", "April", "May", "June"];
+var labels = [];
+var chartPHData = [];
+var chartTempData = [];
 var user;
 var tempPercent = 0;
 var pHPercent = 0;
@@ -42,7 +44,7 @@ const chartData = {
       label: "Plant Chart Test",
       backgroundColor: "rgb(255, 99, 132)",
       borderColor: "rgb(255, 99, 132)",
-      data: [0, 10, 5, 2, 20, 30, 45],
+      data: chartTempData,
     },
   ],
 };
@@ -76,29 +78,35 @@ const App = ({ signOut }) => {
     var tempSum = 0;
     var maxpH = 7.5
     var maxTemp = 75;
+    //chartPHData = [];
+    //chartTempData = [];
+    //console.log("clear")
     await Promise.all(
       notesFromAPI.map(async (note) => {
         if (note.pH) {
           pHCount++;
           pHSum+=note.pH;
         }
-        return note;
-      })
-    );
-    pHPercent = ((pHSum/pHCount))/maxpH;
-    await Promise.all(
-      notesFromAPI.map(async (note) => {
         if (note.temperature) {
           tempCount++;
-          console.log("TC: " + tempCount)
+          //console.log("TC: " + tempCount)
+          tempSum+=note.temperature;
+          labels.push(new Date(note.createdAt).toLocaleString());
+          console.log("TEST: " + note.temperature);
+          console.log("TEST2: " + parseFloat(note.temperature));
+          chartTempData.push(parseFloat(note.temperature));
+          tempCount++;
+          //console.log("TC: " + tempCount)
           tempSum+=note.temperature;
         }
         return note;
       })
     );
+    console.log(chartTempData);
+    pHPercent = ((pHSum/pHCount))/maxpH;
     tempPercent = ((tempSum/tempCount))/maxTemp;
-    console.log("TEMP: "+tempPercent);
-    console.log("pH: "+pHPercent);
+    //console.log("TEMP: "+tempPercent);
+    //console.log("pH: "+pHPercent);
 
 
     setNotes(notesFromAPI);
@@ -140,6 +148,7 @@ const App = ({ signOut }) => {
   }
 
   const LineChart = () => {
+    console.log("MAKE CHART");
     return (
       <div>
         <Line data={chartData} 
