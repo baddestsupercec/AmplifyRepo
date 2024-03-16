@@ -72,6 +72,12 @@ const App = ({ signOut }) => {
       })
     );
     notesFromAPI = notesFromAPI.filter(note => note.username === user);
+
+
+    notesFromAPI.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
+
+    console.log(notesFromAPI);
+    
     var pHCount = 0;
     var pHSum = 0;
     var tempCount = 0;
@@ -87,13 +93,13 @@ const App = ({ signOut }) => {
           pHCount++;
           pHSum+=note.pH;
         }
-        if (note.temperature) {
+        if (note.temperature !== undefined && note.temperature !== null) {
           tempCount++;
           //console.log("TC: " + tempCount)
           tempSum+=note.temperature;
           labels.push(new Date(note.createdAt).toLocaleString());
-          console.log("TEST: " + note.temperature);
-          console.log("TEST2: " + parseFloat(note.temperature));
+          //console.log("TEST: " + note.temperature);
+          //console.log("TEST2: " + parseFloat(note.temperature));
           chartTempData.push(parseFloat(note.temperature));
           tempCount++;
           //console.log("TC: " + tempCount)
@@ -102,7 +108,7 @@ const App = ({ signOut }) => {
         return note;
       })
     );
-    console.log(chartTempData);
+    //console.log(chartTempData);
     pHPercent = ((pHSum/pHCount))/maxpH;
     tempPercent = ((tempSum/tempCount))/maxTemp;
     //console.log("TEMP: "+tempPercent);
