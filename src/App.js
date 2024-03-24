@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./App.css";
 import "@aws-amplify/ui-react/styles.css";
+import { useTable } from 'react-table';
 import {
   Button,
   Flex,
@@ -25,29 +26,57 @@ import { CategoryScale } from "chart.js";
 import { Line } from "react-chartjs-2";
 
 var labels = [];
-var chartPHData = [];
+var chartPhData = [];
 var chartTempData = [];
 var user;
 var tempPercent = 0;
 var pHPercent = 0;
 const client = generateClient();
 
+const tableStyle =  {
+  width: '1000px',
+  borderWidth: '1px',
+  borderColor: 'black',
+  borderStyle: 'solid',
+  borderRadius: '10px',
+  borderSpacing: '0px',
+}
+
+const rowStyle =  {
+  borderWidth: '1px',
+  borderStyle: 'solid',
+  borderColor: 'black',
+}
+
 const chartStyle = {
     height: '100%',
     width: '100%',
 }
 
-const chartData = {
+const chartTemperatureData = {
   labels: labels,
   datasets: [
     {
-      label: "Plant Chart Test",
+      label: "Plant Temperature Data",
       backgroundColor: "rgb(255, 99, 132)",
       borderColor: "rgb(255, 99, 132)",
       data: chartTempData,
     },
   ],
 };
+
+const chartPHData = {
+  labels: labels,
+  datasets: [
+    {
+      label: "Plant Ph Data",
+      backgroundColor: "rgb(255, 99, 132)",
+      borderColor: "rgb(255, 99, 132)",
+      data: chartPhData,
+    },
+  ],
+};
+
 
 const App = ({ signOut }) => {
   const [notes, setNotes] = useState([]);
@@ -58,8 +87,41 @@ const App = ({ signOut }) => {
       const {username} = await getCurrentUser();
       user = username;
   }
+
+  const DataRow = ({id,name,description,username,pH,temperature,createdAt}) => 
+  <tr  style = {rowStyle} key={id}>
+    <td style = {rowStyle}>{name}</td>
+    <td style = {rowStyle}>{description}</td>
+    <td style = {rowStyle}>{username}</td>
+    <td style = {rowStyle}>{pH}</td>
+    <td style = {rowStyle}>{temperature}</td>
+    <td style = {rowStyle}>{new Date(createdAt).toLocaleString()}</td>
+  </tr>
+
+const DataTable = () =>
+<div>
+  <h1>Plant Data</h1>
+  <table  style={tableStyle}>
+    <thead>
+      <tr style = {rowStyle}>
+      <th >Plant Name</th>
+      <th >Description</th>
+      <th >Username</th>
+      <th >pH</th>
+      <th >Temperature</th>
+      <th >Date</th>
+      </tr>
+    </thead>
+    <tbody>
+    {console.log(notes)}
+    {notes.slice(0).reverse().map(DataRow)}
+    </tbody>
+  </table>
+</div>
   async function fetchNotes() {
     await currentAuthenticatedUser();
+      //labels = [];
+    //chartTempData = [];
     const apiData = await client.graphql({ query: listNotes });
     var notesFromAPI = apiData.data.listNotes.items;
     await Promise.all(
@@ -76,7 +138,7 @@ const App = ({ signOut }) => {
 
     notesFromAPI.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
 
-    console.log(notesFromAPI);
+   // console.log(notesFromAPI);
     
     var pHCount = 0;
     var pHSum = 0;
@@ -87,11 +149,14 @@ const App = ({ signOut }) => {
     //chartPHData = [];
     //chartTempData = [];
     //console.log("clear")
+    //labels = [];
+    //chartTempData = [];
     await Promise.all(
       notesFromAPI.map(async (note) => {
-        if (note.pH) {
+        if (note.pH !=undefined && note.pH !== null) {
           pHCount++;
           pHSum+=note.pH;
+          chartPhData.push(parseFloat(note.pH));
         }
         if (note.temperature !== undefined && note.temperature !== null) {
           tempCount++;
@@ -111,6 +176,12 @@ const App = ({ signOut }) => {
     //console.log(chartTempData);
     pHPercent = ((pHSum/pHCount))/maxpH;
     tempPercent = ((tempSum/tempCount))/maxTemp;
+    if(pHPercent>1){
+      pHPercent=1;
+    }
+    if(tempPercent>1){
+      tempPercent=1;
+    }
     //console.log("TEMP: "+tempPercent);
     //console.log("pH: "+pHPercent);
 
@@ -153,11 +224,11 @@ const App = ({ signOut }) => {
     });
   }
 
-  const LineChart = () => {
-    console.log("MAKE CHART");
+  const LineChart = (data) => {
+    //console.log("MAKE CHART");
     return (
       <div>
-        <Line data={chartData} 
+        <Line data={data} 
         width={"30%"}
         options={{ maintainAspectRatio: false }}/>
       </div>
@@ -212,7 +283,7 @@ const App = ({ signOut }) => {
           </Button>
         </Flex>
       </View>
-      <Flex direction="row" justifyContent="left">
+      <Flex direction="row" justifyContent="center">
         <View style={{
             flexDirection: 'row',
             height: 300,
@@ -225,7 +296,7 @@ const App = ({ signOut }) => {
             id="ph-chart1" 
             style={chartStyle} 
             percent={Number(pHPercent)}
-            justifyContent='left'/>
+            justifyContent='center'/>
         </View>
         <View style={{
             flexDirection: 'row',
@@ -234,12 +305,16 @@ const App = ({ signOut }) => {
             width: 300,
         }}>
         <Heading level={2} width={300}>Temperature</Heading>
-        <GaugeChart id="temperature-chart1" style={chartStyle} hideText='True' percent={Number(tempPercent)}/>
+        <GaugeChart id="temperature-chart1" style={chartStyle} hideText='True' direction="row" justifyContent="center" percent={Number(tempPercent)}/>
         </View>
       </Flex>
       <Heading level={2}>Plant Data</Heading>
       <View margin="3rem 0">
-      {LineChart()}
+      {LineChart(chartTemperatureData)}
+      {LineChart(chartPHData)}
+      <Flex direction="row" justifyContent="center">
+      {DataTable()}
+      </Flex>
         {notes.map((note) => (
           <Flex
             key={note.id || note.name}
