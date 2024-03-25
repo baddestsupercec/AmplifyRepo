@@ -105,7 +105,6 @@ const App = ({ signOut }) => {
 
 const DataTable = () =>
 <div>
-  <h1>Plant Data</h1>
   <table  style={tableStyle}>
     <thead>
       <tr style = {rowStyle}>
@@ -290,6 +289,9 @@ const DataTable = () =>
         </Flex>
       </View>
       <Flex direction="row" justifyContent="center">
+      <Heading level={2}>Plant Data</Heading>
+      </Flex>
+      <Flex direction="row" justifyContent="center">
         <View style={{
             flexDirection: 'row',
             height: 300,
@@ -302,7 +304,8 @@ const DataTable = () =>
             id="ph-chart1" 
             style={chartStyle} 
             percent={Number(pHPercent)}
-            justifyContent='center'/>
+            justifyContent='center'
+            hideText='True'/>
         </View>
         <View style={{
             flexDirection: 'row',
@@ -314,7 +317,6 @@ const DataTable = () =>
         <GaugeChart id="temperature-chart1" style={chartStyle} hideText='True' direction="row" justifyContent="center" percent={Number(tempPercent)}/>
         </View>
       </Flex>
-      <Heading level={2}>Plant Data</Heading>
       <View margin="3rem 0">
       {LineChart(chartTemperatureData)}
       {LineChart(chartPHData)}
