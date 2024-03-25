@@ -24,6 +24,8 @@ import GaugeChart from 'react-gauge-chart'
 import Chart from "chart.js/auto";
 import { CategoryScale } from "chart.js";
 import { Line } from "react-chartjs-2";
+import styled from 'styled-components';
+import NavBar from './ui-components/NavBar';
 
 var labels = [];
 var chartPhData = [];
@@ -237,7 +239,7 @@ const DataTable = () =>
 
   return (
     <View className="App">
-      <Heading level={1}>Nature Nanny</Heading>
+      <NavBar />
       <View as="form" margin="3rem 0" onSubmit={createNote}>
         <Flex direction="row" justifyContent="center">
           <TextField
