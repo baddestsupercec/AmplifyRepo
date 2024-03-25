@@ -124,8 +124,8 @@ const DataTable = () =>
 </div>
   async function fetchNotes() {
     await currentAuthenticatedUser();
-    labels = [];
-    chartTempData = [];
+    //labels = [];
+    //chartTempData = [];
     const apiData = await client.graphql({ query: listNotes });
     var notesFromAPI = apiData.data.listNotes.items;
     await Promise.all(
