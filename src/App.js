@@ -96,6 +96,9 @@ const App = ({ signOut }) => {
     <td style = {rowStyle}>{pH}</td>
     <td style = {rowStyle}>{temperature}</td>
     <td style = {rowStyle}>{new Date(createdAt).toLocaleString()}</td>
+    <td style = {rowStyle}>{<Button variation="link" onClick={() => deleteNote({id,name})}>
+              Delete Plant
+            </Button>}</td>
   </tr>
 
 const DataTable = () =>
@@ -110,6 +113,7 @@ const DataTable = () =>
       <th >pH</th>
       <th >Temperature</th>
       <th >Date</th>
+      <th >Edit</th>
       </tr>
     </thead>
     <tbody>
@@ -120,8 +124,8 @@ const DataTable = () =>
 </div>
   async function fetchNotes() {
     await currentAuthenticatedUser();
-      //labels = [];
-    //chartTempData = [];
+    labels = [];
+    chartTempData = [];
     const apiData = await client.graphql({ query: listNotes });
     var notesFromAPI = apiData.data.listNotes.items;
     await Promise.all(
@@ -315,34 +319,6 @@ const DataTable = () =>
       <Flex direction="row" justifyContent="center">
       {DataTable()}
       </Flex>
-        {notes.map((note) => (
-          <Flex
-            key={note.id || note.name}
-            direction="row"
-            justifyContent="center"
-            alignItems="center"
-          >
-            <Text as="strong" fontWeight={700}>
-              {note.name}
-            </Text>
-            <Text as="span">{note.description}</Text>
-            <Text as="span">{note.username}</Text>
-            <Text as="span">{note.pH}</Text>
-            <Text as="span">{note.temperature}</Text>
-            <Text as="span">{new Date(note.createdAt).toLocaleString()}</Text>
-            
-            {note.image && (
-              <Image
-                src={note.image}
-                alt={`visual aid for ${notes.name}`}
-                style={{ width: 400 }}
-              />
-            )}
-            <Button variation="link" onClick={() => deleteNote(note)}>
-              Delete Plant
-            </Button>
-          </Flex>
-        ))}
       </View>
       <Button onClick={signOut}>Sign Out</Button>
     </View>
