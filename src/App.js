@@ -24,6 +24,7 @@ import GaugeChart from 'react-gauge-chart'
 import Chart from "chart.js/auto";
 import { CategoryScale } from "chart.js";
 import { Line } from "react-chartjs-2";
+import Select from 'react-select'
 
 var labels = [];
 var chartPhData = [];
@@ -53,36 +54,46 @@ const chartStyle = {
     width: '100%',
 }
 
-const chartTemperatureData = {
-  labels: labels,
-  datasets: [
-    {
-      label: "Plant Temperature Data",
-      backgroundColor: "rgb(255, 99, 132)",
-      borderColor: "rgb(255, 99, 132)",
-      data: chartTempData,
-    },
-  ],
-};
 
-const chartPHData = {
-  labels: labels,
-  datasets: [
-    {
-      label: "Plant Ph Data",
-      backgroundColor: "rgb(255, 99, 132)",
-      borderColor: "rgb(255, 99, 132)",
-      data: chartPhData,
-    },
-  ],
-};
 
 
 const App = ({ signOut }) => {
   const [notes, setNotes] = useState([]);
+  const [filteredDisplayNotes, setFilteredNotes] = useState([]);
+  //const [filteredPlant, setFilter] = useState('All Plants');
+  var filteredPlant = 'All Plants';
+  const [options, setOptions] = useState([
+    { value: 'All Plants', label: 'All Plants' },]);
   useEffect(() => {
     fetchNotes();
   }, []);
+
+
+  
+
+  const chartTemperatureData = {
+    labels: labels,
+    datasets: [
+      {
+        label: "Plant Temperature Data",
+        backgroundColor: "rgb(255, 99, 132)",
+        borderColor: "rgb(255, 99, 132)",
+        data: chartTempData,
+      },
+    ],
+  };
+  
+  const chartPHData = {
+    labels: labels,
+    datasets: [
+      {
+        label: "Plant Ph Data",
+        backgroundColor: "rgb(255, 99, 132)",
+        borderColor: "rgb(255, 99, 132)",
+        data: chartPhData,
+      },
+    ],
+  };
   async function currentAuthenticatedUser() {
       const {username} = await getCurrentUser();
       user = username;
@@ -116,13 +127,25 @@ const DataTable = () =>
       </tr>
     </thead>
     <tbody>
-    {console.log(notes)}
-    {notes.slice(0).reverse().map(DataRow)}
+    {filteredDisplayNotes.slice(0).reverse().map(DataRow)}
     </tbody>
   </table>
 </div>
+
+useEffect(() => {
+  DataTable();
+}, [filteredDisplayNotes]);
+
+
+const selectFilter = (event) => {
+  console.log(event.target.value);
+  filteredPlant = event.target.value;
+  fetchNotes();
+};
+
   async function fetchNotes() {
     await currentAuthenticatedUser();
+    console.log("START FETCH");
     //labels = [];
     //chartTempData = [];
     const apiData = await client.graphql({ query: listNotes });
@@ -141,6 +164,11 @@ const DataTable = () =>
 
     notesFromAPI.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
 
+    var filteredNotes = notesFromAPI;
+    if(filteredPlant != "All Plants"){
+      filteredNotes = notesFromAPI.filter(note => note.name == filteredPlant);
+    }
+
    // console.log(notesFromAPI);
     
     var pHCount = 0;
@@ -152,10 +180,22 @@ const DataTable = () =>
     //chartPHData = [];
     //chartTempData = [];
     //console.log("clear")
-    //labels = [];
-    //chartTempData = [];
+    labels = [];
+    chartTempData = [];
+    var temporaryOptions = [
+      { value: 'All Plants', label: 'All Plants' }];
+    var usedNames = [];
     await Promise.all(
       notesFromAPI.map(async (note) => {
+        if(!usedNames.includes(note.name)){
+          temporaryOptions.push({value: note.name, label: note.name});
+          usedNames.push(note.name);
+        }
+        return note;
+      })
+    );
+    await Promise.all(
+      filteredNotes.map(async (note) => {
         if (note.pH !=undefined && note.pH !== null) {
           pHCount++;
           pHSum+=note.pH;
@@ -187,8 +227,12 @@ const DataTable = () =>
     }
     //console.log("TEMP: "+tempPercent);
     //console.log("pH: "+pHPercent);
+    console.log(options);
 
 
+
+    setOptions(temporaryOptions);
+    setFilteredNotes(filteredNotes)
     setNotes(notesFromAPI);
   }
 
@@ -240,6 +284,15 @@ const DataTable = () =>
 
   return (
     <View className="App">
+      <label> Filter Plants 
+      <select default = "All Plants" onChange = {selectFilter}>
+        {options.map((option, index) => (
+          <option key={index} value={option.value} label = {options.label}>
+            {option.label}
+          </option>
+        ))}
+      </select>
+      </label>
       <Heading level={1}>Nature Nanny</Heading>
       <View as="form" margin="3rem 0" onSubmit={createNote}>
         <Flex direction="row" justifyContent="center">
