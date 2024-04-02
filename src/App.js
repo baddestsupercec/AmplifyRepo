@@ -355,7 +355,8 @@ const selectFilter = (event) => {
             id="ph-chart1" 
             style={chartStyle} 
             percent={Number(pHPercent)}
-            justifyContent='center'/>
+            justifyContent='center'
+            hideText='True'/>
         </View>
         <View style={{
             flexDirection: 'row',
