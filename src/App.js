@@ -269,6 +269,7 @@ const selectFilter = (event) => {
       query: deleteNoteMutation,
       variables: { input: { id } },
     });
+    fetchNotes();
   }
 
   const LineChart = (data) => {
