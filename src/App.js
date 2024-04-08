@@ -32,6 +32,8 @@ var chartTempData = [];
 var user;
 var tempPercent = 0;
 var pHPercent = 0;
+var plantData = [];
+var sickPlants = [];
 const client = generateClient();
 
 const tableStyle =  {
@@ -175,13 +177,16 @@ const selectFilter = (event) => {
     var pHSum = 0;
     var tempCount = 0;
     var tempSum = 0;
-    var maxpH = 7.5
+    var maxpH = 2;
+    var minpH = 0;
+    var minTemp = 20;
     var maxTemp = 75;
     //chartPHData = [];
     //chartTempData = [];
     //console.log("clear")
     labels = [];
     chartTempData = [];
+    sickPlants = [];
     var temporaryOptions = [
       { value: 'All Plants', label: 'All Plants' }];
     var usedNames = [];
@@ -194,12 +199,18 @@ const selectFilter = (event) => {
         return note;
       })
     );
+    plantData = [];
+    usedNames.map(name => {
+      plantData[name] = {pH : 0, temperature: 0, count: 0};
+    })
+    console.log(plantData);
     await Promise.all(
       filteredNotes.map(async (note) => {
         if (note.pH !=undefined && note.pH !== null) {
           pHCount++;
           pHSum+=note.pH;
           chartPhData.push(parseFloat(note.pH));
+          plantData[note.name].pH+=note.pH;
         }
         if (note.temperature !== undefined && note.temperature !== null) {
           tempCount++;
@@ -212,22 +223,42 @@ const selectFilter = (event) => {
           tempCount++;
           //console.log("TC: " + tempCount)
           tempSum+=note.temperature;
+          plantData[note.name].temperature+=note.temperature;
         }
+        plantData[note.name].count++;
         return note;
       })
     );
     //console.log(chartTempData);
-    pHPercent = ((pHSum/pHCount))/maxpH;
-    tempPercent = ((tempSum/tempCount))/maxTemp;
+    pHPercent = ((pHSum/pHCount));
+    pHPercent = .3+(pHPercent-minpH)/(maxpH-minpH)*(.4);
+    tempPercent = ((tempSum/tempCount));
+    tempPercent = .3+(tempPercent-minTemp)/(maxTemp-minTemp)*(.4);
+    console.log("PERCENTS: " + pHPercent + " " +tempPercent);
     if(pHPercent>1){
       pHPercent=1;
     }
     if(tempPercent>1){
       tempPercent=1;
     }
+
+    Object.keys(plantData).forEach(key => {
+      var plant = plantData[key];
+      var localpHPercent = (plant.pH/plant.count);
+      localpHPercent = .3+(localpHPercent-minpH)/(maxpH-minpH)*(.4);
+      var localTempPercent = ((plant.temperature/plant.count));
+      localTempPercent = .3+(localTempPercent-minTemp)/(maxTemp-minTemp)*(.4);
+      console.log(key + " " + localpHPercent + " " + localTempPercent);
+      if((localpHPercent < .3 || localpHPercent > .7) || (localTempPercent < .3 || localTempPercent > .7)){
+        sickPlants.push(key);
+      }
+    })
+
+    console.log(sickPlants);
+
     //console.log("TEMP: "+tempPercent);
     //console.log("pH: "+pHPercent);
-    console.log(options);
+    //console.log(options);
 
 
 
@@ -240,7 +271,7 @@ const selectFilter = (event) => {
     event.preventDefault();
     const form = new FormData(event.target);
     const image = form.get("image");
-    console.log("USER: " + user)
+    //console.log("USER: " + user)
     const data = {
       name: form.get("name"),
       description: form.get("description"),
@@ -343,6 +374,21 @@ const selectFilter = (event) => {
       <Flex direction="row" justifyContent="center">
       <Heading level={2}>Plant Data</Heading>
       </Flex>
+      <Flex direction="row" justifyContent="center">
+   <div>
+   <table  style={{width: '1000px', borderWidth: '1px',
+  borderColor: 'black',
+  borderRadius: '10px',
+  borderSpacing: '0px',}}>
+   <thead>
+    <tr><td style = {{backgroundColor: "grey"}}>List of Sick Plants:</td></tr>
+    </thead>
+   <tbody>
+    {sickPlants.map(plant => (<tr key = {plant}><td style={rowStyle}>{plant}</td></tr>))}
+    </tbody>
+    </table>
+    </div>
+    </Flex>
       <Flex direction="row" justifyContent="center">
         <View style={{
             flexDirection: 'row',
