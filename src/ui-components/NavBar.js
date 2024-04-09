@@ -1,5 +1,6 @@
-import React from 'react';
-import styled from 'styled-components';
+import React from "react";
+import styled from "styled-components";
+import History from "../History";
 
 const Nav = styled.nav`
   display: flex;
@@ -22,7 +23,7 @@ const NavItem = styled.li`
     align-items: center;
 
     &:hover {
-      color: #bada55;
+      text-decoration-line: underline;
     }
   }
 `;
@@ -37,9 +38,15 @@ const NavBar = () => {
     <Nav>
       <Logo>Nature Nanny</Logo>
       <ul>
-        <NavItem><a href="/">Home</a></NavItem>
-        <NavItem><a href="/">History</a></NavItem>
-        <NavItem><a href="/">Settings</a></NavItem>
+        <NavItem>
+          <a href="/">Home</a>
+        </NavItem>
+        <NavItem>
+          <a href="/history">History</a>
+        </NavItem>
+        <NavItem>
+          <a href="/settings">Settings</a>
+        </NavItem>
       </ul>
     </Nav>
   );
