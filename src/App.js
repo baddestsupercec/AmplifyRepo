@@ -59,6 +59,30 @@ const chartStyle = {
   width: "100%",
 };
 
+const chartTemperatureData = {
+  labels: labels,
+  datasets: [
+    {
+      label: "Plant Temperature Data",
+      backgroundColor: "rgb(255, 99, 132)",
+      borderColor: "rgb(255, 99, 132)",
+      data: chartTempData,
+    },
+  ],
+};
+
+const chartPHData = {
+  labels: labels,
+  datasets: [
+    {
+      label: "Plant Ph Data",
+      backgroundColor: "rgb(255, 99, 132)",
+      borderColor: "rgb(255, 99, 132)",
+      data: chartPhData,
+    },
+  ],
+};
+
 const App = ({ signOut }) => {
   const [notes, setNotes] = useState([]);
   const [filteredDisplayNotes, setFilteredNotes] = useState([]);
@@ -71,29 +95,6 @@ const App = ({ signOut }) => {
     fetchNotes();
   }, []);
 
-  const chartTemperatureData = {
-    labels: labels,
-    datasets: [
-      {
-        label: "Plant Temperature Data",
-        backgroundColor: "rgb(255, 99, 132)",
-        borderColor: "rgb(255, 99, 132)",
-        data: chartTempData,
-      },
-    ],
-  };
-
-  const chartPHData = {
-    labels: labels,
-    datasets: [
-      {
-        label: "Plant Ph Data",
-        backgroundColor: "rgb(255, 99, 132)",
-        borderColor: "rgb(255, 99, 132)",
-        data: chartPhData,
-      },
-    ],
-  };
   async function currentAuthenticatedUser() {
     const { username } = await getCurrentUser();
     user = username;
@@ -331,6 +332,7 @@ const App = ({ signOut }) => {
   return (
     <BrowserRouter>
       <View className="App">
+        <NavBar />
         <label>
           {" "}
           Filter Plants
@@ -342,7 +344,6 @@ const App = ({ signOut }) => {
             ))}
           </select>
         </label>
-        <NavBar />
         <Routes>
           <Route
             path="/"
