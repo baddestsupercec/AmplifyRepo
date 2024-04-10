@@ -194,7 +194,7 @@ const App = ({ signOut }) => {
     //chartTempData = [];
     //console.log("clear")
     labels = [];
-    chartTempData = [];
+    //chartTempData = [];
     sickPlants = [];
     var temporaryOptions = [{ value: "All Plants", label: "All Plants" }];
     var usedNames = [];
@@ -266,7 +266,7 @@ const App = ({ signOut }) => {
       ) {
         sickPlants.push(key);
       }
-    });
+    })
 
     console.log(sickPlants);
 
@@ -317,16 +317,24 @@ const App = ({ signOut }) => {
   }
 
   const LineChart = (data) => {
+
     //console.log("MAKE CHART");
+    data.labels = labels;
+
     return (
+
       <div>
-        <Line
-          data={data}
-          width={"30%"}
-          options={{ maintainAspectRatio: false }}
-        />
+
+        <Line data={data} 
+
+        width={"30%"}
+
+        options={{ maintainAspectRatio: false }}/>
+
       </div>
+
     );
+
   };
 
   return (
@@ -497,6 +505,7 @@ const Home = ({ createNote, LineChart, DataTable }) => (
       </View>
     </Flex>
     <View margin="3rem 0">
+    {console.log("LABELS: " + labels + " " + chartTemperatureData + " " + chartPHData)}
       {LineChart(chartTemperatureData)}
       {LineChart(chartPHData)}
       <Flex direction="row" justifyContent="center">
