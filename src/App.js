@@ -28,6 +28,8 @@ import styled from "styled-components";
 import NavBar from "./ui-components/NavBar";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Select from "react-select";
+import cross from './cross.png'
+import check from './check.png'
 
 var labels = [];
 var chartPhData = [];
@@ -37,6 +39,7 @@ var tempPercent = 0;
 var pHPercent = 0;
 var plantData = [];
 var sickPlants = [];
+var resultImage = check;
 const client = generateClient();
 
 const tableStyle = {
@@ -96,7 +99,10 @@ const App = ({ signOut }) => {
   }, []);
 
   async function currentAuthenticatedUser() {
-    const { username } = await getCurrentUser();
+    const {username, userId, signInDetails} = await getCurrentUser();
+    console.log(`The username: ${username}`);
+    console.log(`The userId: ${userId}`);
+    console.log(`The signInDetails: ${signInDetails}`);
     user = username;
   }
 
@@ -154,6 +160,7 @@ const App = ({ signOut }) => {
     filteredPlant = event.target.value;
     fetchNotes();
   };
+
 
   async function fetchNotes() {
     await currentAuthenticatedUser();
@@ -269,6 +276,13 @@ const App = ({ signOut }) => {
     })
 
     console.log(sickPlants);
+
+    if(sickPlants.length >0){
+      resultImage = cross;
+    }
+    else{
+      resultImage = check;
+    }
 
     //console.log("TEMP: "+tempPercent);
     //console.log("pH: "+pHPercent);
@@ -435,6 +449,9 @@ const Home = ({ createNote, LineChart, DataTable }) => (
     </View>
     <Flex direction="row" justifyContent="center">
       <Heading level={2}>Plant Data</Heading>
+    </Flex>
+    <Flex direction="row" justifyContent="center">
+    <img src={resultImage} width={400} height={300}/>
     </Flex>
     <Flex direction="row" justifyContent="center">
       <div>
