@@ -62,30 +62,6 @@ const chartStyle = {
   width: "100%",
 };
 
-const chartTemperatureData = {
-  labels: labels,
-  datasets: [
-    {
-      label: "Plant Temperature Data",
-      backgroundColor: "rgb(255, 99, 132)",
-      borderColor: "rgb(255, 99, 132)",
-      data: chartTempData,
-    },
-  ],
-};
-
-const chartPHData = {
-  labels: labels,
-  datasets: [
-    {
-      label: "Plant Ph Data",
-      backgroundColor: "rgb(255, 99, 132)",
-      borderColor: "rgb(255, 99, 132)",
-      data: chartPhData,
-    },
-  ],
-};
-
 const App = ({ signOut }) => {
   const [notes, setNotes] = useState([]);
   const [filteredDisplayNotes, setFilteredNotes] = useState([]);
@@ -197,8 +173,7 @@ const App = ({ signOut }) => {
     var minpH = 0;
     var minTemp = 20;
     var maxTemp = 75;
-    //chartPHData = [];
-    //chartTempData = [];
+
     //console.log("clear")
     labels = [];
     //chartTempData = [];
@@ -273,7 +248,7 @@ const App = ({ signOut }) => {
       ) {
         sickPlants.push(key);
       }
-    })
+    });
 
     console.log(sickPlants);
 
@@ -292,6 +267,30 @@ const App = ({ signOut }) => {
     setFilteredNotes(filteredNotes);
     setNotes(notesFromAPI);
   }
+
+  const chartTemperatureData = {
+    labels: labels,
+    datasets: [
+      {
+        label: "Plant Temperature Data",
+        backgroundColor: "rgb(255, 99, 132)",
+        borderColor: "rgb(255, 99, 132)",
+        data: chartTempData,
+      },
+    ],
+  };
+
+  const chartPHData = {
+    labels: labels,
+    datasets: [
+      {
+        label: "Plant Ph Data",
+        backgroundColor: "rgb(255, 99, 132)",
+        borderColor: "rgb(255, 99, 132)",
+        data: chartPhData,
+      },
+    ],
+  };
 
   async function createNote(event) {
     event.preventDefault();
@@ -331,30 +330,24 @@ const App = ({ signOut }) => {
   }
 
   const LineChart = (data) => {
-
     //console.log("MAKE CHART");
     data.labels = labels;
 
     return (
-
       <div>
-
-        <Line data={data} 
-
-        width={"30%"}
-
-        options={{ maintainAspectRatio: false }}/>
-
+        <Line
+          data={data}
+          width={"30%"}
+          options={{ maintainAspectRatio: false }}
+        />
       </div>
-
     );
-
   };
 
   return (
     <BrowserRouter>
       <View className="App">
-        <NavBar />
+        <NavBar signOut={signOut} />
         <label>
           {" "}
           Filter Plants
@@ -374,6 +367,8 @@ const App = ({ signOut }) => {
                 createNote={createNote}
                 LineChart={LineChart}
                 DataTable={DataTable}
+                chartPHData={chartPHData}
+                chartTemperatureData={chartTemperatureData}
               />
             }
           />
@@ -381,7 +376,6 @@ const App = ({ signOut }) => {
           <Route path="/settings" element={<Settings signOut={signOut} />} />
         </Routes>
       </View>
-      <Button onClick={signOut}>Sign Out</Button>
     </BrowserRouter>
   );
 };
@@ -400,7 +394,13 @@ const Settings = ({ signOut }) => (
   </Fragment>
 );
 
-const Home = ({ createNote, LineChart, DataTable }) => (
+const Home = ({
+  createNote,
+  LineChart,
+  DataTable,
+  chartPHData,
+  chartTemperatureData,
+}) => (
   <Fragment>
     <View as="form" margin="3rem 0" onSubmit={createNote}>
       <Flex direction="row" justifyContent="center">
@@ -522,7 +522,9 @@ const Home = ({ createNote, LineChart, DataTable }) => (
       </View>
     </Flex>
     <View margin="3rem 0">
-    {console.log("LABELS: " + labels + " " + chartTemperatureData + " " + chartPHData)}
+      {console.log(
+        "LABELS: " + labels + " " + chartTemperatureData + " " + chartPHData
+      )}
       {LineChart(chartTemperatureData)}
       {LineChart(chartPHData)}
       <Flex direction="row" justifyContent="center">
