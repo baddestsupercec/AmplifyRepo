@@ -28,7 +28,7 @@ export declare type NoteCreateFormInputValues = {
     username?: string;
     pH?: number;
     temperature?: number;
-    gas?: number;
+    humidity?: number;
     smell?: number;
     moisture?: number;
     light?: number;
@@ -40,7 +40,7 @@ export declare type NoteCreateFormValidationValues = {
     username?: ValidationFunction<string>;
     pH?: ValidationFunction<number>;
     temperature?: ValidationFunction<number>;
-    gas?: ValidationFunction<number>;
+    humidity?: ValidationFunction<number>;
     smell?: ValidationFunction<number>;
     moisture?: ValidationFunction<number>;
     light?: ValidationFunction<number>;
@@ -54,7 +54,7 @@ export declare type NoteCreateFormOverridesProps = {
     username?: PrimitiveOverrideProps<TextFieldProps>;
     pH?: PrimitiveOverrideProps<TextFieldProps>;
     temperature?: PrimitiveOverrideProps<TextFieldProps>;
-    gas?: PrimitiveOverrideProps<TextFieldProps>;
+    humidity?: PrimitiveOverrideProps<TextFieldProps>;
     smell?: PrimitiveOverrideProps<TextFieldProps>;
     moisture?: PrimitiveOverrideProps<TextFieldProps>;
     light?: PrimitiveOverrideProps<TextFieldProps>;

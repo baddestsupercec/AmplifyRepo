@@ -29,7 +29,7 @@ export default function NoteCreateForm(props) {
     username: "",
     pH: "",
     temperature: "",
-    gas: "",
+    humidity: "",
     smell: "",
     moisture: "",
     light: "",
@@ -44,7 +44,7 @@ export default function NoteCreateForm(props) {
   const [temperature, setTemperature] = React.useState(
     initialValues.temperature
   );
-  const [gas, setGas] = React.useState(initialValues.gas);
+  const [humidity, setHumidity] = React.useState(initialValues.humidity);
   const [smell, setSmell] = React.useState(initialValues.smell);
   const [moisture, setMoisture] = React.useState(initialValues.moisture);
   const [light, setLight] = React.useState(initialValues.light);
@@ -56,7 +56,7 @@ export default function NoteCreateForm(props) {
     setUsername(initialValues.username);
     setPH(initialValues.pH);
     setTemperature(initialValues.temperature);
-    setGas(initialValues.gas);
+    setHumidity(initialValues.humidity);
     setSmell(initialValues.smell);
     setMoisture(initialValues.moisture);
     setLight(initialValues.light);
@@ -69,7 +69,7 @@ export default function NoteCreateForm(props) {
     username: [],
     pH: [],
     temperature: [],
-    gas: [],
+    humidity: [],
     smell: [],
     moisture: [],
     light: [],
@@ -106,7 +106,7 @@ export default function NoteCreateForm(props) {
           username,
           pH,
           temperature,
-          gas,
+          humidity,
           smell,
           moisture,
           light,
@@ -178,7 +178,7 @@ export default function NoteCreateForm(props) {
               username,
               pH,
               temperature,
-              gas,
+              humidity,
               smell,
               moisture,
               light,
@@ -211,7 +211,7 @@ export default function NoteCreateForm(props) {
               username,
               pH,
               temperature,
-              gas,
+              humidity,
               smell,
               moisture,
               light,
@@ -244,7 +244,7 @@ export default function NoteCreateForm(props) {
               username,
               pH,
               temperature,
-              gas,
+              humidity,
               smell,
               moisture,
               light,
@@ -277,7 +277,7 @@ export default function NoteCreateForm(props) {
               username: value,
               pH,
               temperature,
-              gas,
+              humidity,
               smell,
               moisture,
               light,
@@ -314,7 +314,7 @@ export default function NoteCreateForm(props) {
               username,
               pH: value,
               temperature,
-              gas,
+              humidity,
               smell,
               moisture,
               light,
@@ -351,7 +351,7 @@ export default function NoteCreateForm(props) {
               username,
               pH,
               temperature: value,
-              gas,
+              humidity,
               smell,
               moisture,
               light,
@@ -370,12 +370,12 @@ export default function NoteCreateForm(props) {
         {...getOverrideProps(overrides, "temperature")}
       ></TextField>
       <TextField
-        label="Gas"
+        label="Humidity"
         isRequired={false}
         isReadOnly={false}
         type="number"
         step="any"
-        value={gas}
+        value={humidity}
         onChange={(e) => {
           let value = isNaN(parseFloat(e.target.value))
             ? e.target.value
@@ -388,23 +388,23 @@ export default function NoteCreateForm(props) {
               username,
               pH,
               temperature,
-              gas: value,
+              humidity: value,
               smell,
               moisture,
               light,
             };
             const result = onChange(modelFields);
-            value = result?.gas ?? value;
+            value = result?.humidity ?? value;
           }
-          if (errors.gas?.hasError) {
-            runValidationTasks("gas", value);
+          if (errors.humidity?.hasError) {
+            runValidationTasks("humidity", value);
           }
-          setGas(value);
+          setHumidity(value);
         }}
-        onBlur={() => runValidationTasks("gas", gas)}
-        errorMessage={errors.gas?.errorMessage}
-        hasError={errors.gas?.hasError}
-        {...getOverrideProps(overrides, "gas")}
+        onBlur={() => runValidationTasks("humidity", humidity)}
+        errorMessage={errors.humidity?.errorMessage}
+        hasError={errors.humidity?.hasError}
+        {...getOverrideProps(overrides, "humidity")}
       ></TextField>
       <TextField
         label="Smell"
@@ -425,7 +425,7 @@ export default function NoteCreateForm(props) {
               username,
               pH,
               temperature,
-              gas,
+              humidity,
               smell: value,
               moisture,
               light,
@@ -462,7 +462,7 @@ export default function NoteCreateForm(props) {
               username,
               pH,
               temperature,
-              gas,
+              humidity,
               smell,
               moisture: value,
               light,
@@ -499,7 +499,7 @@ export default function NoteCreateForm(props) {
               username,
               pH,
               temperature,
-              gas,
+              humidity,
               smell,
               moisture,
               light: value,

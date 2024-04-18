@@ -11,7 +11,7 @@ export const onCreateNote = /* GraphQL */ `
       username
       pH
       temperature
-      gas
+      humidity
       smell
       moisture
       light
@@ -31,7 +31,7 @@ export const onUpdateNote = /* GraphQL */ `
       username
       pH
       temperature
-      gas
+      humidity
       smell
       moisture
       light
@@ -51,7 +51,7 @@ export const onDeleteNote = /* GraphQL */ `
       username
       pH
       temperature
-      gas
+      humidity
       smell
       moisture
       light

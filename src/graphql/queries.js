@@ -11,7 +11,7 @@ export const getNote = /* GraphQL */ `
       username
       pH
       temperature
-      gas
+      humidity
       smell
       moisture
       light
@@ -36,7 +36,7 @@ export const listNotes = /* GraphQL */ `
         username
         pH
         temperature
-        gas
+        humidity
         smell
         moisture
         light

@@ -31,7 +31,7 @@ export default function NoteUpdateForm(props) {
     username: "",
     pH: "",
     temperature: "",
-    gas: "",
+    humidity: "",
     smell: "",
     moisture: "",
     light: "",
@@ -46,7 +46,7 @@ export default function NoteUpdateForm(props) {
   const [temperature, setTemperature] = React.useState(
     initialValues.temperature
   );
-  const [gas, setGas] = React.useState(initialValues.gas);
+  const [humidity, setHumidity] = React.useState(initialValues.humidity);
   const [smell, setSmell] = React.useState(initialValues.smell);
   const [moisture, setMoisture] = React.useState(initialValues.moisture);
   const [light, setLight] = React.useState(initialValues.light);
@@ -61,7 +61,7 @@ export default function NoteUpdateForm(props) {
     setUsername(cleanValues.username);
     setPH(cleanValues.pH);
     setTemperature(cleanValues.temperature);
-    setGas(cleanValues.gas);
+    setHumidity(cleanValues.humidity);
     setSmell(cleanValues.smell);
     setMoisture(cleanValues.moisture);
     setLight(cleanValues.light);
@@ -90,7 +90,7 @@ export default function NoteUpdateForm(props) {
     username: [],
     pH: [],
     temperature: [],
-    gas: [],
+    humidity: [],
     smell: [],
     moisture: [],
     light: [],
@@ -127,7 +127,7 @@ export default function NoteUpdateForm(props) {
           username: username ?? null,
           pH: pH ?? null,
           temperature: temperature ?? null,
-          gas: gas ?? null,
+          humidity: humidity ?? null,
           smell: smell ?? null,
           moisture: moisture ?? null,
           light: light ?? null,
@@ -197,7 +197,7 @@ export default function NoteUpdateForm(props) {
               username,
               pH,
               temperature,
-              gas,
+              humidity,
               smell,
               moisture,
               light,
@@ -230,7 +230,7 @@ export default function NoteUpdateForm(props) {
               username,
               pH,
               temperature,
-              gas,
+              humidity,
               smell,
               moisture,
               light,
@@ -263,7 +263,7 @@ export default function NoteUpdateForm(props) {
               username,
               pH,
               temperature,
-              gas,
+              humidity,
               smell,
               moisture,
               light,
@@ -296,7 +296,7 @@ export default function NoteUpdateForm(props) {
               username: value,
               pH,
               temperature,
-              gas,
+              humidity,
               smell,
               moisture,
               light,
@@ -333,7 +333,7 @@ export default function NoteUpdateForm(props) {
               username,
               pH: value,
               temperature,
-              gas,
+              humidity,
               smell,
               moisture,
               light,
@@ -370,7 +370,7 @@ export default function NoteUpdateForm(props) {
               username,
               pH,
               temperature: value,
-              gas,
+              humidity,
               smell,
               moisture,
               light,
@@ -389,12 +389,12 @@ export default function NoteUpdateForm(props) {
         {...getOverrideProps(overrides, "temperature")}
       ></TextField>
       <TextField
-        label="Gas"
+        label="Humidity"
         isRequired={false}
         isReadOnly={false}
         type="number"
         step="any"
-        value={gas}
+        value={humidity}
         onChange={(e) => {
           let value = isNaN(parseFloat(e.target.value))
             ? e.target.value
@@ -407,23 +407,23 @@ export default function NoteUpdateForm(props) {
               username,
               pH,
               temperature,
-              gas: value,
+              humidity: value,
               smell,
               moisture,
               light,
             };
             const result = onChange(modelFields);
-            value = result?.gas ?? value;
+            value = result?.humidity ?? value;
           }
-          if (errors.gas?.hasError) {
-            runValidationTasks("gas", value);
+          if (errors.humidity?.hasError) {
+            runValidationTasks("humidity", value);
           }
-          setGas(value);
+          setHumidity(value);
         }}
-        onBlur={() => runValidationTasks("gas", gas)}
-        errorMessage={errors.gas?.errorMessage}
-        hasError={errors.gas?.hasError}
-        {...getOverrideProps(overrides, "gas")}
+        onBlur={() => runValidationTasks("humidity", humidity)}
+        errorMessage={errors.humidity?.errorMessage}
+        hasError={errors.humidity?.hasError}
+        {...getOverrideProps(overrides, "humidity")}
       ></TextField>
       <TextField
         label="Smell"
@@ -444,7 +444,7 @@ export default function NoteUpdateForm(props) {
               username,
               pH,
               temperature,
-              gas,
+              humidity,
               smell: value,
               moisture,
               light,
@@ -481,7 +481,7 @@ export default function NoteUpdateForm(props) {
               username,
               pH,
               temperature,
-              gas,
+              humidity,
               smell,
               moisture: value,
               light,
@@ -518,7 +518,7 @@ export default function NoteUpdateForm(props) {
               username,
               pH,
               temperature,
-              gas,
+              humidity,
               smell,
               moisture,
               light: value,

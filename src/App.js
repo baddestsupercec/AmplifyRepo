@@ -33,12 +33,12 @@ import check from './check.png'
 
 var labelsPH = [];
 var labelsTemp = [];
-var labelsGas = [];
+var labelsHumidity = [];
 var labelsSmell = [];
 var labelsMoisture = [];
 var labelsLight = [];
 var chartPhData = [];
-var GasData = [];
+var HumidityData = [];
 var SmellData = [];
 var MoistureData = [];
 var LightData = [];
@@ -47,7 +47,7 @@ var user;
 var tempPercent = 0;
 var pHPercent = 0;
 var moisturePercent = 0;
-var gasPercent = 0;
+var humidityPercent = 0;
 var smellPercent = 0;
 var lightPercent = 0;
 var plantData = [];
@@ -101,7 +101,7 @@ const App = ({ signOut }) => {
     description,
     username,
     temperature,
-    gas,
+    humidity,
     smell,
     moisture,
     light,
@@ -112,7 +112,7 @@ const App = ({ signOut }) => {
       <td style={rowStyle}>{description}</td>
       <td style={rowStyle}>{username}</td>
       <td style={rowStyle}>{temperature}</td>
-      <td style={rowStyle}>{gas}</td>
+      <td style={rowStyle}>{humidity}</td>
       <td style={rowStyle}>{smell}</td>
       <td style={rowStyle}>{moisture}</td>
       <td style={rowStyle}>{light}</td>
@@ -136,7 +136,7 @@ const App = ({ signOut }) => {
             <th>Description</th>
             <th>Username</th>
             <th>Temperature</th>
-            <th>Gas</th>
+            <th>Humidity</th>
             <th>Smell</th>
             <th>Moisture</th>
             <th>Light</th>
@@ -191,8 +191,8 @@ const App = ({ signOut }) => {
     var pHSum = 0;
     var tempCount = 0;
     var tempSum = 0;
-    var gasCount = 0;
-    var gasSum = 0;
+    var humidityCount = 0;
+    var humiditySum = 0;
     var smellCount = 0;
     var smellSum = 0;
     var moistureCount = 0;
@@ -203,8 +203,8 @@ const App = ({ signOut }) => {
     var minpH = 0;
     var minTemp = 20;
     var maxTemp = 75;
-    var minGas = 2000;
-    var maxGas = 7000;
+    var minHumidity = 2000;
+    var maxHumidity = 7000;
     var minSmell = 0;
     var maxSmell = 100;
     var minMoisture = 0;
@@ -215,7 +215,7 @@ const App = ({ signOut }) => {
     //console.log("clear")
     labelsPH = [];
     labelsTemp = [];
-    labelsGas = [];
+    labelsHumidity = [];
     labelsSmell = [];
     labelsMoisture = [];
     labelsLight = [];
@@ -234,7 +234,7 @@ const App = ({ signOut }) => {
     );
     plantData = [];
     usedNames.map((name) => {
-      plantData[name] = { pH: 0, temperature: 0, gas: 0, smell: 0, moisture: 0, light: 0, count: 0 };
+      plantData[name] = { pH: 0, temperature: 0, humidity: 0, smell: 0, moisture: 0, light: 0, count: 0 };
     });
     console.log(plantData);
     await Promise.all(
@@ -259,12 +259,12 @@ const App = ({ signOut }) => {
           plantData[note.name].temperature += note.temperature;
           labelsTemp.push(new Date(note.createdAt).toLocaleString());
         }
-        if (note.gas != undefined && note.gas !== null) {
-          gasCount++;
-          gasSum += note.gas;
-          GasData.push(parseFloat(note.gas));
-          plantData[note.name].gas += note.gas;
-          labelsGas.push(new Date(note.createdAt).toLocaleString());
+        if (note.humidity != undefined && note.humidity !== null) {
+          humidityCount++;
+          humiditySum += note.humidity;
+          HumidityData.push(parseFloat(note.humidity));
+          plantData[note.name].humidity += note.humidity;
+          labelsHumidity.push(new Date(note.createdAt).toLocaleString());
         }
         if (note.smell != undefined && note.smell !== null) {
           smellCount++;
@@ -296,8 +296,8 @@ const App = ({ signOut }) => {
     pHPercent = 0.3 + ((pHPercent - minpH) / (maxpH - minpH)) * 0.4;
     tempPercent = tempSum / tempCount;
     tempPercent = 0.3 + ((tempPercent - minTemp) / (maxTemp - minTemp)) * 0.4;
-    gasPercent = gasSum / gasCount;
-    gasPercent = 0.3 + ((gasPercent - minGas) / (maxGas - minGas)) * 0.4;
+    humidityPercent = humiditySum / humidityCount;
+    humidityPercent = 0.3 + ((humidityPercent - minHumidity) / (maxHumidity - minHumidity)) * 0.4;
     smellPercent = smellSum / smellCount;
     smellPercent = 0.3 + ((smellPercent - minSmell) / (maxSmell - minSmell)) * 0.4;
     moisturePercent = moistureSum / moistureCount;
@@ -310,11 +310,11 @@ const App = ({ signOut }) => {
     if (tempPercent > 1) {
       tempPercent = 1;
     }
-    if (gasPercent > 1) {
-      gasPercent = 1;
+    if (humidityPercent > 1) {
+      humidityPercent = 1;
     }
     if (smellPercent > 1) {
-      gasPercent = 1;
+      humidityPercent = 1;
     }
     if (moisturePercent > 1) {
       smellPercent = 1;
@@ -330,8 +330,8 @@ const App = ({ signOut }) => {
       var localTempPercent = plant.temperature / tempCount;
       localTempPercent =
         0.3 + ((localTempPercent - minTemp) / (maxTemp - minTemp)) * 0.4;
-      var localGasPercent = plant.gas / gasCount;
-      localGasPercent = 0.3 + ((localGasPercent - minGas) / (maxGas - minGas)) * 0.4;
+      var localHumidityPercent = plant.humidity / humidityCount;
+      localHumidityPercent = 0.3 + ((localHumidityPercent - minHumidity) / (maxHumidity - minHumidity)) * 0.4;
       var localSmellPercent = plant.smell / smellCount;
       localSmellPercent = 0.3 + ((localSmellPercent - minSmell) / (maxSmell - minSmell)) * 0.4;
       var localMoisturePercent = plant.moisture / moistureCount;
@@ -342,8 +342,8 @@ const App = ({ signOut }) => {
       if (
         localTempPercent < 0.3 ||
         localTempPercent > 0.7 ||
-        localGasPercent < 0.3 ||
-        localGasPercent > 0.7 ||
+        localHumidityPercent < 0.3 ||
+        localHumidityPercent > 0.7 ||
         localSmellPercent < 0.3 ||
         localSmellPercent > 0.7 ||
         localMoisturePercent < 0.3 ||
@@ -396,14 +396,14 @@ const App = ({ signOut }) => {
       },
     ],
   };
-  const chartGasData = {
-    labels: labelsGas,
+  const chartHumidityData = {
+    labels: labelsHumidity,
     datasets: [
       {
-        label: "Plant Gas Data",
+        label: "Plant Humidity Data",
         backgroundColor: "rgb(255, 99, 132)",
         borderColor: "rgb(255, 99, 132)",
-        data: GasData,
+        data: HumidityData,
       },
     ],
   };
@@ -452,7 +452,7 @@ const App = ({ signOut }) => {
       temperature: form.get("Temperature"),
       //image: image.name,
       username: user,
-      gas: form.get("gas"),
+      humidity: form.get("humidity"),
       smell: form.get("smell"), 
       moisture: form.get("moisture"), 
       light: form.get("light"),
@@ -521,7 +521,7 @@ const App = ({ signOut }) => {
                 DataTable={DataTable}
                 chartPHData={chartPHData}
                 chartTemperatureData={chartTemperatureData}
-                chartGasData={chartGasData}
+                chartHumidityData={chartHumidityData}
                 chartSmellData={chartSmellData}
                 chartMoistureData={chartMoistureData}
                 chartLightData={chartLightData}
@@ -534,7 +534,7 @@ const App = ({ signOut }) => {
                 DataTable={DataTable}
                 chartPHData={chartPHData}
                 chartTemperatureData={chartTemperatureData}
-                chartGasData={chartGasData}
+                chartHumidityData={chartHumidityData}
                 chartSmellData={chartSmellData}
                 chartMoistureData={chartMoistureData}
                 chartLightData={chartLightData}
@@ -551,7 +551,7 @@ const History = ({ signOut,createNote,
   DataTable,
   chartPHData,
   chartTemperatureData,
-  chartGasData,
+  chartHumidityData,
   chartSmellData,
   chartMoistureData,
   chartLightData,}) => (
@@ -559,7 +559,7 @@ const History = ({ signOut,createNote,
     <Heading level={1}>History</Heading>
     <View margin="3rem 0">
       {LineChart(chartTemperatureData)}
-      {LineChart(chartGasData)}
+      {LineChart(chartHumidityData)}
       {LineChart(chartSmellData)}
       {LineChart(chartMoistureData)}
       {LineChart(chartLightData)}
@@ -583,7 +583,7 @@ const Home = ({
   DataTable,
   chartPHData,
   chartTemperatureData,
-  chartGasData,
+  chartHumidityData,
   chartSmellData,
   chartMoistureData,
   chartLightData,
@@ -616,9 +616,9 @@ const Home = ({
           required
         />
         <TextField
-          name="gas"
-          placeholder="gas"
-          label="gas"
+          name="humidity"
+          placeholder="humidity"
+          label="humidity"
           labelHidden
           variation="quiet"
           required
@@ -715,15 +715,15 @@ const Home = ({
         }}
       >
         <Heading level={2} width={300}>
-          Gas
+          Humidity
         </Heading>
         <GaugeChart
-          id="gas-chart1"
+          id="humidity-chart1"
           style={chartStyle}
           hideText="True"
           direction="row"
           justifyContent="center"
-          percent={Number(gasPercent)}
+          percent={Number(humidityPercent)}
         />
         </View>
         <View
