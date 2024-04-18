@@ -89,9 +89,6 @@ const App = ({ signOut }) => {
 
   async function currentAuthenticatedUser() {
     const {username, userId, signInDetails} = await getCurrentUser();
-    console.log(`The username: ${username}`);
-    console.log(`The userId: ${userId}`);
-    console.log(`The signInDetails: ${signInDetails}`);
     user = username;
   }
 
@@ -154,7 +151,7 @@ const App = ({ signOut }) => {
   }, [filteredDisplayNotes]);
 
   const selectFilter = (event) => {
-    console.log(event.target.value);
+    console.log("FILTER: " + event.target.value);
     filteredPlant = event.target.value;
     fetchNotes();
   };
@@ -164,7 +161,12 @@ const App = ({ signOut }) => {
     await currentAuthenticatedUser();
     console.log("START FETCH");
     //labels = [];
-    //chartTempData = [];
+    chartTempData = [];
+    chartPhData = [];
+    HumidityData = [];
+    LightData = [];
+    MoistureData = [];
+    SmellData = []
     const apiData = await client.graphql({ query: listNotes });
     var notesFromAPI = apiData.data.listNotes.items;
     await Promise.all(
@@ -185,7 +187,6 @@ const App = ({ signOut }) => {
       filteredNotes = notesFromAPI.filter((note) => note.name == filteredPlant);
     }
 
-    // console.log(notesFromAPI);
 
     var pHCount = 0;
     var pHSum = 0;
@@ -212,7 +213,6 @@ const App = ({ signOut }) => {
     var minLight = 10;
     var maxLight = 100;
 
-    //console.log("clear")
     labelsPH = [];
     labelsTemp = [];
     labelsHumidity = [];
@@ -233,10 +233,14 @@ const App = ({ signOut }) => {
       })
     );
     plantData = [];
+    if(filteredPlant=="All Plants"){
     usedNames.map((name) => {
       plantData[name] = { pH: 0, temperature: 0, humidity: 0, smell: 0, moisture: 0, light: 0, count: 0 };
     });
-    console.log(plantData);
+  }
+  else{
+      plantData[filteredPlant] = { pH: 0, temperature: 0, humidity: 0, smell: 0, moisture: 0, light: 0, count: 0 };
+  }
     await Promise.all(
       filteredNotes.map(async (note) => {
         if (note.pH != undefined && note.pH !== null) {
@@ -248,13 +252,10 @@ const App = ({ signOut }) => {
         }
         if (note.temperature !== undefined && note.temperature !== null) {
           tempCount++;
-          //console.log("TC: " + tempCount)
           tempSum += note.temperature;
-          //console.log("TEST: " + note.temperature);
-          //console.log("TEST2: " + parseFloat(note.temperature));
           chartTempData.push(parseFloat(note.temperature));
+          console.log("ADD TEMP:"+note.temperature);
           tempCount++;
-          //console.log("TC: " + tempCount)
           tempSum += note.temperature;
           plantData[note.name].temperature += note.temperature;
           labelsTemp.push(new Date(note.createdAt).toLocaleString());
@@ -291,19 +292,48 @@ const App = ({ signOut }) => {
         return note;
       })
     );
-    //console.log(chartTempData);
+    if(pHCount!=0){
     pHPercent = pHSum / pHCount;
     pHPercent = 0.3 + ((pHPercent - minpH) / (maxpH - minpH)) * 0.4;
+    }
+    else{
+      pHPercent = 0;
+    }
+    if(tempCount!=0){
     tempPercent = tempSum / tempCount;
     tempPercent = 0.3 + ((tempPercent - minTemp) / (maxTemp - minTemp)) * 0.4;
+    }
+    else{
+      tempPercent = 0;
+    }
+    if(humidityCount!=0){
     humidityPercent = humiditySum / humidityCount;
     humidityPercent = 0.3 + ((humidityPercent - minHumidity) / (maxHumidity - minHumidity)) * 0.4;
+    }
+    else{
+      humidityPercent = 0;
+    }
+    if(smellCount!=0){
     smellPercent = smellSum / smellCount;
     smellPercent = 0.3 + ((smellPercent - minSmell) / (maxSmell - minSmell)) * 0.4;
+    }
+    else{
+      smellPercent = 0;
+    }
+    if(moistureCount!=0){
     moisturePercent = moistureSum / moistureCount;
     moisturePercent = 0.3 + ((moisturePercent - minMoisture) / (maxMoisture - minMoisture)) * 0.4;
+    }
+    else{
+      moisturePercent = 0;
+    }
+    if(lightCount!=0){
     lightPercent = lightSum / lightCount;
     lightPercent = 0.3 + ((lightPercent - minLight) / (maxLight - minLight)) * 0.4;
+    }
+    else{
+      lightPercent = 0;
+    }
     if (pHPercent > 1) {
       pHPercent = 1;
     }
@@ -325,20 +355,39 @@ const App = ({ signOut }) => {
 
     Object.keys(plantData).forEach((key) => {
       var plant = plantData[key];
-      var localpHPercent = plant.pH / pHCount;
+      console.log("PLANT: " + key)
+      var localpHPercent = 0;
+      var localTempPercent = 0;
+      var localHumidityPercent = 0;
+      var localSmellPercent = 0;
+      var localMoisturePercent = 0;
+      var localLightPercent = 0;
+
+      if(pHCount!=0){
+      localpHPercent = plant.pH / pHCount;
       localpHPercent = 0.3 + ((localpHPercent - minpH) / (maxpH - minpH)) * 0.4;
-      var localTempPercent = plant.temperature / tempCount;
+      }
+      if(tempCount!=0){
+      localTempPercent = plant.temperature / tempCount;
       localTempPercent =
         0.3 + ((localTempPercent - minTemp) / (maxTemp - minTemp)) * 0.4;
-      var localHumidityPercent = plant.humidity / humidityCount;
+      }
+      if(humidityCount!=0){
+      localHumidityPercent = plant.humidity / humidityCount;
       localHumidityPercent = 0.3 + ((localHumidityPercent - minHumidity) / (maxHumidity - minHumidity)) * 0.4;
-      var localSmellPercent = plant.smell / smellCount;
+      }
+      if(smellCount!=0){
+      localSmellPercent = plant.smell / smellCount;
       localSmellPercent = 0.3 + ((localSmellPercent - minSmell) / (maxSmell - minSmell)) * 0.4;
-      var localMoisturePercent = plant.moisture / moistureCount;
+      }
+      if(moistureCount!=0){
+      localMoisturePercent = plant.moisture / moistureCount;
       localMoisturePercent = 0.3 + ((localMoisturePercent - minMoisture) / (maxMoisture - minMoisture)) * 0.4;
-      var localLightPercent = plant.light / lightCount;
+      }
+      if(lightCount!=0){
+      localLightPercent = plant.light / lightCount;
       localLightPercent = 0.3 + ((localLightPercent - minLight) / (maxLight - minLight)) * 0.4;
-      console.log(key + " " + localpHPercent + " " + localTempPercent);
+      }
       if (
         localTempPercent < 0.3 ||
         localTempPercent > 0.7 ||
@@ -355,7 +404,6 @@ const App = ({ signOut }) => {
       }
     });
 
-    console.log(sickPlants);
 
     if(sickPlants.length >0){
       resultImage = cross;
@@ -364,9 +412,6 @@ const App = ({ signOut }) => {
       resultImage = check;
     }
 
-    //console.log("TEMP: "+tempPercent);
-    //console.log("pH: "+pHPercent);
-    //console.log(options);
 
     setOptions(temporaryOptions);
     setFilteredNotes(filteredNotes);
@@ -445,7 +490,6 @@ const App = ({ signOut }) => {
     event.preventDefault();
     const form = new FormData(event.target);
     //const image = form.get("image");
-    //console.log("USER: " + user)
     const data = {
       name: form.get("name"),
       description: form.get("description"),
@@ -482,7 +526,6 @@ const App = ({ signOut }) => {
   }
 
   const LineChart = (data) => {
-    //console.log("MAKE CHART");
     //data.labels = labels;
 
     return (
