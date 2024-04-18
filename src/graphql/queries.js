@@ -11,6 +11,10 @@ export const getNote = /* GraphQL */ `
       username
       pH
       temperature
+      gas
+      smell
+      moisture
+      light
       createdAt
       updatedAt
       __typename
@@ -32,6 +36,10 @@ export const listNotes = /* GraphQL */ `
         username
         pH
         temperature
+        gas
+        smell
+        moisture
+        light
         createdAt
         updatedAt
         __typename

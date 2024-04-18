@@ -31,6 +31,10 @@ export default function NoteUpdateForm(props) {
     username: "",
     pH: "",
     temperature: "",
+    gas: "",
+    smell: "",
+    moisture: "",
+    light: "",
   };
   const [name, setName] = React.useState(initialValues.name);
   const [description, setDescription] = React.useState(
@@ -42,6 +46,10 @@ export default function NoteUpdateForm(props) {
   const [temperature, setTemperature] = React.useState(
     initialValues.temperature
   );
+  const [gas, setGas] = React.useState(initialValues.gas);
+  const [smell, setSmell] = React.useState(initialValues.smell);
+  const [moisture, setMoisture] = React.useState(initialValues.moisture);
+  const [light, setLight] = React.useState(initialValues.light);
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
     const cleanValues = noteRecord
@@ -53,6 +61,10 @@ export default function NoteUpdateForm(props) {
     setUsername(cleanValues.username);
     setPH(cleanValues.pH);
     setTemperature(cleanValues.temperature);
+    setGas(cleanValues.gas);
+    setSmell(cleanValues.smell);
+    setMoisture(cleanValues.moisture);
+    setLight(cleanValues.light);
     setErrors({});
   };
   const [noteRecord, setNoteRecord] = React.useState(noteModelProp);
@@ -78,6 +90,10 @@ export default function NoteUpdateForm(props) {
     username: [],
     pH: [],
     temperature: [],
+    gas: [],
+    smell: [],
+    moisture: [],
+    light: [],
   };
   const runValidationTasks = async (
     fieldName,
@@ -111,6 +127,10 @@ export default function NoteUpdateForm(props) {
           username: username ?? null,
           pH: pH ?? null,
           temperature: temperature ?? null,
+          gas: gas ?? null,
+          smell: smell ?? null,
+          moisture: moisture ?? null,
+          light: light ?? null,
         };
         const validationResponses = await Promise.all(
           Object.keys(validations).reduce((promises, fieldName) => {
@@ -177,6 +197,10 @@ export default function NoteUpdateForm(props) {
               username,
               pH,
               temperature,
+              gas,
+              smell,
+              moisture,
+              light,
             };
             const result = onChange(modelFields);
             value = result?.name ?? value;
@@ -206,6 +230,10 @@ export default function NoteUpdateForm(props) {
               username,
               pH,
               temperature,
+              gas,
+              smell,
+              moisture,
+              light,
             };
             const result = onChange(modelFields);
             value = result?.description ?? value;
@@ -235,6 +263,10 @@ export default function NoteUpdateForm(props) {
               username,
               pH,
               temperature,
+              gas,
+              smell,
+              moisture,
+              light,
             };
             const result = onChange(modelFields);
             value = result?.image ?? value;
@@ -264,6 +296,10 @@ export default function NoteUpdateForm(props) {
               username: value,
               pH,
               temperature,
+              gas,
+              smell,
+              moisture,
+              light,
             };
             const result = onChange(modelFields);
             value = result?.username ?? value;
@@ -297,6 +333,10 @@ export default function NoteUpdateForm(props) {
               username,
               pH: value,
               temperature,
+              gas,
+              smell,
+              moisture,
+              light,
             };
             const result = onChange(modelFields);
             value = result?.pH ?? value;
@@ -330,6 +370,10 @@ export default function NoteUpdateForm(props) {
               username,
               pH,
               temperature: value,
+              gas,
+              smell,
+              moisture,
+              light,
             };
             const result = onChange(modelFields);
             value = result?.temperature ?? value;
@@ -343,6 +387,154 @@ export default function NoteUpdateForm(props) {
         errorMessage={errors.temperature?.errorMessage}
         hasError={errors.temperature?.hasError}
         {...getOverrideProps(overrides, "temperature")}
+      ></TextField>
+      <TextField
+        label="Gas"
+        isRequired={false}
+        isReadOnly={false}
+        type="number"
+        step="any"
+        value={gas}
+        onChange={(e) => {
+          let value = isNaN(parseFloat(e.target.value))
+            ? e.target.value
+            : parseFloat(e.target.value);
+          if (onChange) {
+            const modelFields = {
+              name,
+              description,
+              image,
+              username,
+              pH,
+              temperature,
+              gas: value,
+              smell,
+              moisture,
+              light,
+            };
+            const result = onChange(modelFields);
+            value = result?.gas ?? value;
+          }
+          if (errors.gas?.hasError) {
+            runValidationTasks("gas", value);
+          }
+          setGas(value);
+        }}
+        onBlur={() => runValidationTasks("gas", gas)}
+        errorMessage={errors.gas?.errorMessage}
+        hasError={errors.gas?.hasError}
+        {...getOverrideProps(overrides, "gas")}
+      ></TextField>
+      <TextField
+        label="Smell"
+        isRequired={false}
+        isReadOnly={false}
+        type="number"
+        step="any"
+        value={smell}
+        onChange={(e) => {
+          let value = isNaN(parseFloat(e.target.value))
+            ? e.target.value
+            : parseFloat(e.target.value);
+          if (onChange) {
+            const modelFields = {
+              name,
+              description,
+              image,
+              username,
+              pH,
+              temperature,
+              gas,
+              smell: value,
+              moisture,
+              light,
+            };
+            const result = onChange(modelFields);
+            value = result?.smell ?? value;
+          }
+          if (errors.smell?.hasError) {
+            runValidationTasks("smell", value);
+          }
+          setSmell(value);
+        }}
+        onBlur={() => runValidationTasks("smell", smell)}
+        errorMessage={errors.smell?.errorMessage}
+        hasError={errors.smell?.hasError}
+        {...getOverrideProps(overrides, "smell")}
+      ></TextField>
+      <TextField
+        label="Moisture"
+        isRequired={false}
+        isReadOnly={false}
+        type="number"
+        step="any"
+        value={moisture}
+        onChange={(e) => {
+          let value = isNaN(parseFloat(e.target.value))
+            ? e.target.value
+            : parseFloat(e.target.value);
+          if (onChange) {
+            const modelFields = {
+              name,
+              description,
+              image,
+              username,
+              pH,
+              temperature,
+              gas,
+              smell,
+              moisture: value,
+              light,
+            };
+            const result = onChange(modelFields);
+            value = result?.moisture ?? value;
+          }
+          if (errors.moisture?.hasError) {
+            runValidationTasks("moisture", value);
+          }
+          setMoisture(value);
+        }}
+        onBlur={() => runValidationTasks("moisture", moisture)}
+        errorMessage={errors.moisture?.errorMessage}
+        hasError={errors.moisture?.hasError}
+        {...getOverrideProps(overrides, "moisture")}
+      ></TextField>
+      <TextField
+        label="Light"
+        isRequired={false}
+        isReadOnly={false}
+        type="number"
+        step="any"
+        value={light}
+        onChange={(e) => {
+          let value = isNaN(parseFloat(e.target.value))
+            ? e.target.value
+            : parseFloat(e.target.value);
+          if (onChange) {
+            const modelFields = {
+              name,
+              description,
+              image,
+              username,
+              pH,
+              temperature,
+              gas,
+              smell,
+              moisture,
+              light: value,
+            };
+            const result = onChange(modelFields);
+            value = result?.light ?? value;
+          }
+          if (errors.light?.hasError) {
+            runValidationTasks("light", value);
+          }
+          setLight(value);
+        }}
+        onBlur={() => runValidationTasks("light", light)}
+        errorMessage={errors.light?.errorMessage}
+        hasError={errors.light?.hasError}
+        {...getOverrideProps(overrides, "light")}
       ></TextField>
       <Flex
         justifyContent="space-between"

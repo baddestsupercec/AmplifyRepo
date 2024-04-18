@@ -10,4 +10,8 @@ type Note @model @auth(rules: [ { allow: public } ] ){
   username: String
   pH: Float
   temperature: Float
+  gas: Float
+  smell: Float
+  moisture: Float
+  light: Float
 }

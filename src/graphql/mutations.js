@@ -14,6 +14,10 @@ export const createNote = /* GraphQL */ `
       username
       pH
       temperature
+      gas
+      smell
+      moisture
+      light
       createdAt
       updatedAt
       __typename
@@ -33,6 +37,10 @@ export const updateNote = /* GraphQL */ `
       username
       pH
       temperature
+      gas
+      smell
+      moisture
+      light
       createdAt
       updatedAt
       __typename
@@ -52,6 +60,10 @@ export const deleteNote = /* GraphQL */ `
       username
       pH
       temperature
+      gas
+      smell
+      moisture
+      light
       createdAt
       updatedAt
       __typename

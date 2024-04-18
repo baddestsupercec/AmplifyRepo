@@ -28,6 +28,10 @@ export declare type NoteUpdateFormInputValues = {
     username?: string;
     pH?: number;
     temperature?: number;
+    gas?: number;
+    smell?: number;
+    moisture?: number;
+    light?: number;
 };
 export declare type NoteUpdateFormValidationValues = {
     name?: ValidationFunction<string>;
@@ -36,6 +40,10 @@ export declare type NoteUpdateFormValidationValues = {
     username?: ValidationFunction<string>;
     pH?: ValidationFunction<number>;
     temperature?: ValidationFunction<number>;
+    gas?: ValidationFunction<number>;
+    smell?: ValidationFunction<number>;
+    moisture?: ValidationFunction<number>;
+    light?: ValidationFunction<number>;
 };
 export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
 export declare type NoteUpdateFormOverridesProps = {
@@ -46,6 +54,10 @@ export declare type NoteUpdateFormOverridesProps = {
     username?: PrimitiveOverrideProps<TextFieldProps>;
     pH?: PrimitiveOverrideProps<TextFieldProps>;
     temperature?: PrimitiveOverrideProps<TextFieldProps>;
+    gas?: PrimitiveOverrideProps<TextFieldProps>;
+    smell?: PrimitiveOverrideProps<TextFieldProps>;
+    moisture?: PrimitiveOverrideProps<TextFieldProps>;
+    light?: PrimitiveOverrideProps<TextFieldProps>;
 } & EscapeHatchProps;
 export declare type NoteUpdateFormProps = React.PropsWithChildren<{
     overrides?: NoteUpdateFormOverridesProps | undefined | null;

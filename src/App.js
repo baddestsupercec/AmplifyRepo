@@ -31,12 +31,25 @@ import Select from "react-select";
 import cross from './cross.png'
 import check from './check.png'
 
-var labels = [];
+var labelsPH = [];
+var labelsTemp = [];
+var labelsGas = [];
+var labelsSmell = [];
+var labelsMoisture = [];
+var labelsLight = [];
 var chartPhData = [];
+var GasData = [];
+var SmellData = [];
+var MoistureData = [];
+var LightData = [];
 var chartTempData = [];
 var user;
 var tempPercent = 0;
 var pHPercent = 0;
+var moisturePercent = 0;
+var gasPercent = 0;
+var smellPercent = 0;
+var lightPercent = 0;
 var plantData = [];
 var sickPlants = [];
 var resultImage = check;
@@ -87,16 +100,22 @@ const App = ({ signOut }) => {
     name,
     description,
     username,
-    pH,
     temperature,
+    gas,
+    smell,
+    moisture,
+    light,
     createdAt,
   }) => (
     <tr style={rowStyle} key={id}>
       <td style={rowStyle}>{name}</td>
       <td style={rowStyle}>{description}</td>
       <td style={rowStyle}>{username}</td>
-      <td style={rowStyle}>{pH}</td>
       <td style={rowStyle}>{temperature}</td>
+      <td style={rowStyle}>{gas}</td>
+      <td style={rowStyle}>{smell}</td>
+      <td style={rowStyle}>{moisture}</td>
+      <td style={rowStyle}>{light}</td>
       <td style={rowStyle}>{new Date(createdAt).toLocaleString()}</td>
       <td style={rowStyle}>
         {
@@ -116,8 +135,11 @@ const App = ({ signOut }) => {
             <th>Plant Name</th>
             <th>Description</th>
             <th>Username</th>
-            <th>pH</th>
             <th>Temperature</th>
+            <th>Gas</th>
+            <th>Smell</th>
+            <th>Moisture</th>
+            <th>Light</th>
             <th>Date</th>
             <th>Edit</th>
           </tr>
@@ -169,13 +191,34 @@ const App = ({ signOut }) => {
     var pHSum = 0;
     var tempCount = 0;
     var tempSum = 0;
+    var gasCount = 0;
+    var gasSum = 0;
+    var smellCount = 0;
+    var smellSum = 0;
+    var moistureCount = 0;
+    var moistureSum = 0;
+    var lightCount = 0;
+    var lightSum = 0;
     var maxpH = 2;
     var minpH = 0;
     var minTemp = 20;
     var maxTemp = 75;
+    var minGas = 2000;
+    var maxGas = 7000;
+    var minSmell = 0;
+    var maxSmell = 100;
+    var minMoisture = 0;
+    var maxMoisture = 200;
+    var minLight = 10;
+    var maxLight = 100;
 
     //console.log("clear")
-    labels = [];
+    labelsPH = [];
+    labelsTemp = [];
+    labelsGas = [];
+    labelsSmell = [];
+    labelsMoisture = [];
+    labelsLight = [];
     //chartTempData = [];
     sickPlants = [];
     var temporaryOptions = [{ value: "All Plants", label: "All Plants" }];
@@ -191,7 +234,7 @@ const App = ({ signOut }) => {
     );
     plantData = [];
     usedNames.map((name) => {
-      plantData[name] = { pH: 0, temperature: 0, count: 0 };
+      plantData[name] = { pH: 0, temperature: 0, gas: 0, smell: 0, moisture: 0, light: 0, count: 0 };
     });
     console.log(plantData);
     await Promise.all(
@@ -201,12 +244,12 @@ const App = ({ signOut }) => {
           pHSum += note.pH;
           chartPhData.push(parseFloat(note.pH));
           plantData[note.name].pH += note.pH;
+          labelsPH.push(new Date(note.createdAt).toLocaleString());
         }
         if (note.temperature !== undefined && note.temperature !== null) {
           tempCount++;
           //console.log("TC: " + tempCount)
           tempSum += note.temperature;
-          labels.push(new Date(note.createdAt).toLocaleString());
           //console.log("TEST: " + note.temperature);
           //console.log("TEST2: " + parseFloat(note.temperature));
           chartTempData.push(parseFloat(note.temperature));
@@ -214,6 +257,35 @@ const App = ({ signOut }) => {
           //console.log("TC: " + tempCount)
           tempSum += note.temperature;
           plantData[note.name].temperature += note.temperature;
+          labelsTemp.push(new Date(note.createdAt).toLocaleString());
+        }
+        if (note.gas != undefined && note.gas !== null) {
+          gasCount++;
+          gasSum += note.gas;
+          GasData.push(parseFloat(note.gas));
+          plantData[note.name].gas += note.gas;
+          labelsGas.push(new Date(note.createdAt).toLocaleString());
+        }
+        if (note.smell != undefined && note.smell !== null) {
+          smellCount++;
+          smellSum += note.smell;
+          SmellData.push(parseFloat(note.smell));
+          plantData[note.name].smell += note.smell;
+          labelsSmell.push(new Date(note.createdAt).toLocaleString());
+        }
+        if (note.moisture != undefined && note.moisture !== null) {
+          moistureCount++;
+          moistureSum += note.moisture;
+          MoistureData.push(parseFloat(note.moisture));
+          plantData[note.name].moisture += note.moisture;
+          labelsMoisture.push(new Date(note.createdAt).toLocaleString());
+        }
+        if (note.light != undefined && note.light !== null) {
+          lightCount++;
+          lightSum += note.light;
+          LightData.push(parseFloat(note.light));
+          plantData[note.name].light += note.light;
+          labelsLight.push(new Date(note.createdAt).toLocaleString());
         }
         plantData[note.name].count++;
         return note;
@@ -224,27 +296,60 @@ const App = ({ signOut }) => {
     pHPercent = 0.3 + ((pHPercent - minpH) / (maxpH - minpH)) * 0.4;
     tempPercent = tempSum / tempCount;
     tempPercent = 0.3 + ((tempPercent - minTemp) / (maxTemp - minTemp)) * 0.4;
-    console.log("PERCENTS: " + pHPercent + " " + tempPercent);
+    gasPercent = gasSum / gasCount;
+    gasPercent = 0.3 + ((gasPercent - minGas) / (maxGas - minGas)) * 0.4;
+    smellPercent = smellSum / smellCount;
+    smellPercent = 0.3 + ((smellPercent - minSmell) / (maxSmell - minSmell)) * 0.4;
+    moisturePercent = moistureSum / moistureCount;
+    moisturePercent = 0.3 + ((moisturePercent - minMoisture) / (maxMoisture - minMoisture)) * 0.4;
+    lightPercent = lightSum / lightCount;
+    lightPercent = 0.3 + ((lightPercent - minLight) / (maxLight - minLight)) * 0.4;
     if (pHPercent > 1) {
       pHPercent = 1;
     }
     if (tempPercent > 1) {
       tempPercent = 1;
     }
+    if (gasPercent > 1) {
+      gasPercent = 1;
+    }
+    if (smellPercent > 1) {
+      gasPercent = 1;
+    }
+    if (moisturePercent > 1) {
+      smellPercent = 1;
+    }
+    if (lightPercent > 1) {
+      moisturePercent = 1;
+    }
 
     Object.keys(plantData).forEach((key) => {
       var plant = plantData[key];
-      var localpHPercent = plant.pH / plant.count;
+      var localpHPercent = plant.pH / pHCount;
       localpHPercent = 0.3 + ((localpHPercent - minpH) / (maxpH - minpH)) * 0.4;
-      var localTempPercent = plant.temperature / plant.count;
+      var localTempPercent = plant.temperature / tempCount;
       localTempPercent =
         0.3 + ((localTempPercent - minTemp) / (maxTemp - minTemp)) * 0.4;
+      var localGasPercent = plant.gas / gasCount;
+      localGasPercent = 0.3 + ((localGasPercent - minGas) / (maxGas - minGas)) * 0.4;
+      var localSmellPercent = plant.smell / smellCount;
+      localSmellPercent = 0.3 + ((localSmellPercent - minSmell) / (maxSmell - minSmell)) * 0.4;
+      var localMoisturePercent = plant.moisture / moistureCount;
+      localMoisturePercent = 0.3 + ((localMoisturePercent - minMoisture) / (maxMoisture - minMoisture)) * 0.4;
+      var localLightPercent = plant.light / lightCount;
+      localLightPercent = 0.3 + ((localLightPercent - minLight) / (maxLight - minLight)) * 0.4;
       console.log(key + " " + localpHPercent + " " + localTempPercent);
       if (
-        localpHPercent < 0.3 ||
-        localpHPercent > 0.7 ||
         localTempPercent < 0.3 ||
-        localTempPercent > 0.7
+        localTempPercent > 0.7 ||
+        localGasPercent < 0.3 ||
+        localGasPercent > 0.7 ||
+        localSmellPercent < 0.3 ||
+        localSmellPercent > 0.7 ||
+        localMoisturePercent < 0.3 ||
+        localMoisturePercent > 0.7 ||
+        localLightPercent < 0.3 ||
+        localLightPercent > 0.7
       ) {
         sickPlants.push(key);
       }
@@ -269,7 +374,7 @@ const App = ({ signOut }) => {
   }
 
   const chartTemperatureData = {
-    labels: labels,
+    labels: labelsTemp,
     datasets: [
       {
         label: "Plant Temperature Data",
@@ -281,7 +386,7 @@ const App = ({ signOut }) => {
   };
 
   const chartPHData = {
-    labels: labels,
+    labels: labelsPH,
     datasets: [
       {
         label: "Plant Ph Data",
@@ -291,25 +396,72 @@ const App = ({ signOut }) => {
       },
     ],
   };
+  const chartGasData = {
+    labels: labelsGas,
+    datasets: [
+      {
+        label: "Plant Gas Data",
+        backgroundColor: "rgb(255, 99, 132)",
+        borderColor: "rgb(255, 99, 132)",
+        data: GasData,
+      },
+    ],
+  };
+  const chartSmellData = {
+    labels: labelsSmell,
+    datasets: [
+      {
+        label: "Plant Smell Data",
+        backgroundColor: "rgb(255, 99, 132)",
+        borderColor: "rgb(255, 99, 132)",
+        data: SmellData,
+      },
+    ],
+  };
+  const chartMoistureData = {
+    labels: labelsMoisture,
+    datasets: [
+      {
+        label: "Plant Moisture Data",
+        backgroundColor: "rgb(255, 99, 132)",
+        borderColor: "rgb(255, 99, 132)",
+        data: MoistureData,
+      },
+    ],
+  };
+  const chartLightData = {
+    labels: labelsLight,
+    datasets: [
+      {
+        label: "Plant Light Data",
+        backgroundColor: "rgb(255, 99, 132)",
+        borderColor: "rgb(255, 99, 132)",
+        data: LightData,
+      },
+    ],
+  };
 
   async function createNote(event) {
     event.preventDefault();
     const form = new FormData(event.target);
-    const image = form.get("image");
+    //const image = form.get("image");
     //console.log("USER: " + user)
     const data = {
       name: form.get("name"),
       description: form.get("description"),
-      pH: form.get("pH"),
       temperature: form.get("Temperature"),
-      image: image.name,
+      //image: image.name,
       username: user,
+      gas: form.get("gas"),
+      smell: form.get("smell"), 
+      moisture: form.get("moisture"), 
+      light: form.get("light"),
     };
-    if (!!data.image)
-      await uploadData({
-        key: data.name,
-        data: image,
-      });
+    //if (!!data.image)
+      //await uploadData({
+        //key: data.name,
+        //data: image,
+      //});
     await client.graphql({
       query: createNoteMutation,
       variables: { input: data },
@@ -331,7 +483,7 @@ const App = ({ signOut }) => {
 
   const LineChart = (data) => {
     //console.log("MAKE CHART");
-    data.labels = labels;
+    //data.labels = labels;
 
     return (
       <div>
@@ -369,10 +521,24 @@ const App = ({ signOut }) => {
                 DataTable={DataTable}
                 chartPHData={chartPHData}
                 chartTemperatureData={chartTemperatureData}
+                chartGasData={chartGasData}
+                chartSmellData={chartSmellData}
+                chartMoistureData={chartMoistureData}
+                chartLightData={chartLightData}
               />
             }
           />
-          <Route path="/history" element={<History signOut={signOut} />} />
+          <Route path="/history" element={<History signOut={signOut} 
+                createNote={createNote}
+                LineChart={LineChart}
+                DataTable={DataTable}
+                chartPHData={chartPHData}
+                chartTemperatureData={chartTemperatureData}
+                chartGasData={chartGasData}
+                chartSmellData={chartSmellData}
+                chartMoistureData={chartMoistureData}
+                chartLightData={chartLightData}
+                />} />
           <Route path="/settings" element={<Settings signOut={signOut} />} />
         </Routes>
       </View>
@@ -380,10 +546,27 @@ const App = ({ signOut }) => {
   );
 };
 
-const History = ({ signOut }) => (
+const History = ({ signOut,createNote,
+  LineChart,
+  DataTable,
+  chartPHData,
+  chartTemperatureData,
+  chartGasData,
+  chartSmellData,
+  chartMoistureData,
+  chartLightData,}) => (
   <Fragment>
     <Heading level={1}>History</Heading>
-    <Text>Coming soon...</Text>
+    <View margin="3rem 0">
+      {LineChart(chartTemperatureData)}
+      {LineChart(chartGasData)}
+      {LineChart(chartSmellData)}
+      {LineChart(chartMoistureData)}
+      {LineChart(chartLightData)}
+      <Flex direction="row" justifyContent="center">
+        {DataTable()}
+      </Flex>
+    </View>
   </Fragment>
 );
 
@@ -400,6 +583,10 @@ const Home = ({
   DataTable,
   chartPHData,
   chartTemperatureData,
+  chartGasData,
+  chartSmellData,
+  chartMoistureData,
+  chartLightData,
 }) => (
   <Fragment>
     <View as="form" margin="3rem 0" onSubmit={createNote}>
@@ -421,14 +608,6 @@ const Home = ({
           required
         />
         <TextField
-          name="pH"
-          placeholder="pH"
-          label="pH"
-          labelHidden
-          variation="quiet"
-          required
-        />
-        <TextField
           name="Temperature"
           placeholder="Temperature"
           label="Temperature"
@@ -436,11 +615,37 @@ const Home = ({
           variation="quiet"
           required
         />
-        <View
-          name="image"
-          as="input"
-          type="file"
-          style={{ alignSelf: "end" }}
+        <TextField
+          name="gas"
+          placeholder="gas"
+          label="gas"
+          labelHidden
+          variation="quiet"
+          required
+        />
+        <TextField
+          name="smell"
+          placeholder="smell"
+          label="smell"
+          labelHidden
+          variation="quiet"
+          required
+        />
+        <TextField
+          name="moisture"
+          placeholder="moisture"
+          label="moisture"
+          labelHidden
+          variation="quiet"
+          required
+        />
+        <TextField
+          name="light"
+          placeholder="light"
+          label="light"
+          labelHidden
+          variation="quiet"
+          required
         />
         <Button type="submit" variation="primary">
           Upload Plant
@@ -490,25 +695,6 @@ const Home = ({
         }}
       >
         <Heading level={2} width={300}>
-          pH
-        </Heading>
-        <GaugeChart
-          id="ph-chart1"
-          style={chartStyle}
-          percent={Number(pHPercent)}
-          justifyContent="center"
-          hideText="True"
-        />
-      </View>
-      <View
-        style={{
-          flexDirection: "row",
-          height: 300,
-          paddingTop: 80,
-          width: 300,
-        }}
-      >
-        <Heading level={2} width={300}>
           Temperature
         </Heading>
         <GaugeChart
@@ -519,18 +705,88 @@ const Home = ({
           justifyContent="center"
           percent={Number(tempPercent)}
         />
-      </View>
+        </View>
+        <View
+        style={{
+          flexDirection: "row",
+          height: 300,
+          paddingTop: 80,
+          width: 300,
+        }}
+      >
+        <Heading level={2} width={300}>
+          Gas
+        </Heading>
+        <GaugeChart
+          id="gas-chart1"
+          style={chartStyle}
+          hideText="True"
+          direction="row"
+          justifyContent="center"
+          percent={Number(gasPercent)}
+        />
+        </View>
+        <View
+        style={{
+          flexDirection: "row",
+          height: 300,
+          paddingTop: 80,
+          width: 300,
+        }}
+      >
+        <Heading level={2} width={300}>
+          Smell
+        </Heading>
+        <GaugeChart
+          id="smell-chart1"
+          style={chartStyle}
+          hideText="True"
+          direction="row"
+          justifyContent="center"
+          percent={Number(smellPercent)}
+        />
+        </View>
+        <View
+        style={{
+          flexDirection: "row",
+          height: 300,
+          paddingTop: 80,
+          width: 300,
+        }}
+      >
+        <Heading level={2} width={300}>
+          Moisture
+        </Heading>
+        <GaugeChart
+          id="moisture-chart1"
+          style={chartStyle}
+          hideText="True"
+          direction="row"
+          justifyContent="center"
+          percent={Number(moisturePercent)}
+        />
+        </View>
+        <View
+        style={{
+          flexDirection: "row",
+          height: 300,
+          paddingTop: 80,
+          width: 300,
+        }}
+      >
+        <Heading level={2} width={300}>
+          Light
+        </Heading>
+        <GaugeChart
+          id="light-chart1"
+          style={chartStyle}
+          hideText="True"
+          direction="row"
+          justifyContent="center"
+          percent={Number(lightPercent)}
+        />
+        </View>
     </Flex>
-    <View margin="3rem 0">
-      {console.log(
-        "LABELS: " + labels + " " + chartTemperatureData + " " + chartPHData
-      )}
-      {LineChart(chartTemperatureData)}
-      {LineChart(chartPHData)}
-      <Flex direction="row" justifyContent="center">
-        {DataTable()}
-      </Flex>
-    </View>
   </Fragment>
 );
 
