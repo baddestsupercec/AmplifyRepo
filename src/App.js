@@ -235,11 +235,11 @@ const App = ({ signOut }) => {
     plantData = [];
     if(filteredPlant=="All Plants"){
     usedNames.map((name) => {
-      plantData[name] = { pH: 0, temperature: 0, humidity: 0, smell: 0, moisture: 0, light: 0, count: 0 };
+      plantData[name] = { pH: 0, temperature: 0, humidity: 0, smell: 0, moisture: 0, light: 0, count: 0 ,countPh: 0,countTemp: 0,countHumidity: 0,countSmell: 0,countMoisture: 0,countLight: 0};
     });
   }
   else{
-      plantData[filteredPlant] = { pH: 0, temperature: 0, humidity: 0, smell: 0, moisture: 0, light: 0, count: 0 };
+      plantData[filteredPlant] = { pH: 0, temperature: 0, humidity: 0, smell: 0, moisture: 0, light: 0, count: 0 ,countPh: 0,countTemp: 0,countHumidity: 0,countSmell: 0,countMoisture: 0,countLight: 0};
   }
     await Promise.all(
       filteredNotes.map(async (note) => {
@@ -248,6 +248,7 @@ const App = ({ signOut }) => {
           pHSum += note.pH;
           chartPhData.push(parseFloat(note.pH));
           plantData[note.name].pH += note.pH;
+          plantData[note.name].countPh++;
           labelsPH.push(new Date(note.createdAt).toLocaleString());
         }
         if (note.temperature !== undefined && note.temperature !== null) {
@@ -258,6 +259,7 @@ const App = ({ signOut }) => {
           tempCount++;
           tempSum += note.temperature;
           plantData[note.name].temperature += note.temperature;
+          plantData[note.name].countTemp++;
           labelsTemp.push(new Date(note.createdAt).toLocaleString());
         }
         if (note.humidity != undefined && note.humidity !== null) {
@@ -265,6 +267,7 @@ const App = ({ signOut }) => {
           humiditySum += note.humidity;
           HumidityData.push(parseFloat(note.humidity));
           plantData[note.name].humidity += note.humidity;
+          plantData[note.name].countHumidity++;
           labelsHumidity.push(new Date(note.createdAt).toLocaleString());
         }
         if (note.smell != undefined && note.smell !== null) {
@@ -272,6 +275,7 @@ const App = ({ signOut }) => {
           smellSum += note.smell;
           SmellData.push(parseFloat(note.smell));
           plantData[note.name].smell += note.smell;
+          plantData[note.name].countSmell++;
           labelsSmell.push(new Date(note.createdAt).toLocaleString());
         }
         if (note.moisture != undefined && note.moisture !== null) {
@@ -279,6 +283,7 @@ const App = ({ signOut }) => {
           moistureSum += note.moisture;
           MoistureData.push(parseFloat(note.moisture));
           plantData[note.name].moisture += note.moisture;
+          plantData[note.name].countMoisture++;
           labelsMoisture.push(new Date(note.createdAt).toLocaleString());
         }
         if (note.light != undefined && note.light !== null) {
@@ -286,6 +291,7 @@ const App = ({ signOut }) => {
           lightSum += note.light;
           LightData.push(parseFloat(note.light));
           plantData[note.name].light += note.light;
+          plantData[note.name].countLight++;
           labelsLight.push(new Date(note.createdAt).toLocaleString());
         }
         plantData[note.name].count++;
@@ -363,29 +369,29 @@ const App = ({ signOut }) => {
       var localMoisturePercent = 0;
       var localLightPercent = 0;
 
-      if(pHCount!=0){
-      localpHPercent = plant.pH / pHCount;
+      if(plant.countPh=0){
+      localpHPercent = plant.pH / plant.countPh;
       localpHPercent = 0.3 + ((localpHPercent - minpH) / (maxpH - minpH)) * 0.4;
       }
-      if(tempCount!=0){
-      localTempPercent = plant.temperature / tempCount;
+      if(plant.countTemp!=0){
+      localTempPercent = plant.temperature / plant.countTemp;
       localTempPercent =
         0.3 + ((localTempPercent - minTemp) / (maxTemp - minTemp)) * 0.4;
       }
-      if(humidityCount!=0){
-      localHumidityPercent = plant.humidity / humidityCount;
+      if(plant.countHumidity!=0){
+      localHumidityPercent = plant.humidity / plant.countHumidity;
       localHumidityPercent = 0.3 + ((localHumidityPercent - minHumidity) / (maxHumidity - minHumidity)) * 0.4;
       }
-      if(smellCount!=0){
-      localSmellPercent = plant.smell / smellCount;
+      if(plant.countSmell!=0){
+      localSmellPercent = plant.smell / plant.countSmell;
       localSmellPercent = 0.3 + ((localSmellPercent - minSmell) / (maxSmell - minSmell)) * 0.4;
       }
-      if(moistureCount!=0){
-      localMoisturePercent = plant.moisture / moistureCount;
+      if(plant.countMoisture!=0){
+      localMoisturePercent = plant.moisture / plant.countMoisture;
       localMoisturePercent = 0.3 + ((localMoisturePercent - minMoisture) / (maxMoisture - minMoisture)) * 0.4;
       }
-      if(lightCount!=0){
-      localLightPercent = plant.light / lightCount;
+      if(plant.countLight!=0){
+      localLightPercent = plant.light / plant.countLight;
       localLightPercent = 0.3 + ((localLightPercent - minLight) / (maxLight - minLight)) * 0.4;
       }
       if (
@@ -400,6 +406,7 @@ const App = ({ signOut }) => {
         localLightPercent < 0.3 ||
         localLightPercent > 0.7
       ) {
+        console.log(key + " " + localTempPercent + " " + localHumidityPercent + " " + localSmellPercent + " " + localMoisturePercent + " " + localLightPercent)
         sickPlants.push(key);
       }
     });
