@@ -407,7 +407,61 @@ const App = ({ signOut }) => {
         localLightPercent > 0.7
       ) {
         console.log(key + " " + localTempPercent + " " + localHumidityPercent + " " + localSmellPercent + " " + localMoisturePercent + " " + localLightPercent)
-        sickPlants.push(key);
+        var temperatureText = "";
+        var humidityText = "";
+        var smellText = "";
+        var moistureText = "";
+        var lightText = "";
+        if(localTempPercent<.3){
+          temperatureText = "Low";
+        }
+        else if(localTempPercent>.7){
+          temperatureText = "High";
+        }
+        else{
+          temperatureText = "Normal";
+        }
+
+        if(localLightPercent<.3){
+          lightText = "Low";
+        }
+        else if(localLightPercent>.7){
+          lightText = "High";
+        }
+        else{
+          lightText = "Normal";
+        }
+
+        if(localHumidityPercent<.3){
+          humidityText = "Low";
+        }
+        else if(localHumidityPercent>.7){
+          humidityText = "High";
+        }
+        else{
+          humidityText = "Normal";
+        }
+
+        if(localSmellPercent<.3){
+          smellText = "Low";
+        }
+        else if(localSmellPercent>.7){
+          smellText = "High";
+        }
+        else{
+          smellText = "Normal";
+        }
+
+        if(localMoisturePercent<.3){
+          moistureText = "Low";
+        }
+        else if(localMoisturePercent>.7){
+          moistureText = "High";
+        }
+        else{
+          moistureText = "Normal";
+        }
+        sickPlants.push([key,temperatureText,humidityText,smellText,moistureText,lightText]);
       }
     });
 
@@ -721,13 +775,23 @@ const Home = ({
         >
           <thead>
             <tr>
-              <td style={{ backgroundColor: "grey" }}>List of Sick Plants:</td>
+              <th style={{ backgroundColor: "grey" }}>List of Sick Plants</th>
+              <th style={{ backgroundColor: "grey" }}>Temperature</th>
+              <th style={{ backgroundColor: "grey" }}>Humidity</th>
+              <th style={{ backgroundColor: "grey" }}>Smell</th>
+              <th style={{ backgroundColor: "grey" }}>Moisture</th>
+              <th style={{ backgroundColor: "grey" }}>Light</th>
             </tr>
           </thead>
           <tbody>
             {sickPlants.map((plant) => (
-              <tr key={plant}>
-                <td style={rowStyle}>{plant}</td>
+              <tr key={plant[0]}>
+                <td style={rowStyle}>{plant[0]}</td>
+                <td style={rowStyle}>{plant[1]}</td>
+                <td style={rowStyle}>{plant[2]}</td>
+                <td style={rowStyle}>{plant[3]}</td>
+                <td style={rowStyle}>{plant[4]}</td>
+                <td style={rowStyle}>{plant[5]}</td>
               </tr>
             ))}
           </tbody>
@@ -753,6 +817,7 @@ const Home = ({
           hideText="True"
           direction="row"
           justifyContent="center"
+          colors={['#0000FF', '#00FF00', '#FF0000']}
           percent={Number(tempPercent)}
         />
         </View>
@@ -773,6 +838,7 @@ const Home = ({
           hideText="True"
           direction="row"
           justifyContent="center"
+          colors={['#0000FF', '#00FF00', '#FF0000']}
           percent={Number(humidityPercent)}
         />
         </View>
@@ -793,6 +859,7 @@ const Home = ({
           hideText="True"
           direction="row"
           justifyContent="center"
+          colors={['#0000FF', '#00FF00', '#FF0000']}
           percent={Number(smellPercent)}
         />
         </View>
@@ -813,6 +880,7 @@ const Home = ({
           hideText="True"
           direction="row"
           justifyContent="center"
+          colors={['#0000FF', '#00FF00', '#FF0000']}
           percent={Number(moisturePercent)}
         />
         </View>
@@ -833,6 +901,7 @@ const Home = ({
           hideText="True"
           direction="row"
           justifyContent="center"
+          colors={['#0000FF', '#00FF00', '#FF0000']}
           percent={Number(lightPercent)}
         />
         </View>
