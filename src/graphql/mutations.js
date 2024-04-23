@@ -70,3 +70,84 @@ export const deleteNote = /* GraphQL */ `
     }
   }
 `;
+export const createHealthParameters = /* GraphQL */ `
+  mutation CreateHealthParameters(
+    $input: CreateHealthParametersInput!
+    $condition: ModelHealthParametersConditionInput
+  ) {
+    createHealthParameters(input: $input, condition: $condition) {
+      id
+      name
+      username
+      pHlow
+      pHhigh
+      temperatureLow
+      temperatureHigh
+      humidityLow
+      humidityHigh
+      smellLow
+      smellHigh
+      moistureLow
+      moistureHigh
+      lightLow
+      lightHigh
+      createdAt
+      updatedAt
+      __typename
+    }
+  }
+`;
+export const updateHealthParameters = /* GraphQL */ `
+  mutation UpdateHealthParameters(
+    $input: UpdateHealthParametersInput!
+    $condition: ModelHealthParametersConditionInput
+  ) {
+    updateHealthParameters(input: $input, condition: $condition) {
+      id
+      name
+      username
+      pHlow
+      pHhigh
+      temperatureLow
+      temperatureHigh
+      humidityLow
+      humidityHigh
+      smellLow
+      smellHigh
+      moistureLow
+      moistureHigh
+      lightLow
+      lightHigh
+      createdAt
+      updatedAt
+      __typename
+    }
+  }
+`;
+export const deleteHealthParameters = /* GraphQL */ `
+  mutation DeleteHealthParameters(
+    $input: DeleteHealthParametersInput!
+    $condition: ModelHealthParametersConditionInput
+  ) {
+    deleteHealthParameters(input: $input, condition: $condition) {
+      id
+      name
+      username
+      pHlow
+      pHhigh
+      temperatureLow
+      temperatureHigh
+      humidityLow
+      humidityHigh
+      smellLow
+      smellHigh
+      moistureLow
+      moistureHigh
+      lightLow
+      lightHigh
+      createdAt
+      updatedAt
+      __typename
+    }
+  }
+`;

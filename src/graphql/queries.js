@@ -49,3 +49,63 @@ export const listNotes = /* GraphQL */ `
     }
   }
 `;
+export const getHealthParameters = /* GraphQL */ `
+  query GetHealthParameters($id: ID!) {
+    getHealthParameters(id: $id) {
+      id
+      name
+      username
+      pHlow
+      pHhigh
+      temperatureLow
+      temperatureHigh
+      humidityLow
+      humidityHigh
+      smellLow
+      smellHigh
+      moistureLow
+      moistureHigh
+      lightLow
+      lightHigh
+      createdAt
+      updatedAt
+      __typename
+    }
+  }
+`;
+export const listHealthParameters = /* GraphQL */ `
+  query ListHealthParameters(
+    $filter: ModelHealthParametersFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listHealthParameters(
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        name
+        username
+        pHlow
+        pHhigh
+        temperatureLow
+        temperatureHigh
+        humidityLow
+        humidityHigh
+        smellLow
+        smellHigh
+        moistureLow
+        moistureHigh
+        lightLow
+        lightHigh
+        createdAt
+        updatedAt
+        __typename
+      }
+      nextToken
+      __typename
+    }
+  }
+`;

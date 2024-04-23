@@ -15,3 +15,20 @@ type Note @model @auth(rules: [ { allow: public } ] ){
   moisture: Float
   light: Float
 }
+type HealthParameters @model {
+  id: ID!
+  name: String!
+  username: String
+  pHlow: Float
+  pHhigh: Float
+  temperatureLow: Float
+  temperatureHigh: Float
+  humidityLow: Float
+  humidityHigh: Float
+  smellLow: Float
+  smellHigh: Float
+  moistureLow: Float
+  moistureHigh: Float
+  lightLow: Float
+  lightHigh: Float
+}
