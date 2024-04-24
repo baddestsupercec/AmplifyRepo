@@ -151,3 +151,234 @@ export const deleteHealthParameters = /* GraphQL */ `
     }
   }
 `;
+export const createUserData = /* GraphQL */ `
+  mutation CreateUserData(
+    $input: CreateUserDataInput!
+    $condition: ModelUserDataConditionInput
+  ) {
+    createUserData(input: $input, condition: $condition) {
+      userID
+      email
+      username
+      firstName
+      lastName
+      plant {
+        nextToken
+        __typename
+      }
+      createdAt
+      updatedAt
+      __typename
+    }
+  }
+`;
+export const updateUserData = /* GraphQL */ `
+  mutation UpdateUserData(
+    $input: UpdateUserDataInput!
+    $condition: ModelUserDataConditionInput
+  ) {
+    updateUserData(input: $input, condition: $condition) {
+      userID
+      email
+      username
+      firstName
+      lastName
+      plant {
+        nextToken
+        __typename
+      }
+      createdAt
+      updatedAt
+      __typename
+    }
+  }
+`;
+export const deleteUserData = /* GraphQL */ `
+  mutation DeleteUserData(
+    $input: DeleteUserDataInput!
+    $condition: ModelUserDataConditionInput
+  ) {
+    deleteUserData(input: $input, condition: $condition) {
+      userID
+      email
+      username
+      firstName
+      lastName
+      plant {
+        nextToken
+        __typename
+      }
+      createdAt
+      updatedAt
+      __typename
+    }
+  }
+`;
+export const createPlantData = /* GraphQL */ `
+  mutation CreatePlantData(
+    $input: CreatePlantDataInput!
+    $condition: ModelPlantDataConditionInput
+  ) {
+    createPlantData(input: $input, condition: $condition) {
+      plantID
+      info
+      healthparamatersid
+      healthparameters {
+        id
+        name
+        username
+        pHlow
+        pHhigh
+        temperatureLow
+        temperatureHigh
+        humidityLow
+        humidityHigh
+        smellLow
+        smellHigh
+        moistureLow
+        moistureHigh
+        lightLow
+        lightHigh
+        createdAt
+        updatedAt
+        __typename
+      }
+      userid
+      sensor {
+        nextToken
+        __typename
+      }
+      createdAt
+      updatedAt
+      __typename
+    }
+  }
+`;
+export const updatePlantData = /* GraphQL */ `
+  mutation UpdatePlantData(
+    $input: UpdatePlantDataInput!
+    $condition: ModelPlantDataConditionInput
+  ) {
+    updatePlantData(input: $input, condition: $condition) {
+      plantID
+      info
+      healthparamatersid
+      healthparameters {
+        id
+        name
+        username
+        pHlow
+        pHhigh
+        temperatureLow
+        temperatureHigh
+        humidityLow
+        humidityHigh
+        smellLow
+        smellHigh
+        moistureLow
+        moistureHigh
+        lightLow
+        lightHigh
+        createdAt
+        updatedAt
+        __typename
+      }
+      userid
+      sensor {
+        nextToken
+        __typename
+      }
+      createdAt
+      updatedAt
+      __typename
+    }
+  }
+`;
+export const deletePlantData = /* GraphQL */ `
+  mutation DeletePlantData(
+    $input: DeletePlantDataInput!
+    $condition: ModelPlantDataConditionInput
+  ) {
+    deletePlantData(input: $input, condition: $condition) {
+      plantID
+      info
+      healthparamatersid
+      healthparameters {
+        id
+        name
+        username
+        pHlow
+        pHhigh
+        temperatureLow
+        temperatureHigh
+        humidityLow
+        humidityHigh
+        smellLow
+        smellHigh
+        moistureLow
+        moistureHigh
+        lightLow
+        lightHigh
+        createdAt
+        updatedAt
+        __typename
+      }
+      userid
+      sensor {
+        nextToken
+        __typename
+      }
+      createdAt
+      updatedAt
+      __typename
+    }
+  }
+`;
+export const createSensorData = /* GraphQL */ `
+  mutation CreateSensorData(
+    $input: CreateSensorDataInput!
+    $condition: ModelSensorDataConditionInput
+  ) {
+    createSensorData(input: $input, condition: $condition) {
+      sensorID
+      dateTime
+      plantid
+      data
+      createdAt
+      updatedAt
+      __typename
+    }
+  }
+`;
+export const updateSensorData = /* GraphQL */ `
+  mutation UpdateSensorData(
+    $input: UpdateSensorDataInput!
+    $condition: ModelSensorDataConditionInput
+  ) {
+    updateSensorData(input: $input, condition: $condition) {
+      sensorID
+      dateTime
+      plantid
+      data
+      createdAt
+      updatedAt
+      __typename
+    }
+  }
+`;
+export const deleteSensorData = /* GraphQL */ `
+  mutation DeleteSensorData(
+    $input: DeleteSensorDataInput!
+    $condition: ModelSensorDataConditionInput
+  ) {
+    deleteSensorData(input: $input, condition: $condition) {
+      sensorID
+      dateTime
+      plantid
+      data
+      createdAt
+      updatedAt
+      __typename
+    }
+  }
+`;

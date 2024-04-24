@@ -15,7 +15,7 @@ type Note @model @auth(rules: [ { allow: public } ] ){
   moisture: Float
   light: Float
 }
-type HealthParameters @model {
+type HealthParameters @model @auth(rules: [ { allow: public } ] ) {
   id: ID!
   name: String!
   username: String
@@ -31,4 +31,34 @@ type HealthParameters @model {
   moistureHigh: Float
   lightLow: Float
   lightHigh: Float
+}
+
+type UserData @model @auth(rules: [ { allow: public } ] ){
+  userID: ID! @primaryKey
+  email: String
+  username: String
+  firstName: String
+  lastName: String
+  plant: [PlantData] @hasMany(indexName: "byPlant", fields: ["userID"])
+}
+
+type PlantData @model @auth(rules: [ { allow: public } ] ){
+  plantID: ID! @primaryKey
+  info: String
+  healthparamatersid: ID!
+  healthparameters: HealthParameters @hasOne(fields: ["healthparamatersid"])
+  userid: ID! @index(name: "byPlant")
+  sensor: [SensorData] @hasMany(indexName: "bySensor", fields: ["plantID"])
+}
+
+type SensorData @model @searchable @auth(rules: [ { allow: public } ] ){
+  sensorID: ID! @primaryKey(sortKeyFields: ["dateTime"])
+  dateTime: String!
+  plantid: ID! @index(name: "bySensor")
+  data: Float
+}
+
+type Subscription {
+  onSensorByPlantId(plantDataSensorDatasId: ID!): SensorData
+    @aws_subscribe(mutations: ["createSensorData"])
 }
