@@ -12,10 +12,13 @@ import {
   View,
   withAuthenticator,
 } from "@aws-amplify/ui-react";
-import { listNotes } from "./graphql/queries";
+import { listNotes, listHealthParameters } from "./graphql/queries";
 import {
   createNote as createNoteMutation,
   deleteNote as deleteNoteMutation,
+  createHealthParameters as createHealthParametersMutation,
+  deleteHealthParameters as deleteHealthParametersMutation,
+  createHealthParameters,
 } from "./graphql/mutations";
 import { generateClient } from "aws-amplify/api";
 import { uploadData, getUrl, remove } from "aws-amplify/storage";
@@ -77,6 +80,7 @@ const chartStyle = {
 
 const App = ({ signOut }) => {
   const [notes, setNotes] = useState([]);
+  const [healthParameters, setHealthParameters] = useState([]);
   const [filteredDisplayNotes, setFilteredNotes] = useState([]);
   //const [filteredPlant, setFilter] = useState('All Plants');
   var filteredPlant = "All Plants";
@@ -168,6 +172,8 @@ const App = ({ signOut }) => {
     SmellData = [];
     const apiData = await client.graphql({ query: listNotes });
     var notesFromAPI = apiData.data.listNotes.items;
+    const healthData = await client.graphql({ query: listHealthParameters });
+    var HealthDataFromAPI = healthData.data.listHealthParameters.items;
     await Promise.all(
       notesFromAPI.map(async (note) => {
         if (note.image) {
@@ -178,12 +184,14 @@ const App = ({ signOut }) => {
       })
     );
     notesFromAPI = notesFromAPI.filter((note) => note.username === user);
+    HealthDataFromAPI = HealthDataFromAPI.filter((note) => note.username === user);
 
     notesFromAPI.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
 
     var filteredNotes = notesFromAPI;
     if (filteredPlant != "All Plants") {
       filteredNotes = notesFromAPI.filter((note) => note.name == filteredPlant);
+      HealthDataFromAPI = HealthDataFromAPI.filter((note) => note.name == filteredPlant);
     }
 
     var pHCount = 0;
@@ -211,6 +219,7 @@ const App = ({ signOut }) => {
     var minLight = 10;
     var maxLight = 100;
 
+
     labelsPH = [];
     labelsTemp = [];
     labelsHumidity = [];
@@ -231,7 +240,7 @@ const App = ({ signOut }) => {
       })
     );
     plantData = [];
-    if (filteredPlant == "All Plants") {
+      if(filteredPlant=="All Plants"){
       usedNames.map((name) => {
         plantData[name] = {
           pH: 0,
@@ -247,9 +256,21 @@ const App = ({ signOut }) => {
           countSmell: 0,
           countMoisture: 0,
           countLight: 0,
+          minTemp: 40,
+          maxTemp: 80,
+          minHumidity: 2000,
+          maxHumidity: 6000,
+          minSmell: 0,
+          maxSmell: 100,
+          minMoisture: 20,
+          maxMoisture: 100,
+          minLight: 30,
+          maxLight: 70,
+
         };
       });
-    } else {
+    }
+    else{
       plantData[filteredPlant] = {
         pH: 0,
         temperature: 0,
@@ -264,8 +285,37 @@ const App = ({ signOut }) => {
         countSmell: 0,
         countMoisture: 0,
         countLight: 0,
+        minTemp: 40,
+        maxTemp: 80,
+        minHumidity: 2000,
+        maxHumidity: 6000,
+        minSmell: 0,
+        maxSmell: 100,
+        minMoisture: 20,
+        maxMoisture: 100,
+        minLight: 30,
+        maxLight: 70,
+
       };
     }
+    await Promise.all(
+      HealthDataFromAPI.map(async (note) => {
+        console.log("NOTE: " + note);
+        console.log("SET HEALTH: " + note.name + " " + note.temperatureLow);
+        plantData[note.name].minTemp = note.temperatureLow;
+        plantData[note.name].maxTemp = note.temperatureHigh;
+        plantData[note.name].minHumidity = note.humidityLow;
+        plantData[note.name].maxHumidity = note.humidityHigh;
+        plantData[note.name].minSmell = note.smellLow;
+        plantData[note.name].maxSmell = note.smellHigh;
+        plantData[note.name].minMoisture = note.moistureLow;
+        plantData[note.name].maxMoisture = note.moistureHigh;
+        plantData[note.name].minLight = note.lightLow;
+        plantData[note.name].maxLight = note.lightHigh;
+        return note;
+      })
+    );
+    console.log("FILTERED PLANTS: "+filteredNotes);
     await Promise.all(
       filteredNotes.map(async (note) => {
         if (note.pH != undefined && note.pH !== null) {
@@ -277,43 +327,31 @@ const App = ({ signOut }) => {
           labelsPH.push(new Date(note.createdAt).toLocaleString());
         }
         if (note.temperature !== undefined && note.temperature !== null) {
-          tempCount++;
-          tempSum += note.temperature;
+          console.log("ONTEMP: "+ note.name);
           chartTempData.push(parseFloat(note.temperature));
-          console.log("ADD TEMP:" + note.temperature);
-          tempCount++;
-          tempSum += note.temperature;
           plantData[note.name].temperature += note.temperature;
           plantData[note.name].countTemp++;
           labelsTemp.push(new Date(note.createdAt).toLocaleString());
         }
         if (note.humidity != undefined && note.humidity !== null) {
-          humidityCount++;
-          humiditySum += note.humidity;
           HumidityData.push(parseFloat(note.humidity));
           plantData[note.name].humidity += note.humidity;
           plantData[note.name].countHumidity++;
           labelsHumidity.push(new Date(note.createdAt).toLocaleString());
         }
         if (note.smell != undefined && note.smell !== null) {
-          smellCount++;
-          smellSum += note.smell;
           SmellData.push(parseFloat(note.smell));
           plantData[note.name].smell += note.smell;
           plantData[note.name].countSmell++;
           labelsSmell.push(new Date(note.createdAt).toLocaleString());
         }
         if (note.moisture != undefined && note.moisture !== null) {
-          moistureCount++;
-          moistureSum += note.moisture;
           MoistureData.push(parseFloat(note.moisture));
           plantData[note.name].moisture += note.moisture;
           plantData[note.name].countMoisture++;
           labelsMoisture.push(new Date(note.createdAt).toLocaleString());
         }
         if (note.light != undefined && note.light !== null) {
-          lightCount++;
-          lightSum += note.light;
           LightData.push(parseFloat(note.light));
           plantData[note.name].light += note.light;
           plantData[note.name].countLight++;
@@ -323,88 +361,41 @@ const App = ({ signOut }) => {
         return note;
       })
     );
-    if (pHCount != 0) {
-      pHPercent = pHSum / pHCount;
-      pHPercent = 0.3 + ((pHPercent - minpH) / (maxpH - minpH)) * 0.4;
-    } else {
-      pHPercent = 0;
-    }
-    if (tempCount != 0) {
-      tempPercent = tempSum / tempCount;
-      tempPercent = 0.3 + ((tempPercent - minTemp) / (maxTemp - minTemp)) * 0.4;
-    } else {
-      tempPercent = 0;
-    }
-    if (humidityCount != 0) {
-      humidityPercent = humiditySum / humidityCount;
-      humidityPercent =
-        0.3 +
-        ((humidityPercent - minHumidity) / (maxHumidity - minHumidity)) * 0.4;
-    } else {
-      humidityPercent = 0;
-    }
-    if (smellCount != 0) {
-      smellPercent = smellSum / smellCount;
-      smellPercent =
-        0.3 + ((smellPercent - minSmell) / (maxSmell - minSmell)) * 0.4;
-    } else {
-      smellPercent = 0;
-    }
-    if (moistureCount != 0) {
-      moisturePercent = moistureSum / moistureCount;
-      moisturePercent =
-        0.3 +
-        ((moisturePercent - minMoisture) / (maxMoisture - minMoisture)) * 0.4;
-    } else {
-      moisturePercent = 0;
-    }
-    if (lightCount != 0) {
-      lightPercent = lightSum / lightCount;
-      lightPercent =
-        0.3 + ((lightPercent - minLight) / (maxLight - minLight)) * 0.4;
-    } else {
-      lightPercent = 0;
-    }
-    if (pHPercent > 1) {
-      pHPercent = 1;
-    }
-    if (tempPercent > 1) {
-      tempPercent = 1;
-    }
-    if (humidityPercent > 1) {
-      humidityPercent = 1;
-    }
-    if (smellPercent > 1) {
-      humidityPercent = 1;
-    }
-    if (moisturePercent > 1) {
-      smellPercent = 1;
-    }
-    if (lightPercent > 1) {
-      moisturePercent = 1;
-    }
-
+    console.log("DATA: "+plantData);
     Object.keys(plantData).forEach((key) => {
       var plant = plantData[key];
-      console.log("PLANT: " + key);
+      console.log("PLANT: " + key + " " + plant.temperature + " " + plant.minTemp);
       var localpHPercent = 0;
       var localTempPercent = 0;
       var localHumidityPercent = 0;
       var localSmellPercent = 0;
       var localMoisturePercent = 0;
       var localLightPercent = 0;
+      minTemp = plant.minTemp;
+      maxTemp = plant.maxTemp;
+      minHumidity = plant.minHumidity;
+      maxHumidity = plant.maxHumidity;
+      minSmell = plant.minSmell;
+      maxSmell = plant.maxSmell;
+      minMoisture = plant.minMoisture;
+      maxMoisture = plant.maxMoisture;
+      minLight = plant.minLight;
+      maxLight = plant.maxLight;
+      console.log("MIN: "+key+" " +minTemp);
 
-      if ((plant.countPh = 0)) {
+      if ((plant.countPh != 0)) {
         localpHPercent = plant.pH / plant.countPh;
         localpHPercent =
           0.3 + ((localpHPercent - minpH) / (maxpH - minpH)) * 0.4;
       }
       if (plant.countTemp != 0) {
+        tempCount+=1;
         localTempPercent = plant.temperature / plant.countTemp;
         localTempPercent =
           0.3 + ((localTempPercent - minTemp) / (maxTemp - minTemp)) * 0.4;
       }
       if (plant.countHumidity != 0) {
+        humidityCount+=1;
         localHumidityPercent = plant.humidity / plant.countHumidity;
         localHumidityPercent =
           0.3 +
@@ -412,11 +403,13 @@ const App = ({ signOut }) => {
             0.4;
       }
       if (plant.countSmell != 0) {
+        smellCount+=1;
         localSmellPercent = plant.smell / plant.countSmell;
         localSmellPercent =
           0.3 + ((localSmellPercent - minSmell) / (maxSmell - minSmell)) * 0.4;
       }
       if (plant.countMoisture != 0) {
+        moistureCount+=1;
         localMoisturePercent = plant.moisture / plant.countMoisture;
         localMoisturePercent =
           0.3 +
@@ -424,10 +417,59 @@ const App = ({ signOut }) => {
             0.4;
       }
       if (plant.countLight != 0) {
+        lightCount+=1;
         localLightPercent = plant.light / plant.countLight;
         localLightPercent =
           0.3 + ((localLightPercent - minLight) / (maxLight - minLight)) * 0.4;
       }
+
+  
+      if (localTempPercent > 1) {
+        localTempPercent = 1;
+      }
+      else if(localTempPercent<0){
+        localTempPercent = 0;
+      }
+      if (localHumidityPercent > 1) {
+        localHumidityPercent = 1;
+      }
+      else if(localHumidityPercent<0){
+        localHumidityPercent = 0;
+      }
+      if (localSmellPercent > 1) {
+        localSmellPercent = 1;
+      }
+      else if(localSmellPercent<0){
+        localSmellPercent = 0;
+      }
+      if (localMoisturePercent > 1) {
+        localMoisturePercent = 1;
+      }
+      else if(localMoisturePercent<0){
+        localMoisturePercent = 0;
+      }
+      if (localLightPercent > 1) {
+        localLightPercent = 1;
+      }
+      else if(localLightPercent<0){
+        localLightPercent = 0;
+      }
+
+      tempSum+=localTempPercent;
+      console.log("TEMP SUM: "+tempSum + " " + localTempPercent);
+      humiditySum+=localHumidityPercent;
+      smellSum+=localSmellPercent;
+      moistureSum+=localMoisturePercent;
+      lightSum+=localLightPercent;
+
+      if(filteredPlant!="All Plants"){
+        tempPercent = localTempPercent;
+        humidityPercent  = localHumidityPercent;
+        smellPercent = localSmellPercent;
+        moisturePercent = localMoisturePercent;
+        lightPercent = localLightPercent;
+      }
+      
       if (
         localTempPercent < 0.3 ||
         localTempPercent > 0.7 ||
@@ -440,24 +482,13 @@ const App = ({ signOut }) => {
         localLightPercent < 0.3 ||
         localLightPercent > 0.7
       ) {
-        console.log(
-          key +
-            " " +
-            localTempPercent +
-            " " +
-            localHumidityPercent +
-            " " +
-            localSmellPercent +
-            " " +
-            localMoisturePercent +
-            " " +
-            localLightPercent
-        );
         var temperatureText = "";
         var humidityText = "";
         var smellText = "";
         var moistureText = "";
         var lightText = "";
+
+        
         if (localTempPercent < 0.3) {
           temperatureText = "Low";
         } else if (localTempPercent > 0.7) {
@@ -497,6 +528,7 @@ const App = ({ signOut }) => {
         } else {
           moistureText = "Normal";
         }
+        console.log("SICK: " + key);
         sickPlants.push([
           key,
           temperatureText,
@@ -508,6 +540,49 @@ const App = ({ signOut }) => {
       }
     });
 
+    if(filteredPlant=="All Plants"){
+      if(tempCount!=0)
+        tempPercent = tempSum/tempCount;
+      if(humidityCount!=0)
+        humidityPercent  =humiditySum/humidityCount;
+      if(smellCount!=0)
+        smellPercent = smellSum/smellCount;
+      if(moistureCount!=0)
+        moisturePercent = moistureSum/moistureCount;
+      if(lightCount!=0)
+        lightPercent = lightSum/lightCount;
+    }
+    if (tempPercent > 1) {
+      tempPercent = 1;
+    }
+    else if(tempPercent<0){
+      tempPercent = 0;
+    }
+    if (humidityPercent > 1) {
+      humidityPercent = 1;
+    }
+    else if(humidityPercent<0){
+      humidityPercent = 0;
+    }
+    if (smellPercent > 1) {
+      smellPercent = 1;
+    }
+    else if(smellPercent<0){
+      smellPercent = 0;
+    }
+    if (moisturePercent > 1) {
+      moisturePercent = 1;
+    }
+    else if(moisturePercent<0){
+      moisturePercent = 0;
+    }
+    if (lightPercent > 1) {
+      lightPercent = 1;
+    }
+    else if(lightPercent<0){
+      lightPercent = 0;
+    }
+
     if (sickPlants.length > 0) {
       resultImage = cross;
     } else {
@@ -517,6 +592,7 @@ const App = ({ signOut }) => {
     setOptions(temporaryOptions);
     setFilteredNotes(filteredNotes);
     setNotes(notesFromAPI);
+    setHealthParameters(HealthDataFromAPI);
   }
 
   const chartTemperatureData = {
@@ -614,13 +690,48 @@ const App = ({ signOut }) => {
     fetchNotes();
     event.target.reset();
   }
+  async function createHealthParameters(event) {
+    event.preventDefault();
+    const form = new FormData(event.target);
+    //const image = form.get("image");
+    const data = {
+      name: form.get("name"),
+      temperatureLow: form.get("Low Temperature"),
+      temperatureHigh: form.get("High Temperature"),
+      username: user,
+      humidityLow: form.get("Low Humidity"),
+      humidityHigh: form.get("High Humidity"),
+      smellLow: form.get("Low Smell"),
+      smellHigh: form.get("High Smell"),
+      moistureLow: form.get("Low Moisture"),
+      moistureHigh: form.get("High Moisture"),
+      lightLow: form.get("Low Light"),
+      lightHigh: form.get("High Light"),
+    };
+    await client.graphql({
+      query: createHealthParametersMutation,
+      variables: { input: data },
+    });
+    fetchNotes();
+    event.target.reset();
+  }
 
   async function deleteNote({ id, name }) {
     const newNotes = notes.filter((note) => note.id !== id);
     setNotes(newNotes);
     await remove({ key: name });
     await client.graphql({
-      query: deleteNoteMutation,
+      query: deleteHealthParametersMutation,
+      variables: { input: { id } },
+    });
+    fetchNotes();
+  }
+  async function deleteHealthParameters(id, name ) {
+    const newNotes = notes.filter((note) => note.id !== id);
+    setHealthParameters(newNotes);
+    console.log("DELETE "+id);
+    await client.graphql({
+      query: deleteHealthParametersMutation,
       variables: { input: { id } },
     });
     fetchNotes();
@@ -689,7 +800,7 @@ const App = ({ signOut }) => {
               />
             }
           />
-          <Route path="/settings" element={<Settings signOut={signOut} />} />
+          <Route path="/settings" element={<Settings signOut={signOut} createHealthParameters={createHealthParameters} deleteHealthParameters={deleteHealthParameters} healthParameters={healthParameters}/>} />
         </Routes>
       </View>
       <Button onClick={signOut}>Sign Out</Button>
@@ -724,10 +835,158 @@ const History = ({
   </Fragment>
 );
 
-const Settings = ({ signOut }) => (
+const Settings = ({signOut,createHealthParameters,deleteHealthParameters,healthParameters}) => (
   <Fragment>
     <Heading level={1}>Settings</Heading>
-    <Text>Coming soon...</Text>
+    <View as="form" margin="3rem 0" onSubmit={createHealthParameters}>
+      <Flex direction="row" justifyContent="center">
+        <TextField
+          name="name"
+          placeholder="Plant Name"
+          label="Plant Name"
+          labelHidden
+          variation="quiet"
+          required
+        />
+        <TextField
+          name="Low Temperature"
+          placeholder="Low Temperature"
+          label="Low Temperature"
+          labelHidden
+          variation="quiet"
+          required
+        />
+        <TextField
+          name="High Temperature"
+          placeholder="High Temperature"
+          label="High Temperature"
+          labelHidden
+          variation="quiet"
+          required
+        />
+        <TextField
+          name="Low Humidity"
+          placeholder="Low Humidity"
+          label="Low Humidity"
+          labelHidden
+          variation="quiet"
+          required
+        />
+        <TextField
+          name="High Humidity"
+          placeholder="High Humidity"
+          label="High Humidity"
+          labelHidden
+          variation="quiet"
+          required
+        />
+        <TextField
+          name="Low Smell"
+          placeholder="Low Smell"
+          label="Low Smell"
+          labelHidden
+          variation="quiet"
+          required
+        />
+        <TextField
+          name="High Smell"
+          placeholder="High Smell"
+          label="High Smell"
+          labelHidden
+          variation="quiet"
+          required
+        />
+        <TextField
+          name="Low Moisture"
+          placeholder="Low Moisture"
+          label="Low Moisture"
+          labelHidden
+          variation="quiet"
+          required
+        />
+        <TextField
+          name="High Moisture"
+          placeholder="High Moisture"
+          label="High Moisture"
+          labelHidden
+          variation="quiet"
+          required
+        />
+        <TextField
+          name="Low Light"
+          placeholder="Low Light"
+          label="Low Light"
+          labelHidden
+          variation="quiet"
+          required
+        />
+        <TextField
+          name="High Light"
+          placeholder="High Light"
+          label="High Light"
+          labelHidden
+          variation="quiet"
+          required
+        />
+        <Button type="submit" variation="primary">
+          Upload Plant Parameters
+        </Button>
+      </Flex>
+    </View>
+    <Flex direction="row" justifyContent="center">
+      <div>
+        <table
+          style={{
+            width: "1000px",
+            borderWidth: "1px",
+            borderColor: "black",
+            borderRadius: "10px",
+            borderSpacing: "0px",
+          }}
+        >
+          <thead>
+            <tr>
+              <th style={{ backgroundColor: "grey" }}>Plant</th>
+              <th style={{ backgroundColor: "grey" }}>Min Temperature</th>
+              <th style={{ backgroundColor: "grey" }}>Max Temperature</th>
+              <th style={{ backgroundColor: "grey" }}>Min Humidity</th>
+              <th style={{ backgroundColor: "grey" }}>Max Humidity</th>
+              <th style={{ backgroundColor: "grey" }}>Min Smell</th>
+              <th style={{ backgroundColor: "grey" }}>Max Smell</th>
+              <th style={{ backgroundColor: "grey" }}>Min Moisture</th>
+              <th style={{ backgroundColor: "grey" }}>Max Moisture</th>
+              <th style={{ backgroundColor: "grey" }}>Min Light</th>
+              <th style={{ backgroundColor: "grey" }}>Max Light</th>
+              <th style={{ backgroundColor: "grey" }}>Edit</th>
+            </tr>
+          </thead>
+          <tbody>
+            {healthParameters.map((plant) => (
+              <tr key={plant.name}>
+                <td style={rowStyle}>{plant.name}</td>
+                <td style={rowStyle}>{plant.temperatureLow}</td>
+                <td style={rowStyle}>{plant.temperatureHigh}</td>
+                <td style={rowStyle}>{plant.humidityLow}</td>
+                <td style={rowStyle}>{plant.humidityHigh}</td>
+                <td style={rowStyle}>{plant.smellLow}</td>
+                <td style={rowStyle}>{plant.smellHigh}</td>
+                <td style={rowStyle}>{plant.moistureLow}</td>
+                <td style={rowStyle}>{plant.moistureHigh}</td>
+                <td style={rowStyle}>{plant.lightLow}</td>
+                <td style={rowStyle}>{plant.lightHigh}</td>
+                <td style={rowStyle}>
+        {
+          <Button variation="link" onClick={() => deleteHealthParameters( plant.id, plant.name )}>
+            Delete Plant Parameters
+          </Button>
+        }
+      </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </Flex>
   </Fragment>
 );
 

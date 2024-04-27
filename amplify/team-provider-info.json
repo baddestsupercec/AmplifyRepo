@@ -19,7 +19,16 @@
         "amplifyrepo": {}
       },
       "storage": {
-        "s32af0184c": {}
+        "s32af0184c": {},
+        "sensorData": {
+          "tableName": "sensorData",
+          "region": "us-east-2",
+          "arn": "arn:aws:dynamodb:us-east-2:271783618456:table/sensorData",
+          "partitionKeyName": "sensorID",
+          "partitionKeyType": "S",
+          "sortKeyName": "dateTime",
+          "sortKeyType": "S"
+        }
       }
     }
   }
