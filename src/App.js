@@ -12,7 +12,7 @@ import {
   View,
   withAuthenticator,
 } from "@aws-amplify/ui-react";
-import { listNotes, listHealthParameters, listPlantData } from "./graphql/queries";
+import { listNotes, listHealthParameters } from "./graphql/queries";
 import {
   createNote as createNoteMutation,
   deleteNote as deleteNoteMutation,
@@ -159,30 +159,7 @@ const App = ({ signOut }) => {
     filteredPlant = event.target.value;
     fetchNotes();
   };
-/**
- * A simple addition function.
- * @public
- * @function add
- * @param {number} a - The first number.
- * @param {number} b - The second number.
- * @returns {number} The sum of the two numbers.
- */
-function add(a, b) {
-  return a + b;
-}
-/**
- * Fetches notes asynchronously.
- * @public
- * @async
- * @function fetchNotes
- * @returns {Promise<void>} A promise that resolves when notes are fetched.
- * @example
- * fetchNotes().then(() => {
- *   console.log('Notes fetched successfully.');
- * }).catch(err => {
- *   console.error('Error fetching notes:', err);
- * });
- */
+
   async function fetchNotes() {
     await currentAuthenticatedUser();
     console.log("START FETCH");
