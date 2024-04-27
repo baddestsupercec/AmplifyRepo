@@ -706,7 +706,7 @@ const App = ({ signOut }) => {
     setNotes(newNotes);
     await remove({ key: name });
     await client.graphql({
-      query: deleteHealthParametersMutation,
+      query: deleteNoteMutation,
       variables: { input: { id } },
     });
     fetchNotes();
