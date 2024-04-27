@@ -727,7 +727,7 @@ const App = ({ signOut }) => {
     fetchNotes();
   }
   async function deleteHealthParameters(id, name ) {
-    const newNotes = notes.filter((note) => note.id !== id);
+    const newNotes = healthParameters.filter((note) => note.id !== id);
     setHealthParameters(newNotes);
     console.log("DELETE "+id);
     await client.graphql({
