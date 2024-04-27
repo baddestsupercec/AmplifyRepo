@@ -1,0 +1,16 @@
+{
+    "source": {
+      "include": ["src"], 
+      "includePattern": ".+\\.jsx?$" 
+    },
+    "plugins": ["plugins/markdown","node_modules/better-docs"], 
+    "opts": {
+        "template": "node_modules/better-docs",  
+      "recurse": true,
+      "destination": "docs"
+    },
+    "templates": {
+      "cleverLinks": false,
+      "monospaceLinks": false
+    }
+  }
