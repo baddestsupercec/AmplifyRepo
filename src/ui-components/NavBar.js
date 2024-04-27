@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
-import History from "../History";
+import { Button } from "@aws-amplify/ui-react";
+import "./NavBar.css";
 
 const Nav = styled.nav`
   display: flex;
@@ -33,7 +34,7 @@ const Logo = styled.h1`
   margin: 0;
 `;
 
-const NavBar = () => {
+const NavBar = (signOut) => {
   return (
     <Nav>
       <Logo>Nature Nanny</Logo>

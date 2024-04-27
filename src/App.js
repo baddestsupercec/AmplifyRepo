@@ -722,16 +722,19 @@ const App = ({ signOut }) => {
     fetchNotes();
   }
 
-  const LineChart = (data) => {
+  const LineChart = (data, title) => {
     //data.labels = labels;
 
     return (
       <div>
-        <Line
-          data={data}
-          width={"30%"}
-          options={{ maintainAspectRatio: false }}
-        />
+        <Heading level={2}>{title}</Heading>
+        <div className="history-chart">
+          <Line
+            data={data}
+            width={"30%"}
+            options={{ maintainAspectRatio: false }}
+          />
+        </div>
       </div>
     );
   };
@@ -811,27 +814,29 @@ const History = ({
   options,
 }) => (
   <Fragment>
-    <Heading level={1}>History</Heading>
-    <label>
-      {" "}
-      Filter Plants
-      <select default="All Plants" onChange={selectFilter}>
-        {options.map((option, index) => (
-          <option key={index} value={option.value} label={options.label}>
-            {option.label}
-          </option>
-        ))}
-      </select>
-    </label>
-    <View margin="3rem 0">
-      {LineChart(chartTemperatureData)}
-      {LineChart(chartHumidityData)}
-      {LineChart(chartSmellData)}
-      {LineChart(chartMoistureData)}
-      {LineChart(chartLightData)}
-      <Flex direction="row" justifyContent="center">
-        {DataTable()}
-      </Flex>
+    <div className="plantFilter">
+      <label>
+        Filter Plants{" "}
+        <select default="All Plants" onChange={selectFilter}>
+          {options.map((option, index) => (
+            <option key={index} value={option.value} label={options.label}>
+              {option.label}
+            </option>
+          ))}
+        </select>
+      </label>
+    </div>
+    <View>
+      {LineChart(chartTemperatureData, "Temperature")}
+      {LineChart(chartHumidityData, "Humidity")}
+      {LineChart(chartSmellData, "Smell")}
+      {LineChart(chartMoistureData, "Moisture")}
+      {LineChart(chartLightData, "Light")}
+      <div className="history-table">
+        <Flex direction="row" justifyContent="center">
+          {DataTable()}
+        </Flex>
+      </div>
     </View>
   </Fragment>
 );

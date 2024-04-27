@@ -34,10 +34,20 @@
 .plantFilter {
     background-color: white;
     border-radius: 0.75rem;
-    margin: 1rem;
     padding: 0.5rem;
     width: 8rem;
     box-shadow: 1px 1px 2px #000000;
+    flex-direction: row;
+}
+
+.history-table {
+    background-color: white;
+    border-radius: 0.75rem;
+    box-shadow: 1px 1px 2px #000000;
+    padding: 1em;
+    width: 66%;
+    margin: auto;
+    margin-bottom: 1em;
 }
 
 .plantEntry {
@@ -56,6 +66,14 @@
     margin: 0px;
     box-shadow: 1px 1px 2px #000000;
     margin: 1rem;
+}
+
+.history-chart {
+    margin: 1em;
+    background-color: white;
+    padding: 0.5rem;
+    border-radius: 0.75rem;
+    box-shadow: 1px 1px 2px #000000;
 }
 
 .App-logo {
