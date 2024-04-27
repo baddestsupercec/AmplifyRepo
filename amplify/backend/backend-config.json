@@ -7,9 +7,7 @@
           "additionalAuthenticationProviders": [],
           "defaultAuthentication": {
             "apiKeyConfig": {
-              "apiKeyExpirationDate": "2024-05-01T07:10:23.174Z",
-              "apiKeyExpirationDays": 7,
-              "description": "test"
+              "apiKeyExpirationDays": 7
             },
             "authenticationType": "API_KEY"
           }
@@ -45,75 +43,11 @@
       "service": "Cognito"
     }
   },
-  "parameters": {
-    "AMPLIFY_storage_sensorData_arn": {
-      "usedBy": [
-        {
-          "category": "storage",
-          "resourceName": "sensorData"
-        }
-      ]
-    },
-    "AMPLIFY_storage_sensorData_partitionKeyName": {
-      "usedBy": [
-        {
-          "category": "storage",
-          "resourceName": "sensorData"
-        }
-      ]
-    },
-    "AMPLIFY_storage_sensorData_partitionKeyType": {
-      "usedBy": [
-        {
-          "category": "storage",
-          "resourceName": "sensorData"
-        }
-      ]
-    },
-    "AMPLIFY_storage_sensorData_region": {
-      "usedBy": [
-        {
-          "category": "storage",
-          "resourceName": "sensorData"
-        }
-      ]
-    },
-    "AMPLIFY_storage_sensorData_sortKeyName": {
-      "usedBy": [
-        {
-          "category": "storage",
-          "resourceName": "sensorData"
-        }
-      ]
-    },
-    "AMPLIFY_storage_sensorData_sortKeyType": {
-      "usedBy": [
-        {
-          "category": "storage",
-          "resourceName": "sensorData"
-        }
-      ]
-    },
-    "AMPLIFY_storage_sensorData_tableName": {
-      "usedBy": [
-        {
-          "category": "storage",
-          "resourceName": "sensorData"
-        }
-      ]
-    }
-  },
   "storage": {
     "s32af0184c": {
       "dependsOn": [],
       "providerPlugin": "awscloudformation",
       "service": "S3"
-    },
-    "sensorData": {
-      "dependsOn": [],
-      "providerPlugin": "awscloudformation",
-      "service": "DynamoDB",
-      "serviceType": "imported"
     }
   }
 }
