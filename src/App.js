@@ -184,14 +184,18 @@ const App = ({ signOut }) => {
       })
     );
     notesFromAPI = notesFromAPI.filter((note) => note.username === user);
-    HealthDataFromAPI = HealthDataFromAPI.filter((note) => note.username === user);
+    HealthDataFromAPI = HealthDataFromAPI.filter(
+      (note) => note.username === user
+    );
 
     notesFromAPI.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
 
     var filteredNotes = notesFromAPI;
     if (filteredPlant != "All Plants") {
       filteredNotes = notesFromAPI.filter((note) => note.name == filteredPlant);
-      HealthDataFromAPI = HealthDataFromAPI.filter((note) => note.name == filteredPlant);
+      HealthDataFromAPI = HealthDataFromAPI.filter(
+        (note) => note.name == filteredPlant
+      );
     }
 
     var pHCount = 0;
@@ -219,7 +223,6 @@ const App = ({ signOut }) => {
     var minLight = 10;
     var maxLight = 100;
 
-
     labelsPH = [];
     labelsTemp = [];
     labelsHumidity = [];
@@ -240,7 +243,7 @@ const App = ({ signOut }) => {
       })
     );
     plantData = [];
-      if(filteredPlant=="All Plants"){
+    if (filteredPlant == "All Plants") {
       usedNames.map((name) => {
         plantData[name] = {
           pH: 0,
@@ -266,11 +269,9 @@ const App = ({ signOut }) => {
           maxMoisture: 100,
           minLight: 30,
           maxLight: 70,
-
         };
       });
-    }
-    else{
+    } else {
       plantData[filteredPlant] = {
         pH: 0,
         temperature: 0,
@@ -295,7 +296,6 @@ const App = ({ signOut }) => {
         maxMoisture: 100,
         minLight: 30,
         maxLight: 70,
-
       };
     }
     await Promise.all(
@@ -315,7 +315,7 @@ const App = ({ signOut }) => {
         return note;
       })
     );
-    console.log("FILTERED PLANTS: "+filteredNotes);
+    console.log("FILTERED PLANTS: " + filteredNotes);
     await Promise.all(
       filteredNotes.map(async (note) => {
         if (note.pH != undefined && note.pH !== null) {
@@ -327,7 +327,7 @@ const App = ({ signOut }) => {
           labelsPH.push(new Date(note.createdAt).toLocaleString());
         }
         if (note.temperature !== undefined && note.temperature !== null) {
-          console.log("ONTEMP: "+ note.name);
+          console.log("ONTEMP: " + note.name);
           chartTempData.push(parseFloat(note.temperature));
           plantData[note.name].temperature += note.temperature;
           plantData[note.name].countTemp++;
@@ -361,10 +361,12 @@ const App = ({ signOut }) => {
         return note;
       })
     );
-    console.log("DATA: "+plantData);
+    console.log("DATA: " + plantData);
     Object.keys(plantData).forEach((key) => {
       var plant = plantData[key];
-      console.log("PLANT: " + key + " " + plant.temperature + " " + plant.minTemp);
+      console.log(
+        "PLANT: " + key + " " + plant.temperature + " " + plant.minTemp
+      );
       var localpHPercent = 0;
       var localTempPercent = 0;
       var localHumidityPercent = 0;
@@ -381,21 +383,21 @@ const App = ({ signOut }) => {
       maxMoisture = plant.maxMoisture;
       minLight = plant.minLight;
       maxLight = plant.maxLight;
-      console.log("MIN: "+key+" " +minTemp);
+      console.log("MIN: " + key + " " + minTemp);
 
-      if ((plant.countPh != 0)) {
+      if (plant.countPh != 0) {
         localpHPercent = plant.pH / plant.countPh;
         localpHPercent =
           0.3 + ((localpHPercent - minpH) / (maxpH - minpH)) * 0.4;
       }
       if (plant.countTemp != 0) {
-        tempCount+=1;
+        tempCount += 1;
         localTempPercent = plant.temperature / plant.countTemp;
         localTempPercent =
           0.3 + ((localTempPercent - minTemp) / (maxTemp - minTemp)) * 0.4;
       }
       if (plant.countHumidity != 0) {
-        humidityCount+=1;
+        humidityCount += 1;
         localHumidityPercent = plant.humidity / plant.countHumidity;
         localHumidityPercent =
           0.3 +
@@ -403,13 +405,13 @@ const App = ({ signOut }) => {
             0.4;
       }
       if (plant.countSmell != 0) {
-        smellCount+=1;
+        smellCount += 1;
         localSmellPercent = plant.smell / plant.countSmell;
         localSmellPercent =
           0.3 + ((localSmellPercent - minSmell) / (maxSmell - minSmell)) * 0.4;
       }
       if (plant.countMoisture != 0) {
-        moistureCount+=1;
+        moistureCount += 1;
         localMoisturePercent = plant.moisture / plant.countMoisture;
         localMoisturePercent =
           0.3 +
@@ -417,59 +419,53 @@ const App = ({ signOut }) => {
             0.4;
       }
       if (plant.countLight != 0) {
-        lightCount+=1;
+        lightCount += 1;
         localLightPercent = plant.light / plant.countLight;
         localLightPercent =
           0.3 + ((localLightPercent - minLight) / (maxLight - minLight)) * 0.4;
       }
 
-  
       if (localTempPercent > 1) {
         localTempPercent = 1;
-      }
-      else if(localTempPercent<0){
+      } else if (localTempPercent < 0) {
         localTempPercent = 0;
       }
       if (localHumidityPercent > 1) {
         localHumidityPercent = 1;
-      }
-      else if(localHumidityPercent<0){
+      } else if (localHumidityPercent < 0) {
         localHumidityPercent = 0;
       }
       if (localSmellPercent > 1) {
         localSmellPercent = 1;
-      }
-      else if(localSmellPercent<0){
+      } else if (localSmellPercent < 0) {
         localSmellPercent = 0;
       }
       if (localMoisturePercent > 1) {
         localMoisturePercent = 1;
-      }
-      else if(localMoisturePercent<0){
+      } else if (localMoisturePercent < 0) {
         localMoisturePercent = 0;
       }
       if (localLightPercent > 1) {
         localLightPercent = 1;
-      }
-      else if(localLightPercent<0){
+      } else if (localLightPercent < 0) {
         localLightPercent = 0;
       }
 
-      tempSum+=localTempPercent;
-      console.log("TEMP SUM: "+tempSum + " " + localTempPercent);
-      humiditySum+=localHumidityPercent;
-      smellSum+=localSmellPercent;
-      moistureSum+=localMoisturePercent;
-      lightSum+=localLightPercent;
+      tempSum += localTempPercent;
+      console.log("TEMP SUM: " + tempSum + " " + localTempPercent);
+      humiditySum += localHumidityPercent;
+      smellSum += localSmellPercent;
+      moistureSum += localMoisturePercent;
+      lightSum += localLightPercent;
 
-      if(filteredPlant!="All Plants"){
+      if (filteredPlant != "All Plants") {
         tempPercent = localTempPercent;
-        humidityPercent  = localHumidityPercent;
+        humidityPercent = localHumidityPercent;
         smellPercent = localSmellPercent;
         moisturePercent = localMoisturePercent;
         lightPercent = localLightPercent;
       }
-      
+
       if (
         localTempPercent < 0.3 ||
         localTempPercent > 0.7 ||
@@ -488,7 +484,6 @@ const App = ({ signOut }) => {
         var moistureText = "";
         var lightText = "";
 
-        
         if (localTempPercent < 0.3) {
           temperatureText = "Low";
         } else if (localTempPercent > 0.7) {
@@ -540,46 +535,36 @@ const App = ({ signOut }) => {
       }
     });
 
-    if(filteredPlant=="All Plants"){
-      if(tempCount!=0)
-        tempPercent = tempSum/tempCount;
-      if(humidityCount!=0)
-        humidityPercent  =humiditySum/humidityCount;
-      if(smellCount!=0)
-        smellPercent = smellSum/smellCount;
-      if(moistureCount!=0)
-        moisturePercent = moistureSum/moistureCount;
-      if(lightCount!=0)
-        lightPercent = lightSum/lightCount;
+    if (filteredPlant == "All Plants") {
+      if (tempCount != 0) tempPercent = tempSum / tempCount;
+      if (humidityCount != 0) humidityPercent = humiditySum / humidityCount;
+      if (smellCount != 0) smellPercent = smellSum / smellCount;
+      if (moistureCount != 0) moisturePercent = moistureSum / moistureCount;
+      if (lightCount != 0) lightPercent = lightSum / lightCount;
     }
     if (tempPercent > 1) {
       tempPercent = 1;
-    }
-    else if(tempPercent<0){
+    } else if (tempPercent < 0) {
       tempPercent = 0;
     }
     if (humidityPercent > 1) {
       humidityPercent = 1;
-    }
-    else if(humidityPercent<0){
+    } else if (humidityPercent < 0) {
       humidityPercent = 0;
     }
     if (smellPercent > 1) {
       smellPercent = 1;
-    }
-    else if(smellPercent<0){
+    } else if (smellPercent < 0) {
       smellPercent = 0;
     }
     if (moisturePercent > 1) {
       moisturePercent = 1;
-    }
-    else if(moisturePercent<0){
+    } else if (moisturePercent < 0) {
       moisturePercent = 0;
     }
     if (lightPercent > 1) {
       lightPercent = 1;
-    }
-    else if(lightPercent<0){
+    } else if (lightPercent < 0) {
       lightPercent = 0;
     }
 
@@ -726,10 +711,10 @@ const App = ({ signOut }) => {
     });
     fetchNotes();
   }
-  async function deleteHealthParameters(id, name ) {
+  async function deleteHealthParameters(id, name) {
     const newNotes = notes.filter((note) => note.id !== id);
     setHealthParameters(newNotes);
-    console.log("DELETE "+id);
+    console.log("DELETE " + id);
     await client.graphql({
       query: deleteHealthParametersMutation,
       variables: { input: { id } },
@@ -753,19 +738,8 @@ const App = ({ signOut }) => {
 
   return (
     <BrowserRouter>
+      <NavBar signOut={signOut} />
       <View className="App">
-        <NavBar signOut={signOut} />
-        <label>
-          {" "}
-          Filter Plants
-          <select default="All Plants" onChange={selectFilter}>
-            {options.map((option, index) => (
-              <option key={index} value={option.value} label={options.label}>
-                {option.label}
-              </option>
-            ))}
-          </select>
-        </label>
         <Routes>
           <Route
             path="/"
@@ -780,6 +754,8 @@ const App = ({ signOut }) => {
                 chartSmellData={chartSmellData}
                 chartMoistureData={chartMoistureData}
                 chartLightData={chartLightData}
+                selectFilter={selectFilter}
+                options={options}
               />
             }
           />
@@ -797,13 +773,25 @@ const App = ({ signOut }) => {
                 chartSmellData={chartSmellData}
                 chartMoistureData={chartMoistureData}
                 chartLightData={chartLightData}
+                selectFilter={selectFilter}
+                options={options}
               />
             }
           />
-          <Route path="/settings" element={<Settings signOut={signOut} createHealthParameters={createHealthParameters} deleteHealthParameters={deleteHealthParameters} healthParameters={healthParameters}/>} />
+          <Route
+            path="/settings"
+            element={
+              <Settings
+                signOut={signOut}
+                createHealthParameters={createHealthParameters}
+                deleteHealthParameters={deleteHealthParameters}
+                healthParameters={healthParameters}
+              />
+            }
+          />
         </Routes>
+        <Button onClick={signOut}>Sign Out</Button>
       </View>
-      <Button onClick={signOut}>Sign Out</Button>
     </BrowserRouter>
   );
 };
@@ -819,9 +807,22 @@ const History = ({
   chartSmellData,
   chartMoistureData,
   chartLightData,
+  selectFilter,
+  options,
 }) => (
   <Fragment>
     <Heading level={1}>History</Heading>
+    <label>
+      {" "}
+      Filter Plants
+      <select default="All Plants" onChange={selectFilter}>
+        {options.map((option, index) => (
+          <option key={index} value={option.value} label={options.label}>
+            {option.label}
+          </option>
+        ))}
+      </select>
+    </label>
     <View margin="3rem 0">
       {LineChart(chartTemperatureData)}
       {LineChart(chartHumidityData)}
@@ -835,7 +836,12 @@ const History = ({
   </Fragment>
 );
 
-const Settings = ({signOut,createHealthParameters,deleteHealthParameters,healthParameters}) => (
+const Settings = ({
+  signOut,
+  createHealthParameters,
+  deleteHealthParameters,
+  healthParameters,
+}) => (
   <Fragment>
     <Heading level={1}>Settings</Heading>
     <View as="form" margin="3rem 0" onSubmit={createHealthParameters}>
@@ -975,12 +981,17 @@ const Settings = ({signOut,createHealthParameters,deleteHealthParameters,healthP
                 <td style={rowStyle}>{plant.lightLow}</td>
                 <td style={rowStyle}>{plant.lightHigh}</td>
                 <td style={rowStyle}>
-        {
-          <Button variation="link" onClick={() => deleteHealthParameters( plant.id, plant.name )}>
-            Delete Plant Parameters
-          </Button>
-        }
-      </td>
+                  {
+                    <Button
+                      variation="link"
+                      onClick={() =>
+                        deleteHealthParameters(plant.id, plant.name)
+                      }
+                    >
+                      Delete Plant Parameters
+                    </Button>
+                  }
+                </td>
               </tr>
             ))}
           </tbody>
@@ -1000,9 +1011,75 @@ const Home = ({
   chartSmellData,
   chartMoistureData,
   chartLightData,
+  selectFilter,
+  options,
 }) => (
   <Fragment>
-    <View as="form" margin="3rem 0" onSubmit={createNote}>
+    <div className="plantFilter">
+      <label>
+        <Text>Filter Plants</Text>
+        <select default="All Plants" onChange={selectFilter}>
+          {options.map((option, index) => (
+            <option key={index} value={option.value} label={options.label}>
+              {option.label}
+            </option>
+          ))}
+        </select>
+      </label>
+    </div>
+
+    {/* <Flex direction="row" justifyContent="center">
+      <Heading level={2}>Plant Data</Heading>
+    </Flex> */}
+    <div>
+      <Flex direction="row" justifyContent="center">
+        <img src={resultImage} width={400} height={200} />
+        <div className="sickPlant">
+          <table
+            style={{
+              width: "1000px",
+              borderWidth: "1px",
+              borderColor: "black",
+              borderRadius: "10px",
+              borderSpacing: "0px",
+            }}
+          >
+            <thead>
+              <tr>
+                <th style={{ backgroundColor: "grey" }}>List of Sick Plants</th>
+                <th style={{ backgroundColor: "grey" }}>Temperature</th>
+                <th style={{ backgroundColor: "grey" }}>Humidity</th>
+                <th style={{ backgroundColor: "grey" }}>Smell</th>
+                <th style={{ backgroundColor: "grey" }}>Moisture</th>
+                <th style={{ backgroundColor: "grey" }}>Light</th>
+              </tr>
+            </thead>
+            <tbody>
+              {sickPlants.map((plant) => (
+                <tr key={plant[0]}>
+                  <td style={rowStyle}>{plant[0]}</td>
+                  <td style={rowStyle}>{plant[1]}</td>
+                  <td style={rowStyle}>{plant[2]}</td>
+                  <td style={rowStyle}>{plant[3]}</td>
+                  <td style={rowStyle}>{plant[4]}</td>
+                  <td style={rowStyle}>{plant[5]}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </Flex>
+    </div>
+
+    <Gauges
+      tempPercent={tempPercent}
+      humidityPercent={humidityPercent}
+      smellPercent={smellPercent}
+      lightPercent={lightPercent}
+      moisturePercent={moisturePercent}
+    ></Gauges>
+    <Flex direction="row" justifyContent="center"></Flex>
+    <View as="form" onSubmit={createNote} className="plantEntry">
       <Flex direction="row" justifyContent="center">
         <TextField
           name="name"
@@ -1065,59 +1142,20 @@ const Home = ({
         </Button>
       </Flex>
     </View>
-    <Flex direction="row" justifyContent="center">
-      <Heading level={2}>Plant Data</Heading>
-    </Flex>
-    <Flex direction="row" justifyContent="center">
-      <img src={resultImage} width={400} height={300} />
-    </Flex>
-    <Flex direction="row" justifyContent="center">
-      <div>
-        <table
-          style={{
-            width: "1000px",
-            borderWidth: "1px",
-            borderColor: "black",
-            borderRadius: "10px",
-            borderSpacing: "0px",
-          }}
-        >
-          <thead>
-            <tr>
-              <th style={{ backgroundColor: "grey" }}>List of Sick Plants</th>
-              <th style={{ backgroundColor: "grey" }}>Temperature</th>
-              <th style={{ backgroundColor: "grey" }}>Humidity</th>
-              <th style={{ backgroundColor: "grey" }}>Smell</th>
-              <th style={{ backgroundColor: "grey" }}>Moisture</th>
-              <th style={{ backgroundColor: "grey" }}>Light</th>
-            </tr>
-          </thead>
-          <tbody>
-            {sickPlants.map((plant) => (
-              <tr key={plant[0]}>
-                <td style={rowStyle}>{plant[0]}</td>
-                <td style={rowStyle}>{plant[1]}</td>
-                <td style={rowStyle}>{plant[2]}</td>
-                <td style={rowStyle}>{plant[3]}</td>
-                <td style={rowStyle}>{plant[4]}</td>
-                <td style={rowStyle}>{plant[5]}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-    </Flex>
-    <Flex direction="row" justifyContent="center">
-      <View
-        style={{
-          flexDirection: "row",
-          height: 300,
-          paddingTop: 80,
-          width: 300,
-          marginLeft: 50,
-        }}
-      >
-        <Heading level={2} width={300}>
+  </Fragment>
+);
+
+const Gauges = ({
+  tempPercent,
+  humidityPercent,
+  smellPercent,
+  moisturePercent,
+  lightPercent,
+}) => {
+  return (
+    <div className="gauges">
+      <View className="gauge">
+        <Heading level={2} className="gauge-title">
           Temperature
         </Heading>
         <GaugeChart
@@ -1130,15 +1168,8 @@ const Home = ({
           percent={Number(tempPercent)}
         />
       </View>
-      <View
-        style={{
-          flexDirection: "row",
-          height: 300,
-          paddingTop: 80,
-          width: 300,
-        }}
-      >
-        <Heading level={2} width={300}>
+      <View className="gauge">
+        <Heading level={2} className="gauge-title">
           Humidity
         </Heading>
         <GaugeChart
@@ -1151,15 +1182,8 @@ const Home = ({
           percent={Number(humidityPercent)}
         />
       </View>
-      <View
-        style={{
-          flexDirection: "row",
-          height: 300,
-          paddingTop: 80,
-          width: 300,
-        }}
-      >
-        <Heading level={2} width={300}>
+      <View className="gauge">
+        <Heading level={2} className="gauge-title">
           Smell
         </Heading>
         <GaugeChart
@@ -1172,15 +1196,8 @@ const Home = ({
           percent={Number(smellPercent)}
         />
       </View>
-      <View
-        style={{
-          flexDirection: "row",
-          height: 300,
-          paddingTop: 80,
-          width: 300,
-        }}
-      >
-        <Heading level={2} width={300}>
+      <View className="gauge">
+        <Heading level={2} className="gauge-title">
           Moisture
         </Heading>
         <GaugeChart
@@ -1193,15 +1210,8 @@ const Home = ({
           percent={Number(moisturePercent)}
         />
       </View>
-      <View
-        style={{
-          flexDirection: "row",
-          height: 300,
-          paddingTop: 80,
-          width: 300,
-        }}
-      >
-        <Heading level={2} width={300}>
+      <View className="gauge">
+        <Heading level={2} className="gauge-title">
           Light
         </Heading>
         <GaugeChart
@@ -1214,8 +1224,8 @@ const Home = ({
           percent={Number(lightPercent)}
         />
       </View>
-    </Flex>
-  </Fragment>
-);
+    </div>
+  );
+};
 
 export default withAuthenticator(App);
