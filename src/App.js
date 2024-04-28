@@ -849,7 +849,12 @@ const Settings = ({
 }) => (
   <Fragment>
     <Heading level={1}>Settings</Heading>
-    <View as="form" margin="3rem 0" onSubmit={createHealthParameters}>
+    <View
+      as="form"
+      margin="3rem 0"
+      onSubmit={createHealthParameters}
+      className="plantEntry"
+    >
       <Flex direction="row" justifyContent="center">
         <TextField
           name="name"
@@ -944,65 +949,67 @@ const Settings = ({
         </Button>
       </Flex>
     </View>
-    <Flex direction="row" justifyContent="center">
-      <div>
-        <table
-          style={{
-            width: "1000px",
-            borderWidth: "1px",
-            borderColor: "black",
-            borderRadius: "10px",
-            borderSpacing: "0px",
-          }}
-        >
-          <thead>
-            <tr>
-              <th style={{ backgroundColor: "grey" }}>Plant</th>
-              <th style={{ backgroundColor: "grey" }}>Min Temperature</th>
-              <th style={{ backgroundColor: "grey" }}>Max Temperature</th>
-              <th style={{ backgroundColor: "grey" }}>Min Humidity</th>
-              <th style={{ backgroundColor: "grey" }}>Max Humidity</th>
-              <th style={{ backgroundColor: "grey" }}>Min Smell</th>
-              <th style={{ backgroundColor: "grey" }}>Max Smell</th>
-              <th style={{ backgroundColor: "grey" }}>Min Moisture</th>
-              <th style={{ backgroundColor: "grey" }}>Max Moisture</th>
-              <th style={{ backgroundColor: "grey" }}>Min Light</th>
-              <th style={{ backgroundColor: "grey" }}>Max Light</th>
-              <th style={{ backgroundColor: "grey" }}>Edit</th>
-            </tr>
-          </thead>
-          <tbody>
-            {healthParameters.map((plant) => (
-              <tr key={plant.name}>
-                <td style={rowStyle}>{plant.name}</td>
-                <td style={rowStyle}>{plant.temperatureLow}</td>
-                <td style={rowStyle}>{plant.temperatureHigh}</td>
-                <td style={rowStyle}>{plant.humidityLow}</td>
-                <td style={rowStyle}>{plant.humidityHigh}</td>
-                <td style={rowStyle}>{plant.smellLow}</td>
-                <td style={rowStyle}>{plant.smellHigh}</td>
-                <td style={rowStyle}>{plant.moistureLow}</td>
-                <td style={rowStyle}>{plant.moistureHigh}</td>
-                <td style={rowStyle}>{plant.lightLow}</td>
-                <td style={rowStyle}>{plant.lightHigh}</td>
-                <td style={rowStyle}>
-                  {
-                    <Button
-                      variation="link"
-                      onClick={() =>
-                        deleteHealthParameters(plant.id, plant.name)
-                      }
-                    >
-                      Delete Plant Parameters
-                    </Button>
-                  }
-                </td>
+    <div className="history-table">
+      <Flex direction="row" justifyContent="center">
+        <div>
+          <table
+            style={{
+              width: "1000px",
+              borderWidth: "1px",
+              borderColor: "black",
+              borderRadius: "10px",
+              borderSpacing: "0px",
+            }}
+          >
+            <thead>
+              <tr>
+                <th style={{ backgroundColor: "grey" }}>Plant</th>
+                <th style={{ backgroundColor: "grey" }}>Min Temperature</th>
+                <th style={{ backgroundColor: "grey" }}>Max Temperature</th>
+                <th style={{ backgroundColor: "grey" }}>Min Humidity</th>
+                <th style={{ backgroundColor: "grey" }}>Max Humidity</th>
+                <th style={{ backgroundColor: "grey" }}>Min Smell</th>
+                <th style={{ backgroundColor: "grey" }}>Max Smell</th>
+                <th style={{ backgroundColor: "grey" }}>Min Moisture</th>
+                <th style={{ backgroundColor: "grey" }}>Max Moisture</th>
+                <th style={{ backgroundColor: "grey" }}>Min Light</th>
+                <th style={{ backgroundColor: "grey" }}>Max Light</th>
+                <th style={{ backgroundColor: "grey" }}>Edit</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-    </Flex>
+            </thead>
+            <tbody>
+              {healthParameters.map((plant) => (
+                <tr key={plant.name}>
+                  <td style={rowStyle}>{plant.name}</td>
+                  <td style={rowStyle}>{plant.temperatureLow}</td>
+                  <td style={rowStyle}>{plant.temperatureHigh}</td>
+                  <td style={rowStyle}>{plant.humidityLow}</td>
+                  <td style={rowStyle}>{plant.humidityHigh}</td>
+                  <td style={rowStyle}>{plant.smellLow}</td>
+                  <td style={rowStyle}>{plant.smellHigh}</td>
+                  <td style={rowStyle}>{plant.moistureLow}</td>
+                  <td style={rowStyle}>{plant.moistureHigh}</td>
+                  <td style={rowStyle}>{plant.lightLow}</td>
+                  <td style={rowStyle}>{plant.lightHigh}</td>
+                  <td style={rowStyle}>
+                    {
+                      <Button
+                        variation="link"
+                        onClick={() =>
+                          deleteHealthParameters(plant.id, plant.name)
+                        }
+                      >
+                        Delete Plant Parameters
+                      </Button>
+                    }
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </Flex>
+    </div>
   </Fragment>
 );
 
