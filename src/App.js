@@ -59,7 +59,7 @@ var resultImage = check;
 const client = generateClient();
 
 const tableStyle = {
-  width: "1000px",
+  width: "1100px",
   borderWidth: "1px",
   borderColor: "black",
   borderStyle: "solid",
@@ -136,11 +136,11 @@ const App = ({ signOut }) => {
             <th>Plant Name</th>
             <th>Description</th>
             <th>Username</th>
-            <th>Temperature</th>
-            <th>Humidity</th>
+            <th>Temperature(F)</th>
+            <th>Humidity(%)</th>
             <th>Smell</th>
-            <th>Moisture</th>
-            <th>Light</th>
+            <th>Moisture(%)</th>
+            <th>Light(lm)</th>
             <th>Date</th>
             <th>Edit</th>
           </tr>
@@ -246,29 +246,29 @@ const App = ({ signOut }) => {
     if (filteredPlant == "All Plants") {
       usedNames.map((name) => {
         plantData[name] = {
-          pH: 0,
-          temperature: 0,
-          humidity: 0,
-          smell: 0,
-          moisture: 0,
-          light: 0,
-          count: 0,
-          countPh: 0,
-          countTemp: 0,
-          countHumidity: 0,
-          countSmell: 0,
-          countMoisture: 0,
-          countLight: 0,
-          minTemp: 40,
-          maxTemp: 80,
-          minHumidity: 2000,
-          maxHumidity: 6000,
-          minSmell: 0,
-          maxSmell: 100,
-          minMoisture: 20,
-          maxMoisture: 100,
-          minLight: 30,
-          maxLight: 70,
+        pH: 0,
+        temperature: 0,
+        humidity: 0,
+        smell: 0,
+        moisture: 0,
+        light: 0,
+        count: 0,
+        countPh: 0,
+        countTemp: 0,
+        countHumidity: 0,
+        countSmell: 0,
+        countMoisture: 0,
+        countLight: 0,
+        minTemp: 40,
+        maxTemp: 80,
+        minHumidity: 20,
+        maxHumidity: 60,
+        minSmell: 75,
+        maxSmell: 150,
+        minMoisture: 25,
+        maxMoisture: 70,
+        minLight: 400,
+        maxLight: 1000,
         };
       });
     } else {
@@ -288,14 +288,14 @@ const App = ({ signOut }) => {
         countLight: 0,
         minTemp: 40,
         maxTemp: 80,
-        minHumidity: 2000,
-        maxHumidity: 6000,
-        minSmell: 0,
-        maxSmell: 100,
-        minMoisture: 20,
-        maxMoisture: 100,
-        minLight: 30,
-        maxLight: 70,
+        minHumidity: 20,
+        maxHumidity: 60,
+        minSmell: 75,
+        maxSmell: 150,
+        minMoisture: 25,
+        maxMoisture: 70,
+        minLight: 400,
+        maxLight: 1000,
       };
     }
     await Promise.all(
@@ -954,7 +954,7 @@ const Settings = ({
         <div>
           <table
             style={{
-              width: "1000px",
+              width: "1100px",
               borderWidth: "1px",
               borderColor: "black",
               borderRadius: "10px",
@@ -964,16 +964,16 @@ const Settings = ({
             <thead>
               <tr>
                 <th style={{ backgroundColor: "grey" }}>Plant</th>
-                <th style={{ backgroundColor: "grey" }}>Min Temperature</th>
-                <th style={{ backgroundColor: "grey" }}>Max Temperature</th>
-                <th style={{ backgroundColor: "grey" }}>Min Humidity</th>
-                <th style={{ backgroundColor: "grey" }}>Max Humidity</th>
+                <th style={{ backgroundColor: "grey" }}>Min Temperature(F)</th>
+                <th style={{ backgroundColor: "grey" }}>Max Temperature(F)</th>
+                <th style={{ backgroundColor: "grey" }}>Min Humidity(%)</th>
+                <th style={{ backgroundColor: "grey" }}>Max Humidity(%)</th>
                 <th style={{ backgroundColor: "grey" }}>Min Smell</th>
                 <th style={{ backgroundColor: "grey" }}>Max Smell</th>
-                <th style={{ backgroundColor: "grey" }}>Min Moisture</th>
-                <th style={{ backgroundColor: "grey" }}>Max Moisture</th>
-                <th style={{ backgroundColor: "grey" }}>Min Light</th>
-                <th style={{ backgroundColor: "grey" }}>Max Light</th>
+                <th style={{ backgroundColor: "grey" }}>Min Moisture(%)</th>
+                <th style={{ backgroundColor: "grey" }}>Max Moisture(%)</th>
+                <th style={{ backgroundColor: "grey" }}>Min Light(lm)</th>
+                <th style={{ backgroundColor: "grey" }}>Max Light(lm)</th>
                 <th style={{ backgroundColor: "grey" }}>Edit</th>
               </tr>
             </thead>
@@ -1059,11 +1059,11 @@ const Home = ({
             <thead>
               <tr>
                 <th style={{ backgroundColor: "grey" }}>List of Sick Plants</th>
-                <th style={{ backgroundColor: "grey" }}>Temperature</th>
-                <th style={{ backgroundColor: "grey" }}>Humidity</th>
+                <th style={{ backgroundColor: "grey" }}>Temperature(F)</th>
+                <th style={{ backgroundColor: "grey" }}>Humidity(%)</th>
                 <th style={{ backgroundColor: "grey" }}>Smell</th>
-                <th style={{ backgroundColor: "grey" }}>Moisture</th>
-                <th style={{ backgroundColor: "grey" }}>Light</th>
+                <th style={{ backgroundColor: "grey" }}>Moisture(%)</th>
+                <th style={{ backgroundColor: "grey" }}>Light(lm)</th>
               </tr>
             </thead>
             <tbody>
