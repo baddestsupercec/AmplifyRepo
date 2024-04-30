@@ -154,6 +154,12 @@ const App = ({ signOut }) => {
     DataTable();
   }, [filteredDisplayNotes]);
 
+   /**
+ * Sets the current filtered plant from the dropdown.
+ * @public
+ * @async
+ * @function selectFilter
+ */
   const selectFilter = (event) => {
     console.log("FILTER: " + event.target.value);
     filteredPlant = event.target.value;
