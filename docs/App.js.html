@@ -1,4 +1,91 @@
-import React, { useState, useEffect, Fragment } from "react";
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title> App.js</title>
+
+  <script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script src="./build/entry.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+  <link href="https://fonts.googleapis.com/css?family=Roboto:100,400,700|Inconsolata,700" rel="stylesheet">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+  <link type="text/css" rel="stylesheet" href="https://jmblog.github.io/color-themes-for-google-code-prettify/themes/tomorrow-night.min.css">
+  <link type="text/css" rel="stylesheet" href="styles/app.min.css">
+  <link type="text/css" rel="stylesheet" href="styles/iframe.css">
+  <link type="text/css" rel="stylesheet" href="">
+  <script async defer src="https://buttons.github.io/buttons.js"></script>
+
+  
+</head>
+
+
+
+<body class="layout small-header">
+    <div id="stickyNavbarOverlay"></div>
+    
+
+<div class="top-nav">
+    <div class="inner">
+        <a id="hamburger" role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+        </a>
+        <div class="logo">
+            
+            
+        </div>
+        <div class="menu">
+            
+            <div class="navigation">
+                <a
+                    href="index.html"
+                    class="link"
+                >
+                    Documentation
+                </a>
+                
+                
+                
+            </div>
+        </div>
+    </div>
+</div>
+    <div id="main">
+        <div
+            class="sidebar "
+            id="sidebarNav"
+        >
+            
+            <nav>
+                
+                    <h2><a href="index.html">Documentation</a></h2><div class="category"><h3>Global</h3><ul><li><a href="global.html#fetchNotes">fetchNotes</a></li></ul></div>
+                
+            </nav>
+        </div>
+        <div class="core" id="main-content-wrapper">
+            <div class="content">
+                <header class="page-title">
+                    <p>Source</p>
+                    <h1>App.js</h1>
+                </header>
+                
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import React, { useState, useEffect, Fragment } from "react";
 import "./App.css";
 import "@aws-amplify/ui-react/styles.css";
 import { useTable } from "react-table";
@@ -108,46 +195,46 @@ const App = ({ signOut }) => {
     light,
     createdAt,
   }) => (
-    <tr style={rowStyle} key={id}>
-      <td style={rowStyle}>{name}</td>
-      <td style={rowStyle}>{description}</td>
-      <td style={rowStyle}>{username}</td>
-      <td style={rowStyle}>{temperature}</td>
-      <td style={rowStyle}>{humidity}</td>
-      <td style={rowStyle}>{smell}</td>
-      <td style={rowStyle}>{moisture}</td>
-      <td style={rowStyle}>{light}</td>
-      <td style={rowStyle}>{new Date(createdAt).toLocaleString()}</td>
-      <td style={rowStyle}>
+    &lt;tr style={rowStyle} key={id}>
+      &lt;td style={rowStyle}>{name}&lt;/td>
+      &lt;td style={rowStyle}>{description}&lt;/td>
+      &lt;td style={rowStyle}>{username}&lt;/td>
+      &lt;td style={rowStyle}>{temperature}&lt;/td>
+      &lt;td style={rowStyle}>{humidity}&lt;/td>
+      &lt;td style={rowStyle}>{smell}&lt;/td>
+      &lt;td style={rowStyle}>{moisture}&lt;/td>
+      &lt;td style={rowStyle}>{light}&lt;/td>
+      &lt;td style={rowStyle}>{new Date(createdAt).toLocaleString()}&lt;/td>
+      &lt;td style={rowStyle}>
         {
-          <Button variation="link" onClick={() => deleteNote({ id, name })}>
+          &lt;Button variation="link" onClick={() => deleteNote({ id, name })}>
             Delete Plant
-          </Button>
+          &lt;/Button>
         }
-      </td>
-    </tr>
+      &lt;/td>
+    &lt;/tr>
   );
 
   const DataTable = () => (
-    <div>
-      <table style={tableStyle}>
-        <thead>
-          <tr style={rowStyle}>
-            <th>Plant Name</th>
-            <th>Description</th>
-            <th>Username</th>
-            <th>Temperature</th>
-            <th>Humidity</th>
-            <th>Smell</th>
-            <th>Moisture</th>
-            <th>Light</th>
-            <th>Date</th>
-            <th>Edit</th>
-          </tr>
-        </thead>
-        <tbody>{filteredDisplayNotes.slice(0).reverse().map(DataRow)}</tbody>
-      </table>
-    </div>
+    &lt;div>
+      &lt;table style={tableStyle}>
+        &lt;thead>
+          &lt;tr style={rowStyle}>
+            &lt;th>Plant Name&lt;/th>
+            &lt;th>Description&lt;/th>
+            &lt;th>Username&lt;/th>
+            &lt;th>Temperature&lt;/th>
+            &lt;th>Humidity&lt;/th>
+            &lt;th>Smell&lt;/th>
+            &lt;th>Moisture&lt;/th>
+            &lt;th>Light&lt;/th>
+            &lt;th>Date&lt;/th>
+            &lt;th>Edit&lt;/th>
+          &lt;/tr>
+        &lt;/thead>
+        &lt;tbody>{filteredDisplayNotes.slice(0).reverse().map(DataRow)}&lt;/tbody>
+      &lt;/table>
+    &lt;/div>
   );
 
   useEffect(() => {
@@ -165,7 +252,7 @@ const App = ({ signOut }) => {
  * @public
  * @async
  * @function fetchNotes
- * @returns {Promise<void>} A promise
+ * @returns {Promise&lt;void>} A promise
  */
   async function fetchNotes() {
     await currentAuthenticatedUser();
@@ -325,7 +412,7 @@ const App = ({ signOut }) => {
     console.log("FILTERED PLANTS: "+filteredNotes);
     await Promise.all(
       filteredNotes.map(async (note) => {
-        if (note.pH != undefined && note.pH !== null) {
+        if (note.pH != undefined &amp;&amp; note.pH !== null) {
           pHCount++;
           pHSum += note.pH;
           chartPhData.push(parseFloat(note.pH));
@@ -333,32 +420,32 @@ const App = ({ signOut }) => {
           plantData[note.name].countPh++;
           labelsPH.push(new Date(note.createdAt).toLocaleString());
         }
-        if (note.temperature !== undefined && note.temperature !== null) {
+        if (note.temperature !== undefined &amp;&amp; note.temperature !== null) {
           console.log("ONTEMP: "+ note.name);
           chartTempData.push(parseFloat(note.temperature));
           plantData[note.name].temperature += note.temperature;
           plantData[note.name].countTemp++;
           labelsTemp.push(new Date(note.createdAt).toLocaleString());
         }
-        if (note.humidity != undefined && note.humidity !== null) {
+        if (note.humidity != undefined &amp;&amp; note.humidity !== null) {
           HumidityData.push(parseFloat(note.humidity));
           plantData[note.name].humidity += note.humidity;
           plantData[note.name].countHumidity++;
           labelsHumidity.push(new Date(note.createdAt).toLocaleString());
         }
-        if (note.smell != undefined && note.smell !== null) {
+        if (note.smell != undefined &amp;&amp; note.smell !== null) {
           SmellData.push(parseFloat(note.smell));
           plantData[note.name].smell += note.smell;
           plantData[note.name].countSmell++;
           labelsSmell.push(new Date(note.createdAt).toLocaleString());
         }
-        if (note.moisture != undefined && note.moisture !== null) {
+        if (note.moisture != undefined &amp;&amp; note.moisture !== null) {
           MoistureData.push(parseFloat(note.moisture));
           plantData[note.name].moisture += note.moisture;
           plantData[note.name].countMoisture++;
           labelsMoisture.push(new Date(note.createdAt).toLocaleString());
         }
-        if (note.light != undefined && note.light !== null) {
+        if (note.light != undefined &amp;&amp; note.light !== null) {
           LightData.push(parseFloat(note.light));
           plantData[note.name].light += note.light;
           plantData[note.name].countLight++;
@@ -434,31 +521,31 @@ const App = ({ signOut }) => {
       if (localTempPercent > 1) {
         localTempPercent = 1;
       }
-      else if(localTempPercent<0){
+      else if(localTempPercent&lt;0){
         localTempPercent = 0;
       }
       if (localHumidityPercent > 1) {
         localHumidityPercent = 1;
       }
-      else if(localHumidityPercent<0){
+      else if(localHumidityPercent&lt;0){
         localHumidityPercent = 0;
       }
       if (localSmellPercent > 1) {
         localSmellPercent = 1;
       }
-      else if(localSmellPercent<0){
+      else if(localSmellPercent&lt;0){
         localSmellPercent = 0;
       }
       if (localMoisturePercent > 1) {
         localMoisturePercent = 1;
       }
-      else if(localMoisturePercent<0){
+      else if(localMoisturePercent&lt;0){
         localMoisturePercent = 0;
       }
       if (localLightPercent > 1) {
         localLightPercent = 1;
       }
-      else if(localLightPercent<0){
+      else if(localLightPercent&lt;0){
         localLightPercent = 0;
       }
 
@@ -478,15 +565,15 @@ const App = ({ signOut }) => {
       }
       
       if (
-        localTempPercent < 0.3 ||
+        localTempPercent &lt; 0.3 ||
         localTempPercent > 0.7 ||
-        localHumidityPercent < 0.3 ||
+        localHumidityPercent &lt; 0.3 ||
         localHumidityPercent > 0.7 ||
-        localSmellPercent < 0.3 ||
+        localSmellPercent &lt; 0.3 ||
         localSmellPercent > 0.7 ||
-        localMoisturePercent < 0.3 ||
+        localMoisturePercent &lt; 0.3 ||
         localMoisturePercent > 0.7 ||
-        localLightPercent < 0.3 ||
+        localLightPercent &lt; 0.3 ||
         localLightPercent > 0.7
       ) {
         var temperatureText = "";
@@ -496,7 +583,7 @@ const App = ({ signOut }) => {
         var lightText = "";
 
         
-        if (localTempPercent < 0.3) {
+        if (localTempPercent &lt; 0.3) {
           temperatureText = "Low";
         } else if (localTempPercent > 0.7) {
           temperatureText = "High";
@@ -504,7 +591,7 @@ const App = ({ signOut }) => {
           temperatureText = "Normal";
         }
 
-        if (localLightPercent < 0.3) {
+        if (localLightPercent &lt; 0.3) {
           lightText = "Low";
         } else if (localLightPercent > 0.7) {
           lightText = "High";
@@ -512,7 +599,7 @@ const App = ({ signOut }) => {
           lightText = "Normal";
         }
 
-        if (localHumidityPercent < 0.3) {
+        if (localHumidityPercent &lt; 0.3) {
           humidityText = "Low";
         } else if (localHumidityPercent > 0.7) {
           humidityText = "High";
@@ -520,7 +607,7 @@ const App = ({ signOut }) => {
           humidityText = "Normal";
         }
 
-        if (localSmellPercent < 0.3) {
+        if (localSmellPercent &lt; 0.3) {
           smellText = "Low";
         } else if (localSmellPercent > 0.7) {
           smellText = "High";
@@ -528,7 +615,7 @@ const App = ({ signOut }) => {
           smellText = "Normal";
         }
 
-        if (localMoisturePercent < 0.3) {
+        if (localMoisturePercent &lt; 0.3) {
           moistureText = "Low";
         } else if (localMoisturePercent > 0.7) {
           moistureText = "High";
@@ -562,31 +649,31 @@ const App = ({ signOut }) => {
     if (tempPercent > 1) {
       tempPercent = 1;
     }
-    else if(tempPercent<0){
+    else if(tempPercent&lt;0){
       tempPercent = 0;
     }
     if (humidityPercent > 1) {
       humidityPercent = 1;
     }
-    else if(humidityPercent<0){
+    else if(humidityPercent&lt;0){
       humidityPercent = 0;
     }
     if (smellPercent > 1) {
       smellPercent = 1;
     }
-    else if(smellPercent<0){
+    else if(smellPercent&lt;0){
       smellPercent = 0;
     }
     if (moisturePercent > 1) {
       moisturePercent = 1;
     }
-    else if(moisturePercent<0){
+    else if(moisturePercent&lt;0){
       moisturePercent = 0;
     }
     if (lightPercent > 1) {
       lightPercent = 1;
     }
-    else if(lightPercent<0){
+    else if(lightPercent&lt;0){
       lightPercent = 0;
     }
 
@@ -748,36 +835,36 @@ const App = ({ signOut }) => {
     //data.labels = labels;
 
     return (
-      <div>
-        <Line
+      &lt;div>
+        &lt;Line
           data={data}
           width={"30%"}
           options={{ maintainAspectRatio: false }}
         />
-      </div>
+      &lt;/div>
     );
   };
 
   return (
-    <BrowserRouter>
-      <View className="App">
-        <NavBar signOut={signOut} />
-        <label>
+    &lt;BrowserRouter>
+      &lt;View className="App">
+        &lt;NavBar signOut={signOut} />
+        &lt;label>
           {" "}
           Filter Plants
-          <select default="All Plants" onChange={selectFilter}>
+          &lt;select default="All Plants" onChange={selectFilter}>
             {options.map((option, index) => (
-              <option key={index} value={option.value} label={options.label}>
+              &lt;option key={index} value={option.value} label={options.label}>
                 {option.label}
-              </option>
+              &lt;/option>
             ))}
-          </select>
-        </label>
-        <Routes>
-          <Route
+          &lt;/select>
+        &lt;/label>
+        &lt;Routes>
+          &lt;Route
             path="/"
             element={
-              <Home
+              &lt;Home
                 createNote={createNote}
                 LineChart={LineChart}
                 DataTable={DataTable}
@@ -790,10 +877,10 @@ const App = ({ signOut }) => {
               />
             }
           />
-          <Route
+          &lt;Route
             path="/history"
             element={
-              <History
+              &lt;History
                 signOut={signOut}
                 createNote={createNote}
                 LineChart={LineChart}
@@ -807,11 +894,11 @@ const App = ({ signOut }) => {
               />
             }
           />
-          <Route path="/settings" element={<Settings signOut={signOut} createHealthParameters={createHealthParameters} deleteHealthParameters={deleteHealthParameters} healthParameters={healthParameters}/>} />
-        </Routes>
-      </View>
-      <Button onClick={signOut}>Sign Out</Button>
-    </BrowserRouter>
+          &lt;Route path="/settings" element={&lt;Settings signOut={signOut} createHealthParameters={createHealthParameters} deleteHealthParameters={deleteHealthParameters} healthParameters={healthParameters}/>} />
+        &lt;/Routes>
+      &lt;/View>
+      &lt;Button onClick={signOut}>Sign Out&lt;/Button>
+    &lt;/BrowserRouter>
   );
 };
 
@@ -827,27 +914,27 @@ const History = ({
   chartMoistureData,
   chartLightData,
 }) => (
-  <Fragment>
-    <Heading level={1}>History</Heading>
-    <View margin="3rem 0">
+  &lt;Fragment>
+    &lt;Heading level={1}>History&lt;/Heading>
+    &lt;View margin="3rem 0">
       {LineChart(chartTemperatureData)}
       {LineChart(chartHumidityData)}
       {LineChart(chartSmellData)}
       {LineChart(chartMoistureData)}
       {LineChart(chartLightData)}
-      <Flex direction="row" justifyContent="center">
+      &lt;Flex direction="row" justifyContent="center">
         {DataTable()}
-      </Flex>
-    </View>
-  </Fragment>
+      &lt;/Flex>
+    &lt;/View>
+  &lt;/Fragment>
 );
 
 const Settings = ({signOut,createHealthParameters,deleteHealthParameters,healthParameters}) => (
-  <Fragment>
-    <Heading level={1}>Settings</Heading>
-    <View as="form" margin="3rem 0" onSubmit={createHealthParameters}>
-      <Flex direction="row" justifyContent="center">
-        <TextField
+  &lt;Fragment>
+    &lt;Heading level={1}>Settings&lt;/Heading>
+    &lt;View as="form" margin="3rem 0" onSubmit={createHealthParameters}>
+      &lt;Flex direction="row" justifyContent="center">
+        &lt;TextField
           name="name"
           placeholder="Plant Name"
           label="Plant Name"
@@ -855,7 +942,7 @@ const Settings = ({signOut,createHealthParameters,deleteHealthParameters,healthP
           variation="quiet"
           required
         />
-        <TextField
+        &lt;TextField
           name="Low Temperature"
           placeholder="Low Temperature"
           label="Low Temperature"
@@ -863,7 +950,7 @@ const Settings = ({signOut,createHealthParameters,deleteHealthParameters,healthP
           variation="quiet"
           required
         />
-        <TextField
+        &lt;TextField
           name="High Temperature"
           placeholder="High Temperature"
           label="High Temperature"
@@ -871,7 +958,7 @@ const Settings = ({signOut,createHealthParameters,deleteHealthParameters,healthP
           variation="quiet"
           required
         />
-        <TextField
+        &lt;TextField
           name="Low Humidity"
           placeholder="Low Humidity"
           label="Low Humidity"
@@ -879,7 +966,7 @@ const Settings = ({signOut,createHealthParameters,deleteHealthParameters,healthP
           variation="quiet"
           required
         />
-        <TextField
+        &lt;TextField
           name="High Humidity"
           placeholder="High Humidity"
           label="High Humidity"
@@ -887,7 +974,7 @@ const Settings = ({signOut,createHealthParameters,deleteHealthParameters,healthP
           variation="quiet"
           required
         />
-        <TextField
+        &lt;TextField
           name="Low Smell"
           placeholder="Low Smell"
           label="Low Smell"
@@ -895,7 +982,7 @@ const Settings = ({signOut,createHealthParameters,deleteHealthParameters,healthP
           variation="quiet"
           required
         />
-        <TextField
+        &lt;TextField
           name="High Smell"
           placeholder="High Smell"
           label="High Smell"
@@ -903,7 +990,7 @@ const Settings = ({signOut,createHealthParameters,deleteHealthParameters,healthP
           variation="quiet"
           required
         />
-        <TextField
+        &lt;TextField
           name="Low Moisture"
           placeholder="Low Moisture"
           label="Low Moisture"
@@ -911,7 +998,7 @@ const Settings = ({signOut,createHealthParameters,deleteHealthParameters,healthP
           variation="quiet"
           required
         />
-        <TextField
+        &lt;TextField
           name="High Moisture"
           placeholder="High Moisture"
           label="High Moisture"
@@ -919,7 +1006,7 @@ const Settings = ({signOut,createHealthParameters,deleteHealthParameters,healthP
           variation="quiet"
           required
         />
-        <TextField
+        &lt;TextField
           name="Low Light"
           placeholder="Low Light"
           label="Low Light"
@@ -927,7 +1014,7 @@ const Settings = ({signOut,createHealthParameters,deleteHealthParameters,healthP
           variation="quiet"
           required
         />
-        <TextField
+        &lt;TextField
           name="High Light"
           placeholder="High Light"
           label="High Light"
@@ -935,14 +1022,14 @@ const Settings = ({signOut,createHealthParameters,deleteHealthParameters,healthP
           variation="quiet"
           required
         />
-        <Button type="submit" variation="primary">
+        &lt;Button type="submit" variation="primary">
           Upload Plant Parameters
-        </Button>
-      </Flex>
-    </View>
-    <Flex direction="row" justifyContent="center">
-      <div>
-        <table
+        &lt;/Button>
+      &lt;/Flex>
+    &lt;/View>
+    &lt;Flex direction="row" justifyContent="center">
+      &lt;div>
+        &lt;table
           style={{
             width: "1000px",
             borderWidth: "1px",
@@ -951,50 +1038,50 @@ const Settings = ({signOut,createHealthParameters,deleteHealthParameters,healthP
             borderSpacing: "0px",
           }}
         >
-          <thead>
-            <tr>
-              <th style={{ backgroundColor: "grey" }}>Plant</th>
-              <th style={{ backgroundColor: "grey" }}>Min Temperature</th>
-              <th style={{ backgroundColor: "grey" }}>Max Temperature</th>
-              <th style={{ backgroundColor: "grey" }}>Min Humidity</th>
-              <th style={{ backgroundColor: "grey" }}>Max Humidity</th>
-              <th style={{ backgroundColor: "grey" }}>Min Smell</th>
-              <th style={{ backgroundColor: "grey" }}>Max Smell</th>
-              <th style={{ backgroundColor: "grey" }}>Min Moisture</th>
-              <th style={{ backgroundColor: "grey" }}>Max Moisture</th>
-              <th style={{ backgroundColor: "grey" }}>Min Light</th>
-              <th style={{ backgroundColor: "grey" }}>Max Light</th>
-              <th style={{ backgroundColor: "grey" }}>Edit</th>
-            </tr>
-          </thead>
-          <tbody>
+          &lt;thead>
+            &lt;tr>
+              &lt;th style={{ backgroundColor: "grey" }}>Plant&lt;/th>
+              &lt;th style={{ backgroundColor: "grey" }}>Min Temperature&lt;/th>
+              &lt;th style={{ backgroundColor: "grey" }}>Max Temperature&lt;/th>
+              &lt;th style={{ backgroundColor: "grey" }}>Min Humidity&lt;/th>
+              &lt;th style={{ backgroundColor: "grey" }}>Max Humidity&lt;/th>
+              &lt;th style={{ backgroundColor: "grey" }}>Min Smell&lt;/th>
+              &lt;th style={{ backgroundColor: "grey" }}>Max Smell&lt;/th>
+              &lt;th style={{ backgroundColor: "grey" }}>Min Moisture&lt;/th>
+              &lt;th style={{ backgroundColor: "grey" }}>Max Moisture&lt;/th>
+              &lt;th style={{ backgroundColor: "grey" }}>Min Light&lt;/th>
+              &lt;th style={{ backgroundColor: "grey" }}>Max Light&lt;/th>
+              &lt;th style={{ backgroundColor: "grey" }}>Edit&lt;/th>
+            &lt;/tr>
+          &lt;/thead>
+          &lt;tbody>
             {healthParameters.map((plant) => (
-              <tr key={plant.name}>
-                <td style={rowStyle}>{plant.name}</td>
-                <td style={rowStyle}>{plant.temperatureLow}</td>
-                <td style={rowStyle}>{plant.temperatureHigh}</td>
-                <td style={rowStyle}>{plant.humidityLow}</td>
-                <td style={rowStyle}>{plant.humidityHigh}</td>
-                <td style={rowStyle}>{plant.smellLow}</td>
-                <td style={rowStyle}>{plant.smellHigh}</td>
-                <td style={rowStyle}>{plant.moistureLow}</td>
-                <td style={rowStyle}>{plant.moistureHigh}</td>
-                <td style={rowStyle}>{plant.lightLow}</td>
-                <td style={rowStyle}>{plant.lightHigh}</td>
-                <td style={rowStyle}>
+              &lt;tr key={plant.name}>
+                &lt;td style={rowStyle}>{plant.name}&lt;/td>
+                &lt;td style={rowStyle}>{plant.temperatureLow}&lt;/td>
+                &lt;td style={rowStyle}>{plant.temperatureHigh}&lt;/td>
+                &lt;td style={rowStyle}>{plant.humidityLow}&lt;/td>
+                &lt;td style={rowStyle}>{plant.humidityHigh}&lt;/td>
+                &lt;td style={rowStyle}>{plant.smellLow}&lt;/td>
+                &lt;td style={rowStyle}>{plant.smellHigh}&lt;/td>
+                &lt;td style={rowStyle}>{plant.moistureLow}&lt;/td>
+                &lt;td style={rowStyle}>{plant.moistureHigh}&lt;/td>
+                &lt;td style={rowStyle}>{plant.lightLow}&lt;/td>
+                &lt;td style={rowStyle}>{plant.lightHigh}&lt;/td>
+                &lt;td style={rowStyle}>
         {
-          <Button variation="link" onClick={() => deleteHealthParameters( plant.id, plant.name )}>
+          &lt;Button variation="link" onClick={() => deleteHealthParameters( plant.id, plant.name )}>
             Delete Plant Parameters
-          </Button>
+          &lt;/Button>
         }
-      </td>
-              </tr>
+      &lt;/td>
+              &lt;/tr>
             ))}
-          </tbody>
-        </table>
-      </div>
-    </Flex>
-  </Fragment>
+          &lt;/tbody>
+        &lt;/table>
+      &lt;/div>
+    &lt;/Flex>
+  &lt;/Fragment>
 );
 
 const Home = ({
@@ -1008,10 +1095,10 @@ const Home = ({
   chartMoistureData,
   chartLightData,
 }) => (
-  <Fragment>
-    <View as="form" margin="3rem 0" onSubmit={createNote}>
-      <Flex direction="row" justifyContent="center">
-        <TextField
+  &lt;Fragment>
+    &lt;View as="form" margin="3rem 0" onSubmit={createNote}>
+      &lt;Flex direction="row" justifyContent="center">
+        &lt;TextField
           name="name"
           placeholder="Plant Name"
           label="Plant Name"
@@ -1019,7 +1106,7 @@ const Home = ({
           variation="quiet"
           required
         />
-        <TextField
+        &lt;TextField
           name="description"
           placeholder="Plant Description"
           label="Plant Description"
@@ -1027,7 +1114,7 @@ const Home = ({
           variation="quiet"
           required
         />
-        <TextField
+        &lt;TextField
           name="Temperature"
           placeholder="Temperature"
           label="Temperature"
@@ -1035,7 +1122,7 @@ const Home = ({
           variation="quiet"
           required
         />
-        <TextField
+        &lt;TextField
           name="humidity"
           placeholder="humidity"
           label="humidity"
@@ -1043,7 +1130,7 @@ const Home = ({
           variation="quiet"
           required
         />
-        <TextField
+        &lt;TextField
           name="smell"
           placeholder="smell"
           label="smell"
@@ -1051,7 +1138,7 @@ const Home = ({
           variation="quiet"
           required
         />
-        <TextField
+        &lt;TextField
           name="moisture"
           placeholder="moisture"
           label="moisture"
@@ -1059,7 +1146,7 @@ const Home = ({
           variation="quiet"
           required
         />
-        <TextField
+        &lt;TextField
           name="light"
           placeholder="light"
           label="light"
@@ -1067,20 +1154,20 @@ const Home = ({
           variation="quiet"
           required
         />
-        <Button type="submit" variation="primary">
+        &lt;Button type="submit" variation="primary">
           Upload Plant
-        </Button>
-      </Flex>
-    </View>
-    <Flex direction="row" justifyContent="center">
-      <Heading level={2}>Plant Data</Heading>
-    </Flex>
-    <Flex direction="row" justifyContent="center">
-      <img src={resultImage} width={400} height={300} />
-    </Flex>
-    <Flex direction="row" justifyContent="center">
-      <div>
-        <table
+        &lt;/Button>
+      &lt;/Flex>
+    &lt;/View>
+    &lt;Flex direction="row" justifyContent="center">
+      &lt;Heading level={2}>Plant Data&lt;/Heading>
+    &lt;/Flex>
+    &lt;Flex direction="row" justifyContent="center">
+      &lt;img src={resultImage} width={400} height={300} />
+    &lt;/Flex>
+    &lt;Flex direction="row" justifyContent="center">
+      &lt;div>
+        &lt;table
           style={{
             width: "1000px",
             borderWidth: "1px",
@@ -1089,33 +1176,33 @@ const Home = ({
             borderSpacing: "0px",
           }}
         >
-          <thead>
-            <tr>
-              <th style={{ backgroundColor: "grey" }}>List of Sick Plants</th>
-              <th style={{ backgroundColor: "grey" }}>Temperature</th>
-              <th style={{ backgroundColor: "grey" }}>Humidity</th>
-              <th style={{ backgroundColor: "grey" }}>Smell</th>
-              <th style={{ backgroundColor: "grey" }}>Moisture</th>
-              <th style={{ backgroundColor: "grey" }}>Light</th>
-            </tr>
-          </thead>
-          <tbody>
+          &lt;thead>
+            &lt;tr>
+              &lt;th style={{ backgroundColor: "grey" }}>List of Sick Plants&lt;/th>
+              &lt;th style={{ backgroundColor: "grey" }}>Temperature&lt;/th>
+              &lt;th style={{ backgroundColor: "grey" }}>Humidity&lt;/th>
+              &lt;th style={{ backgroundColor: "grey" }}>Smell&lt;/th>
+              &lt;th style={{ backgroundColor: "grey" }}>Moisture&lt;/th>
+              &lt;th style={{ backgroundColor: "grey" }}>Light&lt;/th>
+            &lt;/tr>
+          &lt;/thead>
+          &lt;tbody>
             {sickPlants.map((plant) => (
-              <tr key={plant[0]}>
-                <td style={rowStyle}>{plant[0]}</td>
-                <td style={rowStyle}>{plant[1]}</td>
-                <td style={rowStyle}>{plant[2]}</td>
-                <td style={rowStyle}>{plant[3]}</td>
-                <td style={rowStyle}>{plant[4]}</td>
-                <td style={rowStyle}>{plant[5]}</td>
-              </tr>
+              &lt;tr key={plant[0]}>
+                &lt;td style={rowStyle}>{plant[0]}&lt;/td>
+                &lt;td style={rowStyle}>{plant[1]}&lt;/td>
+                &lt;td style={rowStyle}>{plant[2]}&lt;/td>
+                &lt;td style={rowStyle}>{plant[3]}&lt;/td>
+                &lt;td style={rowStyle}>{plant[4]}&lt;/td>
+                &lt;td style={rowStyle}>{plant[5]}&lt;/td>
+              &lt;/tr>
             ))}
-          </tbody>
-        </table>
-      </div>
-    </Flex>
-    <Flex direction="row" justifyContent="center">
-      <View
+          &lt;/tbody>
+        &lt;/table>
+      &lt;/div>
+    &lt;/Flex>
+    &lt;Flex direction="row" justifyContent="center">
+      &lt;View
         style={{
           flexDirection: "row",
           height: 300,
@@ -1124,10 +1211,10 @@ const Home = ({
           marginLeft: 50,
         }}
       >
-        <Heading level={2} width={300}>
+        &lt;Heading level={2} width={300}>
           Temperature
-        </Heading>
-        <GaugeChart
+        &lt;/Heading>
+        &lt;GaugeChart
           id="temperature-chart1"
           style={chartStyle}
           hideText="True"
@@ -1136,8 +1223,8 @@ const Home = ({
           colors={["#0000FF", "#00FF00", "#FF0000"]}
           percent={Number(tempPercent)}
         />
-      </View>
-      <View
+      &lt;/View>
+      &lt;View
         style={{
           flexDirection: "row",
           height: 300,
@@ -1145,10 +1232,10 @@ const Home = ({
           width: 300,
         }}
       >
-        <Heading level={2} width={300}>
+        &lt;Heading level={2} width={300}>
           Humidity
-        </Heading>
-        <GaugeChart
+        &lt;/Heading>
+        &lt;GaugeChart
           id="humidity-chart1"
           style={chartStyle}
           hideText="True"
@@ -1157,8 +1244,8 @@ const Home = ({
           colors={["#0000FF", "#00FF00", "#FF0000"]}
           percent={Number(humidityPercent)}
         />
-      </View>
-      <View
+      &lt;/View>
+      &lt;View
         style={{
           flexDirection: "row",
           height: 300,
@@ -1166,10 +1253,10 @@ const Home = ({
           width: 300,
         }}
       >
-        <Heading level={2} width={300}>
+        &lt;Heading level={2} width={300}>
           Smell
-        </Heading>
-        <GaugeChart
+        &lt;/Heading>
+        &lt;GaugeChart
           id="smell-chart1"
           style={chartStyle}
           hideText="True"
@@ -1178,8 +1265,8 @@ const Home = ({
           colors={["#0000FF", "#00FF00", "#FF0000"]}
           percent={Number(smellPercent)}
         />
-      </View>
-      <View
+      &lt;/View>
+      &lt;View
         style={{
           flexDirection: "row",
           height: 300,
@@ -1187,10 +1274,10 @@ const Home = ({
           width: 300,
         }}
       >
-        <Heading level={2} width={300}>
+        &lt;Heading level={2} width={300}>
           Moisture
-        </Heading>
-        <GaugeChart
+        &lt;/Heading>
+        &lt;GaugeChart
           id="moisture-chart1"
           style={chartStyle}
           hideText="True"
@@ -1199,8 +1286,8 @@ const Home = ({
           colors={["#0000FF", "#00FF00", "#FF0000"]}
           percent={Number(moisturePercent)}
         />
-      </View>
-      <View
+      &lt;/View>
+      &lt;View
         style={{
           flexDirection: "row",
           height: 300,
@@ -1208,10 +1295,10 @@ const Home = ({
           width: 300,
         }}
       >
-        <Heading level={2} width={300}>
+        &lt;Heading level={2} width={300}>
           Light
-        </Heading>
-        <GaugeChart
+        &lt;/Heading>
+        &lt;GaugeChart
           id="light-chart1"
           style={chartStyle}
           hideText="True"
@@ -1220,9 +1307,39 @@ const Home = ({
           colors={["#0000FF", "#00FF00", "#FF0000"]}
           percent={Number(lightPercent)}
         />
-      </View>
-    </Flex>
-  </Fragment>
+      &lt;/View>
+    &lt;/Flex>
+  &lt;/Fragment>
 );
 
 export default withAuthenticator(App);
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+            </div>
+            
+            <footer class="footer">
+                <div class="content has-text-centered">
+                    <p>Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 4.0.2</a></p>
+                    <p class="sidebar-created-by">
+                        <a href="https://github.com/SoftwareBrothers/better-docs" target="_blank">BetterDocs theme</a> provided with <i class="fas fa-heart"></i> by
+                        <a href="http://softwarebrothers.co" target="_blank">SoftwareBrothers - JavaScript Development Agency</a>
+                    </p>
+                </div>
+            </footer>
+            
+        </div>
+        <div id="side-nav" class="side-nav">
+        </div>
+    </div>
+<script src="scripts/app.min.js"></script>
+<script>PR.prettyPrint();</script>
+<script src="scripts/linenumber.js"> </script>
+
+
+</body>
+</html>
