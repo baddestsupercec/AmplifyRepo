@@ -68,7 +68,7 @@
             
             <nav>
                 
-                    <h2><a href="index.html">Documentation</a></h2><div class="category"><h3>Global</h3><ul><li><a href="global.html#fetchNotes">fetchNotes</a></li></ul></div>
+                    <h2><a href="index.html">Documentation</a></h2><div class="category"><h3>Global</h3><ul><li><a href="global.html#fetchNotes">fetchNotes</a></li><li><a href="global.html#selectFilter">selectFilter</a></li></ul></div>
                 
             </nav>
         </div>
@@ -241,6 +241,12 @@ const App = ({ signOut }) => {
     DataTable();
   }, [filteredDisplayNotes]);
 
+   /**
+ * Sets the current filtered plant from the dropdown.
+ * @public
+ * @async
+ * @function selectFilter
+ */
   const selectFilter = (event) => {
     console.log("FILTER: " + event.target.value);
     filteredPlant = event.target.value;
