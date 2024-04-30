@@ -1,3 +1,5 @@
+
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -5,7 +7,7 @@
   
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title> Home</title>
+  <title> ui-components/NavBar.js</title>
 
   <script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
@@ -66,46 +68,86 @@
             
             <nav>
                 
-                    <h2><a href="index.html">Documentation</a></h2><div class="category"><h3>Global</h3><ul><li><a href="global.html#DataRow">DataRow</a></li><li><a href="global.html#DataTable">DataTable</a></li><li><a href="global.html#Gauges">Gauges</a></li><li><a href="global.html#History">History</a></li><li><a href="global.html#Home">Home</a></li><li><a href="global.html#LineChart">LineChart</a></li><li><a href="global.html#NavBar">NavBar</a></li><li><a href="global.html#Settings">Settings</a></li><li><a href="global.html#createHealthParameters">createHealthParameters</a></li><li><a href="global.html#createNote">createNote</a></li><li><a href="global.html#deleteHealthParameters">deleteHealthParameters</a></li><li><a href="global.html#deleteNote">deleteNote</a></li><li><a href="global.html#fetchNotes">fetchNotes</a></li><li><a href="global.html#selectFilter">selectFilter</a></li><li><li><a href="Hardware.html">Hardware</a></li><a href="references.html">References</a></li></ul></div>
+                    <h2><a href="index.html">Documentation</a></h2><div class="category"><h3>Global</h3><ul><li><a href="global.html#DataRow">DataRow</a></li><li><a href="global.html#DataTable">DataTable</a></li><li><a href="global.html#Gauges">Gauges</a></li><li><a href="global.html#History">History</a></li><li><a href="global.html#Home">Home</a></li><li><a href="global.html#LineChart">LineChart</a></li><li><a href="global.html#NavBar">NavBar</a></li><li><a href="global.html#Settings">Settings</a></li><li><a href="global.html#createHealthParameters">createHealthParameters</a></li><li><a href="global.html#createNote">createNote</a></li><li><a href="global.html#deleteHealthParameters">deleteHealthParameters</a></li><li><a href="global.html#deleteNote">deleteNote</a></li><li><a href="global.html#fetchNotes">fetchNotes</a></li><li><a href="global.html#selectFilter">selectFilter</a></li></ul></div>
                 
             </nav>
         </div>
         <div class="core" id="main-content-wrapper">
             <div class="content">
                 <header class="page-title">
-                    <p></p>
-                    <h1>Nature Nanny Documentation</h1>
+                    <p>Source</p>
+                    <h1>ui-components/NavBar.js</h1>
                 </header>
-                This site contains the documentation for the code our team wrote for the project. The javascript code used for our website was auto generated using JSDOC, and 
-                the C code written for the hardware was documented seperately by the hardware team. Their code is listed in a PDF under the section labeled 'Hardware' on the nav bar.
-                There is also a section labeled 'References' where sites used to learn resources for developing this project are listed.
-                <br>
-
-
                 
 
 
 
     
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import React from "react";
+import styled from "styled-components";
+import { Button } from "@aws-amplify/ui-react";
+import "./NavBar.css";
 
+const Nav = styled.nav`
+  display: flex;
+  align-items: center;
+  background-color: #8fc583;
+  color: #fff;
+  padding: 1rem;
+  text-align: center;
+`;
 
-    <h3> </h3>
+const NavItem = styled.li`
+  list-style: none;
+  margin: 0 1rem;
+  display: inline;
 
+  a {
+    color: #fff;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    align-items: center;
 
+    &amp;:hover {
+      text-decoration-line: underline;
+    }
+  }
+`;
 
+const Logo = styled.h1`
+  font-size: 1.5rem;
+  margin: 0;
+`;
+/**
+ * Defines the NavBar component. It contains links to the Home, History, and Settings pages.
+ * It is rendered along the top of each page.
+ * @param {Object} signOut - The signOut component which the user can use to log out of their account.
+ * @function NavBar
+ */
+const NavBar = (signOut) => {
+  return (
+    &lt;Nav>
+      &lt;Logo>Nature Nanny&lt;/Logo>
+      &lt;ul>
+        &lt;NavItem>
+          &lt;a href="/">Home&lt;/a>
+        &lt;/NavItem>
+        &lt;NavItem>
+          &lt;a href="/history">History&lt;/a>
+        &lt;/NavItem>
+        &lt;NavItem>
+          &lt;a href="/settings">Settings&lt;/a>
+        &lt;/NavItem>
+      &lt;/ul>
+    &lt;/Nav>
+  );
+};
 
-
-
-
-
-
-
-    
-
-
-
-
-
+export default NavBar;</code></pre>
+        </article>
+    </section>
 
 
 

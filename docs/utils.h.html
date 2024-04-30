@@ -1,0 +1,212 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>utils.h</title>
+
+  <script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script src="./build/entry.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+  <link href="https://fonts.googleapis.com/css?family=Roboto:100,400,700|Inconsolata,700" rel="stylesheet">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+  <link type="text/css" rel="stylesheet" href="https://jmblog.github.io/color-themes-for-google-code-prettify/themes/tomorrow-night.min.css">
+  <link type="text/css" rel="stylesheet" href="styles/app.min.css">
+  <link type="text/css" rel="stylesheet" href="styles/iframe.css">
+  <link type="text/css" rel="stylesheet" href="">
+  <script async defer src="https://buttons.github.io/buttons.js"></script>
+
+  
+</head>
+
+
+
+<body class="layout small-header">
+    <div id="stickyNavbarOverlay"></div>
+    
+
+<div class="top-nav">
+    <div class="inner">
+        <a id="hamburger" role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+        </a>
+        <div class="logo">
+            
+            
+        </div>
+        <div class="menu">
+            
+            <div class="navigation">
+                <a
+                    href="index.html"
+                    class="link"
+                >
+                    Documentation
+                </a>
+                
+                
+                
+            </div>
+        </div>
+    </div>
+</div>
+    <div id="main">
+        <div
+            class="sidebar "
+            id="sidebarNav"
+        >
+            
+        <nav>
+                
+          <h2><a href="index.html">Documentation</a></h2><div class="category"><h3>Global</h3><ul><li><a href="global.html#DataRow">DataRow</a></li><li><a href="global.html#DataTable">DataTable</a></li><li><a href="global.html#Gauges">Gauges</a></li><li><a href="global.html#History">History</a></li><li><a href="global.html#Home">Home</a></li><li><a href="global.html#LineChart">LineChart</a></li><li><a href="global.html#NavBar">NavBar</a></li><li><a href="global.html#Settings">Settings</a></li><li><a href="global.html#createHealthParameters">createHealthParameters</a></li><li><a href="global.html#createNote">createNote</a></li><li><a href="global.html#deleteHealthParameters">deleteHealthParameters</a></li><li><a href="global.html#deleteNote">deleteNote</a></li><li><a href="global.html#fetchNotes">fetchNotes</a></li><li><a href="global.html#selectFilter">selectFilter</a></li><li><li><a href="Hardware.html">Hardware</a></li><a href="references.html">References</a></li></ul></div>
+      
+  </nav>
+        </div>
+        <div class="core" id="main-content-wrapper">
+            <div class="content">
+                <header class="page-title">
+                    <p>Source</p>
+                    <h1>utils.h</h1>
+                </header>
+                
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>// Include necessary libraries and header files
+              #include <Arduino_BuiltIn.h>
+              #include "aws_credentials.h"
+              #include <WiFiClientSecure.h>
+              #include <PubSubClient.h>
+              #include <ArduinoJson.h>
+              #include "WiFi.h"
+              
+              // Define AWS IoT topics
+              #define AWS_IOT_PUBLISH_TOPIC   "esp32/pub"
+              #define AWS_IOT_SUBSCRIBE_TOPIC "esp32/sub"
+              
+              // Initialize WiFiClientSecure and PubSubClient objects
+              WiFiClientSecure net = WiFiClientSecure();
+              PubSubClient client(net);
+              
+              // Message handler function for incoming MQTT messages
+              void messageHandler(char* topic, byte* payload, unsigned int length) {
+                // Print incoming topic
+                Serial.print("incoming: ");
+                Serial.println(topic);
+               
+                // Deserialize JSON payload
+                StaticJsonDocument<200> doc;
+                deserializeJson(doc, payload);
+                const char* message = doc["message"];
+                Serial.println(message);
+              }
+              
+              // Function to connect to AWS IoT Core
+              void connectAWS() {
+                // Print connection status message
+                Serial.println("Connecting to Wi-Fi");
+               
+                // Wait for WiFi connection
+                while (WiFi.status() != WL_CONNECTED){
+                  delay(500);
+                  Serial.print(".");
+                }
+               
+                // Configure WiFiClientSecure with AWS IoT device credentials
+                net.setCACert(AWS_CERT_CA);
+                net.setCertificate(AWS_CERT_CRT);
+                net.setPrivateKey(AWS_CERT_PRIVATE);
+               
+                // Connect to MQTT broker on AWS endpoint
+                client.setServer(AWS_IOT_ENDPOINT, 8883);
+               
+                // Set up message handler
+                client.setCallback(messageHandler);
+               
+                // Print connection status message
+                Serial.println("Connecting to AWS IoT");
+               
+                // Attempt to connect to AWS IoT Core
+                while (!client.connect(THINGNAME)) {
+                  Serial.print(".");
+                  delay(100);
+                }
+               
+                // Check if connection is successful
+                if (!client.connected()) {
+                  Serial.println("AWS IoT Timeout!");
+                  return;
+                }
+               
+                // Subscribe to a topic on AWS IoT Core
+                client.subscribe(AWS_IOT_SUBSCRIBE_TOPIC);
+               
+                // Print success message
+                Serial.println("AWS IoT Connected!");
+              }
+              
+              // Function to publish a message to AWS IoT Core
+              void publishMessageA(String id, char __typename[], char createdAt[], char username[], char description[], float humidity,float light,float moisture,float smell,float temperature, char name[]) {
+                // Create a JSON document
+                StaticJsonDocument<600> doc;
+                doc["id"] = id;
+                doc["__typename"] = __typename;
+                doc["createdAt"] = createdAt;
+                doc["username"] = username;
+                doc["description"] = description;
+                doc["humidity"] = humidity;
+                doc["light"] = light;
+                doc["moisture"] = moisture;
+                doc["smell"] = smell;
+                doc["temperature"] = temperature;
+                doc["name"] = name;
+              
+                // Serialize JSON document to a buffer
+                char jsonBuffer[2048];
+                serializeJson(doc, jsonBuffer);
+               
+                // Publish message to AWS IoT Core
+                client.publish(AWS_IOT_PUBLISH_TOPIC, jsonBuffer);
+              }</code></pre>
+        </article>
+    </section>
+
+
+
+
+            </div>
+            
+            <footer class="footer">
+                <div class="content has-text-centered">
+                    <p>Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 4.0.2</a></p>
+                    <p class="sidebar-created-by">
+                        <a href="https://github.com/SoftwareBrothers/better-docs" target="_blank">BetterDocs theme</a> provided with <i class="fas fa-heart"></i> by
+                        <a href="http://softwarebrothers.co" target="_blank">SoftwareBrothers - JavaScript Development Agency</a>
+                    </p>
+                </div>
+            </footer>
+            
+        </div>
+        <div id="side-nav" class="side-nav">
+        </div>
+    </div>
+<script src="scripts/app.min.js"></script>
+<script>PR.prettyPrint();</script>
+<script src="scripts/linenumber.js"> </script>
+
+
+</body>
+</html>

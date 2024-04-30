@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
-import History from "../History";
+import { Button } from "@aws-amplify/ui-react";
+import "./NavBar.css";
 
 const Nav = styled.nav`
   display: flex;
@@ -32,8 +33,13 @@ const Logo = styled.h1`
   font-size: 1.5rem;
   margin: 0;
 `;
-
-const NavBar = () => {
+/**
+ * Defines the NavBar component. It contains links to the Home, History, and Settings pages.
+ * It is rendered along the top of each page.
+ * @param {Object} signOut - The signOut component which the user can use to log out of their account.
+ * @function NavBar
+ */
+const NavBar = (signOut) => {
   return (
     <Nav>
       <Logo>Nature Nanny</Logo>

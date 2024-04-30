@@ -1,10 +1,87 @@
 .App {
   text-align: center;
+  padding: 50px;
+  padding-top: 20px;
+  background: lightgray;
 }
+
+.gauges {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: white;
+    border-radius: 0.75rem;
+    padding: 0.25rem;
+    /* padding-left: 50px; */
+    /* padding-right: 50px;  */
+    /* border-radius: 10px; */
+    overflow: hidden;
+    box-shadow: 1px 1px 2px #000000;
+    margin: 1rem;
+}
+
+.gauge {
+    /* height: 300;
+    width: 290; */
+    flex-direction: row;
+    padding-top: 1em;
+}
+
+.gauge-title {
+    width: 15rem;
+}
+
+.plantFilter {
+    background-color: white;
+    border-radius: 0.75rem;
+    padding: 0.5rem;
+    width: 8rem;
+    box-shadow: 1px 1px 2px #000000;
+    flex-direction: row;
+}
+
+.history-table {
+    background-color: white;
+    border-radius: 0.75rem;
+    box-shadow: 1px 1px 2px #000000;
+    padding: 1em;
+    width: 80%;
+    margin: auto;
+    margin-bottom: 1em;
+}
+
+.plantEntry {
+    background-color: white;
+    padding: 20px;
+    border-radius: 0.75rem;
+    margin: 0px;
+    box-shadow: 1px 1px 2px #000000;
+    margin: 1rem;
+}
+
+.sickPlant {
+    background-color: white;
+    padding: 20px;
+    border-radius: 0.75rem;
+    margin: 0px;
+    box-shadow: 1px 1px 2px #000000;
+    margin: 1rem;
+}
+
+.history-chart {
+    margin: 1em;
+    background-color: white;
+    padding: 0.5rem;
+    border-radius: 0.75rem;
+    box-shadow: 1px 1px 2px #000000;
+}
+
+
 
 .App-logo {
   height: 40vmin;
   pointer-events: none;
+  margin-bottom: 100px;
 }
 
 @media (prefers-reduced-motion: no-preference) {

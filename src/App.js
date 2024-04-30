@@ -59,7 +59,7 @@ var resultImage = check;
 const client = generateClient();
 
 const tableStyle = {
-  width: "1000px",
+  width: "1100px",
   borderWidth: "1px",
   borderColor: "black",
   borderStyle: "solid",
@@ -91,11 +91,32 @@ const App = ({ signOut }) => {
     fetchNotes();
   }, []);
 
+  /**
+ * Gets information about the current user by using a pre defined API call to the Cognito service handling user authentification.
+ * Sets the global user variable to the retrieved username.
+ * @function DataTable
+ * @async
+ */
   async function currentAuthenticatedUser() {
     const { username, userId, signInDetails } = await getCurrentUser();
     user = username;
   }
 
+  /**
+ * Called by map function in DataTable to create each row.
+ * Applies the defined royStyle and outputs the reading of each characteristic in each row.
+ * @param {string}  id - ID of entry in database
+ * @param {string}  name - Name of entry in database
+ * @param {string}  description - Description of entry in database
+ * @param {string}  username -  Owner of the entry in database
+ * @param {float}  temperature - Temperature of plant entry in database
+ * @param {float}  humidity - Humidity of plant entry in database
+ * @param {float}  smell - Smell of plant entry in database
+ * @param {float}  moisture - Moisture of plant entry in database
+ * @param {float}  light - Light of plant entry in database
+ * @param {string}  createdAt - Data that plant entry was added to database
+ * @function DataRow
+ */
   const DataRow = ({
     id,
     name,
@@ -128,6 +149,11 @@ const App = ({ signOut }) => {
     </tr>
   );
 
+  /**
+ * Constructs the data table used to display the main data on the history page.
+ * Maps each reading onto the DataRow function to construct each row in the body of the table.
+ * @function DataTable
+ */
   const DataTable = () => (
     <div>
       <table style={tableStyle}>
@@ -136,11 +162,11 @@ const App = ({ signOut }) => {
             <th>Plant Name</th>
             <th>Description</th>
             <th>Username</th>
-            <th>Temperature</th>
-            <th>Humidity</th>
+            <th>Temperature(F)</th>
+            <th>Humidity(%)</th>
             <th>Smell</th>
-            <th>Moisture</th>
-            <th>Light</th>
+            <th>Moisture(%)</th>
+            <th>Light(lm)</th>
             <th>Date</th>
             <th>Edit</th>
           </tr>
@@ -154,10 +180,9 @@ const App = ({ signOut }) => {
     DataTable();
   }, [filteredDisplayNotes]);
 
-   /**
+  /**
  * Sets the current filtered plant from the dropdown.
- * @public
- * @async
+ * Called during the onSubmit event for that dropdown
  * @function selectFilter
  */
   const selectFilter = (event) => {
@@ -167,8 +192,16 @@ const App = ({ signOut }) => {
   };
 
   /**
- * Retrieves all data.
- * @public
+ * Main function that generates the majority of the content on the page.
+ * Starts by retrieving data from our main data table as well as our healthParameters table.
+ * Filters this data to select one specific plant if it has been selected from the dropdown, and also only selects plants from the current user.
+ * Creates a dictionary named PlantData to store all of the retrieved data for each plant.
+ * Loops through the retrieved data and adds them to the dictionary.
+ * Determines if plants are healthy by applying a linear interpolation formula to see if each characteristic lies between 30% to 70% between their defined min and max values.
+ * The parameters used to determine health of each plant are taken from their corresponding entry in the health parameters table. If none exists for that plant, default values are used.
+ * Uses this data to store list of sick plants in the SickPlants list so they can be output to a table.
+ * If all plants are being filtered, the resulting gauges show the average health of all plants, and if one plant is filtered they show the health of just that one.
+ * Updates the value of the global variables used to construct the visual elements such as charts/tables/gauges.
  * @async
  * @function fetchNotes
  * @returns {Promise<void>} A promise
@@ -197,14 +230,18 @@ const App = ({ signOut }) => {
       })
     );
     notesFromAPI = notesFromAPI.filter((note) => note.username === user);
-    HealthDataFromAPI = HealthDataFromAPI.filter((note) => note.username === user);
+    HealthDataFromAPI = HealthDataFromAPI.filter(
+      (note) => note.username === user
+    );
 
     notesFromAPI.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
 
     var filteredNotes = notesFromAPI;
     if (filteredPlant != "All Plants") {
       filteredNotes = notesFromAPI.filter((note) => note.name == filteredPlant);
-      HealthDataFromAPI = HealthDataFromAPI.filter((note) => note.name == filteredPlant);
+      HealthDataFromAPI = HealthDataFromAPI.filter(
+        (note) => note.name == filteredPlant
+      );
     }
 
     var pHCount = 0;
@@ -232,7 +269,6 @@ const App = ({ signOut }) => {
     var minLight = 10;
     var maxLight = 100;
 
-
     labelsPH = [];
     labelsTemp = [];
     labelsHumidity = [];
@@ -253,37 +289,35 @@ const App = ({ signOut }) => {
       })
     );
     plantData = [];
-      if(filteredPlant=="All Plants"){
+    if (filteredPlant == "All Plants") {
       usedNames.map((name) => {
         plantData[name] = {
-          pH: 0,
-          temperature: 0,
-          humidity: 0,
-          smell: 0,
-          moisture: 0,
-          light: 0,
-          count: 0,
-          countPh: 0,
-          countTemp: 0,
-          countHumidity: 0,
-          countSmell: 0,
-          countMoisture: 0,
-          countLight: 0,
-          minTemp: 40,
-          maxTemp: 80,
-          minHumidity: 2000,
-          maxHumidity: 6000,
-          minSmell: 0,
-          maxSmell: 100,
-          minMoisture: 20,
-          maxMoisture: 100,
-          minLight: 30,
-          maxLight: 70,
-
+        pH: 0,
+        temperature: 0,
+        humidity: 0,
+        smell: 0,
+        moisture: 0,
+        light: 0,
+        count: 0,
+        countPh: 0,
+        countTemp: 0,
+        countHumidity: 0,
+        countSmell: 0,
+        countMoisture: 0,
+        countLight: 0,
+        minTemp: 40,
+        maxTemp: 80,
+        minHumidity: 20,
+        maxHumidity: 60,
+        minSmell: 75,
+        maxSmell: 150,
+        minMoisture: 25,
+        maxMoisture: 70,
+        minLight: 400,
+        maxLight: 1000,
         };
       });
-    }
-    else{
+    } else {
       plantData[filteredPlant] = {
         pH: 0,
         temperature: 0,
@@ -300,15 +334,14 @@ const App = ({ signOut }) => {
         countLight: 0,
         minTemp: 40,
         maxTemp: 80,
-        minHumidity: 2000,
-        maxHumidity: 6000,
-        minSmell: 0,
-        maxSmell: 100,
-        minMoisture: 20,
-        maxMoisture: 100,
-        minLight: 30,
-        maxLight: 70,
-
+        minHumidity: 20,
+        maxHumidity: 60,
+        minSmell: 75,
+        maxSmell: 150,
+        minMoisture: 25,
+        maxMoisture: 70,
+        minLight: 400,
+        maxLight: 1000,
       };
     }
     await Promise.all(
@@ -328,7 +361,7 @@ const App = ({ signOut }) => {
         return note;
       })
     );
-    console.log("FILTERED PLANTS: "+filteredNotes);
+    console.log("FILTERED PLANTS: " + filteredNotes);
     await Promise.all(
       filteredNotes.map(async (note) => {
         if (note.pH != undefined && note.pH !== null) {
@@ -340,7 +373,7 @@ const App = ({ signOut }) => {
           labelsPH.push(new Date(note.createdAt).toLocaleString());
         }
         if (note.temperature !== undefined && note.temperature !== null) {
-          console.log("ONTEMP: "+ note.name);
+          console.log("ONTEMP: " + note.name);
           chartTempData.push(parseFloat(note.temperature));
           plantData[note.name].temperature += note.temperature;
           plantData[note.name].countTemp++;
@@ -374,10 +407,12 @@ const App = ({ signOut }) => {
         return note;
       })
     );
-    console.log("DATA: "+plantData);
+    console.log("DATA: " + plantData);
     Object.keys(plantData).forEach((key) => {
       var plant = plantData[key];
-      console.log("PLANT: " + key + " " + plant.temperature + " " + plant.minTemp);
+      console.log(
+        "PLANT: " + key + " " + plant.temperature + " " + plant.minTemp
+      );
       var localpHPercent = 0;
       var localTempPercent = 0;
       var localHumidityPercent = 0;
@@ -394,21 +429,21 @@ const App = ({ signOut }) => {
       maxMoisture = plant.maxMoisture;
       minLight = plant.minLight;
       maxLight = plant.maxLight;
-      console.log("MIN: "+key+" " +minTemp);
+      console.log("MIN: " + key + " " + minTemp);
 
-      if ((plant.countPh != 0)) {
+      if (plant.countPh != 0) {
         localpHPercent = plant.pH / plant.countPh;
         localpHPercent =
           0.3 + ((localpHPercent - minpH) / (maxpH - minpH)) * 0.4;
       }
       if (plant.countTemp != 0) {
-        tempCount+=1;
+        tempCount += 1;
         localTempPercent = plant.temperature / plant.countTemp;
         localTempPercent =
           0.3 + ((localTempPercent - minTemp) / (maxTemp - minTemp)) * 0.4;
       }
       if (plant.countHumidity != 0) {
-        humidityCount+=1;
+        humidityCount += 1;
         localHumidityPercent = plant.humidity / plant.countHumidity;
         localHumidityPercent =
           0.3 +
@@ -416,13 +451,13 @@ const App = ({ signOut }) => {
             0.4;
       }
       if (plant.countSmell != 0) {
-        smellCount+=1;
+        smellCount += 1;
         localSmellPercent = plant.smell / plant.countSmell;
         localSmellPercent =
           0.3 + ((localSmellPercent - minSmell) / (maxSmell - minSmell)) * 0.4;
       }
       if (plant.countMoisture != 0) {
-        moistureCount+=1;
+        moistureCount += 1;
         localMoisturePercent = plant.moisture / plant.countMoisture;
         localMoisturePercent =
           0.3 +
@@ -430,59 +465,53 @@ const App = ({ signOut }) => {
             0.4;
       }
       if (plant.countLight != 0) {
-        lightCount+=1;
+        lightCount += 1;
         localLightPercent = plant.light / plant.countLight;
         localLightPercent =
           0.3 + ((localLightPercent - minLight) / (maxLight - minLight)) * 0.4;
       }
 
-  
       if (localTempPercent > 1) {
         localTempPercent = 1;
-      }
-      else if(localTempPercent<0){
+      } else if (localTempPercent < 0) {
         localTempPercent = 0;
       }
       if (localHumidityPercent > 1) {
         localHumidityPercent = 1;
-      }
-      else if(localHumidityPercent<0){
+      } else if (localHumidityPercent < 0) {
         localHumidityPercent = 0;
       }
       if (localSmellPercent > 1) {
         localSmellPercent = 1;
-      }
-      else if(localSmellPercent<0){
+      } else if (localSmellPercent < 0) {
         localSmellPercent = 0;
       }
       if (localMoisturePercent > 1) {
         localMoisturePercent = 1;
-      }
-      else if(localMoisturePercent<0){
+      } else if (localMoisturePercent < 0) {
         localMoisturePercent = 0;
       }
       if (localLightPercent > 1) {
         localLightPercent = 1;
-      }
-      else if(localLightPercent<0){
+      } else if (localLightPercent < 0) {
         localLightPercent = 0;
       }
 
-      tempSum+=localTempPercent;
-      console.log("TEMP SUM: "+tempSum + " " + localTempPercent);
-      humiditySum+=localHumidityPercent;
-      smellSum+=localSmellPercent;
-      moistureSum+=localMoisturePercent;
-      lightSum+=localLightPercent;
+      tempSum += localTempPercent;
+      console.log("TEMP SUM: " + tempSum + " " + localTempPercent);
+      humiditySum += localHumidityPercent;
+      smellSum += localSmellPercent;
+      moistureSum += localMoisturePercent;
+      lightSum += localLightPercent;
 
-      if(filteredPlant!="All Plants"){
+      if (filteredPlant != "All Plants") {
         tempPercent = localTempPercent;
-        humidityPercent  = localHumidityPercent;
+        humidityPercent = localHumidityPercent;
         smellPercent = localSmellPercent;
         moisturePercent = localMoisturePercent;
         lightPercent = localLightPercent;
       }
-      
+
       if (
         localTempPercent < 0.3 ||
         localTempPercent > 0.7 ||
@@ -501,7 +530,6 @@ const App = ({ signOut }) => {
         var moistureText = "";
         var lightText = "";
 
-        
         if (localTempPercent < 0.3) {
           temperatureText = "Low";
         } else if (localTempPercent > 0.7) {
@@ -553,46 +581,36 @@ const App = ({ signOut }) => {
       }
     });
 
-    if(filteredPlant=="All Plants"){
-      if(tempCount!=0)
-        tempPercent = tempSum/tempCount;
-      if(humidityCount!=0)
-        humidityPercent  =humiditySum/humidityCount;
-      if(smellCount!=0)
-        smellPercent = smellSum/smellCount;
-      if(moistureCount!=0)
-        moisturePercent = moistureSum/moistureCount;
-      if(lightCount!=0)
-        lightPercent = lightSum/lightCount;
+    if (filteredPlant == "All Plants") {
+      if (tempCount != 0) tempPercent = tempSum / tempCount;
+      if (humidityCount != 0) humidityPercent = humiditySum / humidityCount;
+      if (smellCount != 0) smellPercent = smellSum / smellCount;
+      if (moistureCount != 0) moisturePercent = moistureSum / moistureCount;
+      if (lightCount != 0) lightPercent = lightSum / lightCount;
     }
     if (tempPercent > 1) {
       tempPercent = 1;
-    }
-    else if(tempPercent<0){
+    } else if (tempPercent < 0) {
       tempPercent = 0;
     }
     if (humidityPercent > 1) {
       humidityPercent = 1;
-    }
-    else if(humidityPercent<0){
+    } else if (humidityPercent < 0) {
       humidityPercent = 0;
     }
     if (smellPercent > 1) {
       smellPercent = 1;
-    }
-    else if(smellPercent<0){
+    } else if (smellPercent < 0) {
       smellPercent = 0;
     }
     if (moisturePercent > 1) {
       moisturePercent = 1;
-    }
-    else if(moisturePercent<0){
+    } else if (moisturePercent < 0) {
       moisturePercent = 0;
     }
     if (lightPercent > 1) {
       lightPercent = 1;
-    }
-    else if(lightPercent<0){
+    } else if (lightPercent < 0) {
       lightPercent = 0;
     }
 
@@ -676,6 +694,14 @@ const App = ({ signOut }) => {
     ],
   };
 
+  /**
+ * Called by the data form to add a plant entry to the database, which we used for testing the site and front end connection.
+ * Stores the retrieved data in a object and calls the predefined mutation to upload it to the table.
+ * Calls fetchNotes to update the visual elements.
+ * @param {object} event - Event submitted by form holds form data which can be parsed to retrieve plant data
+ * @function createNote
+ * @async
+ */
   async function createNote(event) {
     event.preventDefault();
     const form = new FormData(event.target);
@@ -703,6 +729,15 @@ const App = ({ signOut }) => {
     fetchNotes();
     event.target.reset();
   }
+
+  /**
+ * Called by the data form to add a plant health parameters to the corresponding table.
+ * Stores the retrieved data in a object and calls the predefined mutation to upload it to the table.
+ * Calls fetchNotes to update the visual elements.
+ * @param {object} event - Event submitted by form holds form data which can be parsed to retrieve plant parameter data.
+ * @function createHealthParameters
+ * @async
+ */
   async function createHealthParameters(event) {
     event.preventDefault();
     const form = new FormData(event.target);
@@ -729,20 +764,37 @@ const App = ({ signOut }) => {
     event.target.reset();
   }
 
+  /**
+ * Deletes a entry from the main data table. Filters the global variable containing the data to remove entries matching the given id.
+ * Calls the deleteNoteMutation that was defined by Amplify to remove the entry from the table
+ * @param {string} id - Id of the plant to be deleted.
+ * @param {string} name - Name of the plant to be deleted.
+ * @function deleteNote
+ * @async
+ */
   async function deleteNote({ id, name }) {
     const newNotes = notes.filter((note) => note.id !== id);
     setNotes(newNotes);
     await remove({ key: name });
     await client.graphql({
-      query: deleteHealthParametersMutation,
+      query: deleteNoteMutation,
       variables: { input: { id } },
     });
     fetchNotes();
   }
-  async function deleteHealthParameters(id, name ) {
-    const newNotes = notes.filter((note) => note.id !== id);
+
+  /**
+ * Deletes a entry from the parameters table. Filters the global variable containing the data to remove entries matching the given id.
+ * Calls the deletehealthParametersMutation that was defined by Amplify to remove the entry from the table
+ * @param {string} id - Id of the parameter entry to be deleted.
+ * @param {string} name - Name of the plant parameter entry to be deleted.
+ * @function deleteHealthParameters
+ * @async
+ */
+  async function deleteHealthParameters(id, name) {
+    const newNotes = healthParameters.filter((note) => note.id !== id);
     setHealthParameters(newNotes);
-    console.log("DELETE "+id);
+    console.log("DELETE " + id);
     await client.graphql({
       query: deleteHealthParametersMutation,
       variables: { input: { id } },
@@ -750,35 +802,34 @@ const App = ({ signOut }) => {
     fetchNotes();
   }
 
-  const LineChart = (data) => {
+  /**
+ * Deletes a entry from the main data table. Filters the global variable containing the data to remove entries matching the given id.
+ * Calls the deleteNoteMutation that was defined by Amplify to remove the entry from the table
+ * @param {Array} data - Array of floats that contains the numbers used in the line chart.
+ * @param {string} title - The title of the chart which corresponds to the characteristic it is displaying
+ * @function LineChart
+ */
+  const LineChart = (data, title) => {
     //data.labels = labels;
 
     return (
       <div>
-        <Line
-          data={data}
-          width={"30%"}
-          options={{ maintainAspectRatio: false }}
-        />
+        <Heading level={2}>{title}</Heading>
+        <div className="history-chart">
+          <Line
+            data={data}
+            width={"30%"}
+            options={{ maintainAspectRatio: false }}
+          />
+        </div>
       </div>
     );
   };
 
   return (
     <BrowserRouter>
+      <NavBar signOut={signOut} />
       <View className="App">
-        <NavBar signOut={signOut} />
-        <label>
-          {" "}
-          Filter Plants
-          <select default="All Plants" onChange={selectFilter}>
-            {options.map((option, index) => (
-              <option key={index} value={option.value} label={options.label}>
-                {option.label}
-              </option>
-            ))}
-          </select>
-        </label>
         <Routes>
           <Route
             path="/"
@@ -793,6 +844,8 @@ const App = ({ signOut }) => {
                 chartSmellData={chartSmellData}
                 chartMoistureData={chartMoistureData}
                 chartLightData={chartLightData}
+                selectFilter={selectFilter}
+                options={options}
               />
             }
           />
@@ -810,17 +863,34 @@ const App = ({ signOut }) => {
                 chartSmellData={chartSmellData}
                 chartMoistureData={chartMoistureData}
                 chartLightData={chartLightData}
+                selectFilter={selectFilter}
+                options={options}
               />
             }
           />
-          <Route path="/settings" element={<Settings signOut={signOut} createHealthParameters={createHealthParameters} deleteHealthParameters={deleteHealthParameters} healthParameters={healthParameters}/>} />
+          <Route
+            path="/settings"
+            element={
+              <Settings
+                signOut={signOut}
+                createHealthParameters={createHealthParameters}
+                deleteHealthParameters={deleteHealthParameters}
+                healthParameters={healthParameters}
+              />
+            }
+          />
         </Routes>
+        <Button onClick={signOut}>Sign Out</Button>
       </View>
-      <Button onClick={signOut}>Sign Out</Button>
     </BrowserRouter>
   );
 };
 
+/**
+ * Defines the History component which is rendered on the History page.
+ * This contains the line charts for each characteristic, as well as the table which shows all the data collected.
+ * @function History
+ */
 const History = ({
   signOut,
   createNote,
@@ -832,26 +902,57 @@ const History = ({
   chartSmellData,
   chartMoistureData,
   chartLightData,
+  selectFilter,
+  options,
 }) => (
   <Fragment>
-    <Heading level={1}>History</Heading>
-    <View margin="3rem 0">
-      {LineChart(chartTemperatureData)}
-      {LineChart(chartHumidityData)}
-      {LineChart(chartSmellData)}
-      {LineChart(chartMoistureData)}
-      {LineChart(chartLightData)}
-      <Flex direction="row" justifyContent="center">
-        {DataTable()}
-      </Flex>
+    <div className="plantFilter">
+      <label>
+        Filter Plants{" "}
+        <select default="All Plants" onChange={selectFilter}>
+          {options.map((option, index) => (
+            <option key={index} value={option.value} label={options.label}>
+              {option.label}
+            </option>
+          ))}
+        </select>
+      </label>
+    </div>
+    <View>
+      {LineChart(chartTemperatureData, "Temperature")}
+      {LineChart(chartHumidityData, "Humidity")}
+      {LineChart(chartSmellData, "Smell")}
+      {LineChart(chartMoistureData, "Moisture")}
+      {LineChart(chartLightData, "Light")}
+      <div className="history-table">
+        <Flex direction="row" justifyContent="center">
+          {DataTable()}
+        </Flex>
+      </div>
     </View>
   </Fragment>
 );
 
-const Settings = ({signOut,createHealthParameters,deleteHealthParameters,healthParameters}) => (
+/**
+ * Defines the Settings component which is rendered on the Settings page.
+ * This displays the current parameters the user has uploaded for each plant, and also allows them to delete these parameters
+ * There is also a form the user can fill out to upload new parameter data.
+ * @function Settings
+ */
+const Settings = ({
+  signOut,
+  createHealthParameters,
+  deleteHealthParameters,
+  healthParameters,
+}) => (
   <Fragment>
     <Heading level={1}>Settings</Heading>
-    <View as="form" margin="3rem 0" onSubmit={createHealthParameters}>
+    <View
+      as="form"
+      margin="3rem 0"
+      onSubmit={createHealthParameters}
+      className="plantEntry"
+    >
       <Flex direction="row" justifyContent="center">
         <TextField
           name="name"
@@ -946,63 +1047,76 @@ const Settings = ({signOut,createHealthParameters,deleteHealthParameters,healthP
         </Button>
       </Flex>
     </View>
-    <Flex direction="row" justifyContent="center">
-      <div>
-        <table
-          style={{
-            width: "1000px",
-            borderWidth: "1px",
-            borderColor: "black",
-            borderRadius: "10px",
-            borderSpacing: "0px",
-          }}
-        >
-          <thead>
-            <tr>
-              <th style={{ backgroundColor: "grey" }}>Plant</th>
-              <th style={{ backgroundColor: "grey" }}>Min Temperature</th>
-              <th style={{ backgroundColor: "grey" }}>Max Temperature</th>
-              <th style={{ backgroundColor: "grey" }}>Min Humidity</th>
-              <th style={{ backgroundColor: "grey" }}>Max Humidity</th>
-              <th style={{ backgroundColor: "grey" }}>Min Smell</th>
-              <th style={{ backgroundColor: "grey" }}>Max Smell</th>
-              <th style={{ backgroundColor: "grey" }}>Min Moisture</th>
-              <th style={{ backgroundColor: "grey" }}>Max Moisture</th>
-              <th style={{ backgroundColor: "grey" }}>Min Light</th>
-              <th style={{ backgroundColor: "grey" }}>Max Light</th>
-              <th style={{ backgroundColor: "grey" }}>Edit</th>
-            </tr>
-          </thead>
-          <tbody>
-            {healthParameters.map((plant) => (
-              <tr key={plant.name}>
-                <td style={rowStyle}>{plant.name}</td>
-                <td style={rowStyle}>{plant.temperatureLow}</td>
-                <td style={rowStyle}>{plant.temperatureHigh}</td>
-                <td style={rowStyle}>{plant.humidityLow}</td>
-                <td style={rowStyle}>{plant.humidityHigh}</td>
-                <td style={rowStyle}>{plant.smellLow}</td>
-                <td style={rowStyle}>{plant.smellHigh}</td>
-                <td style={rowStyle}>{plant.moistureLow}</td>
-                <td style={rowStyle}>{plant.moistureHigh}</td>
-                <td style={rowStyle}>{plant.lightLow}</td>
-                <td style={rowStyle}>{plant.lightHigh}</td>
-                <td style={rowStyle}>
-        {
-          <Button variation="link" onClick={() => deleteHealthParameters( plant.id, plant.name )}>
-            Delete Plant Parameters
-          </Button>
-        }
-      </td>
+    <div className="history-table">
+      <Flex direction="row" justifyContent="center">
+        <div>
+          <table
+            style={{
+              width: "1100px",
+              borderWidth: "1px",
+              borderColor: "black",
+              borderRadius: "10px",
+              borderSpacing: "0px",
+            }}
+          >
+            <thead>
+              <tr>
+                <th style={{ backgroundColor: "grey" }}>Plant</th>
+                <th style={{ backgroundColor: "grey" }}>Min Temperature(F)</th>
+                <th style={{ backgroundColor: "grey" }}>Max Temperature(F)</th>
+                <th style={{ backgroundColor: "grey" }}>Min Humidity(%)</th>
+                <th style={{ backgroundColor: "grey" }}>Max Humidity(%)</th>
+                <th style={{ backgroundColor: "grey" }}>Min Smell</th>
+                <th style={{ backgroundColor: "grey" }}>Max Smell</th>
+                <th style={{ backgroundColor: "grey" }}>Min Moisture(%)</th>
+                <th style={{ backgroundColor: "grey" }}>Max Moisture(%)</th>
+                <th style={{ backgroundColor: "grey" }}>Min Light(lm)</th>
+                <th style={{ backgroundColor: "grey" }}>Max Light(lm)</th>
+                <th style={{ backgroundColor: "grey" }}>Edit</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-    </Flex>
+            </thead>
+            <tbody>
+              {healthParameters.map((plant) => (
+                <tr key={plant.name}>
+                  <td style={rowStyle}>{plant.name}</td>
+                  <td style={rowStyle}>{plant.temperatureLow}</td>
+                  <td style={rowStyle}>{plant.temperatureHigh}</td>
+                  <td style={rowStyle}>{plant.humidityLow}</td>
+                  <td style={rowStyle}>{plant.humidityHigh}</td>
+                  <td style={rowStyle}>{plant.smellLow}</td>
+                  <td style={rowStyle}>{plant.smellHigh}</td>
+                  <td style={rowStyle}>{plant.moistureLow}</td>
+                  <td style={rowStyle}>{plant.moistureHigh}</td>
+                  <td style={rowStyle}>{plant.lightLow}</td>
+                  <td style={rowStyle}>{plant.lightHigh}</td>
+                  <td style={rowStyle}>
+                    {
+                      <Button
+                        variation="link"
+                        onClick={() =>
+                          deleteHealthParameters(plant.id, plant.name)
+                        }
+                      >
+                        Delete Plant Parameters
+                      </Button>
+                    }
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </Flex>
+    </div>
   </Fragment>
 );
 
+/**
+ * Defines the Home component which is rendered on the Home page.
+ * This contains the gauges used to show if each characteristic is too high or low.
+ * It renders one of two images depending on whether the user has any sick plants, and displays these sick plants in a table.
+ * @function Home
+ */
 const Home = ({
   createNote,
   LineChart,
@@ -1013,9 +1127,75 @@ const Home = ({
   chartSmellData,
   chartMoistureData,
   chartLightData,
+  selectFilter,
+  options,
 }) => (
   <Fragment>
-    <View as="form" margin="3rem 0" onSubmit={createNote}>
+    <div className="plantFilter">
+      <label>
+        <Text>Filter Plants</Text>
+        <select default="All Plants" onChange={selectFilter}>
+          {options.map((option, index) => (
+            <option key={index} value={option.value} label={options.label}>
+              {option.label}
+            </option>
+          ))}
+        </select>
+      </label>
+    </div>
+
+    {/* <Flex direction="row" justifyContent="center">
+      <Heading level={2}>Plant Data</Heading>
+    </Flex> */}
+    <div>
+      <Flex direction="row" justifyContent="center">
+        <img src={resultImage} width={400} height={200} />
+        <div className="sickPlant">
+          <table
+            style={{
+              width: "1000px",
+              borderWidth: "1px",
+              borderColor: "black",
+              borderRadius: "10px",
+              borderSpacing: "0px",
+            }}
+          >
+            <thead>
+              <tr>
+                <th style={{ backgroundColor: "grey" }}>List of Sick Plants</th>
+                <th style={{ backgroundColor: "grey" }}>Temperature(F)</th>
+                <th style={{ backgroundColor: "grey" }}>Humidity(%)</th>
+                <th style={{ backgroundColor: "grey" }}>Smell</th>
+                <th style={{ backgroundColor: "grey" }}>Moisture(%)</th>
+                <th style={{ backgroundColor: "grey" }}>Light(lm)</th>
+              </tr>
+            </thead>
+            <tbody>
+              {sickPlants.map((plant) => (
+                <tr key={plant[0]}>
+                  <td style={rowStyle}>{plant[0]}</td>
+                  <td style={rowStyle}>{plant[1]}</td>
+                  <td style={rowStyle}>{plant[2]}</td>
+                  <td style={rowStyle}>{plant[3]}</td>
+                  <td style={rowStyle}>{plant[4]}</td>
+                  <td style={rowStyle}>{plant[5]}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </Flex>
+    </div>
+
+    <Gauges
+      tempPercent={tempPercent}
+      humidityPercent={humidityPercent}
+      smellPercent={smellPercent}
+      lightPercent={lightPercent}
+      moisturePercent={moisturePercent}
+    ></Gauges>
+    <Flex direction="row" justifyContent="center"></Flex>
+    <View as="form" onSubmit={createNote} className="plantEntry">
       <Flex direction="row" justifyContent="center">
         <TextField
           name="name"
@@ -1078,59 +1258,24 @@ const Home = ({
         </Button>
       </Flex>
     </View>
-    <Flex direction="row" justifyContent="center">
-      <Heading level={2}>Plant Data</Heading>
-    </Flex>
-    <Flex direction="row" justifyContent="center">
-      <img src={resultImage} width={400} height={300} />
-    </Flex>
-    <Flex direction="row" justifyContent="center">
-      <div>
-        <table
-          style={{
-            width: "1000px",
-            borderWidth: "1px",
-            borderColor: "black",
-            borderRadius: "10px",
-            borderSpacing: "0px",
-          }}
-        >
-          <thead>
-            <tr>
-              <th style={{ backgroundColor: "grey" }}>List of Sick Plants</th>
-              <th style={{ backgroundColor: "grey" }}>Temperature</th>
-              <th style={{ backgroundColor: "grey" }}>Humidity</th>
-              <th style={{ backgroundColor: "grey" }}>Smell</th>
-              <th style={{ backgroundColor: "grey" }}>Moisture</th>
-              <th style={{ backgroundColor: "grey" }}>Light</th>
-            </tr>
-          </thead>
-          <tbody>
-            {sickPlants.map((plant) => (
-              <tr key={plant[0]}>
-                <td style={rowStyle}>{plant[0]}</td>
-                <td style={rowStyle}>{plant[1]}</td>
-                <td style={rowStyle}>{plant[2]}</td>
-                <td style={rowStyle}>{plant[3]}</td>
-                <td style={rowStyle}>{plant[4]}</td>
-                <td style={rowStyle}>{plant[5]}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-    </Flex>
-    <Flex direction="row" justifyContent="center">
-      <View
-        style={{
-          flexDirection: "row",
-          height: 300,
-          paddingTop: 80,
-          width: 300,
-          marginLeft: 50,
-        }}
-      >
-        <Heading level={2} width={300}>
+  </Fragment>
+);
+
+/**
+ * Defines each of the five gauges used to display the state of the health characteristics.
+ * @function Gauges
+ */
+const Gauges = ({
+  tempPercent,
+  humidityPercent,
+  smellPercent,
+  moisturePercent,
+  lightPercent,
+}) => {
+  return (
+    <div className="gauges">
+      <View className="gauge">
+        <Heading level={2} className="gauge-title">
           Temperature
         </Heading>
         <GaugeChart
@@ -1143,15 +1288,8 @@ const Home = ({
           percent={Number(tempPercent)}
         />
       </View>
-      <View
-        style={{
-          flexDirection: "row",
-          height: 300,
-          paddingTop: 80,
-          width: 300,
-        }}
-      >
-        <Heading level={2} width={300}>
+      <View className="gauge">
+        <Heading level={2} className="gauge-title">
           Humidity
         </Heading>
         <GaugeChart
@@ -1164,15 +1302,8 @@ const Home = ({
           percent={Number(humidityPercent)}
         />
       </View>
-      <View
-        style={{
-          flexDirection: "row",
-          height: 300,
-          paddingTop: 80,
-          width: 300,
-        }}
-      >
-        <Heading level={2} width={300}>
+      <View className="gauge">
+        <Heading level={2} className="gauge-title">
           Smell
         </Heading>
         <GaugeChart
@@ -1185,15 +1316,8 @@ const Home = ({
           percent={Number(smellPercent)}
         />
       </View>
-      <View
-        style={{
-          flexDirection: "row",
-          height: 300,
-          paddingTop: 80,
-          width: 300,
-        }}
-      >
-        <Heading level={2} width={300}>
+      <View className="gauge">
+        <Heading level={2} className="gauge-title">
           Moisture
         </Heading>
         <GaugeChart
@@ -1206,15 +1330,8 @@ const Home = ({
           percent={Number(moisturePercent)}
         />
       </View>
-      <View
-        style={{
-          flexDirection: "row",
-          height: 300,
-          paddingTop: 80,
-          width: 300,
-        }}
-      >
-        <Heading level={2} width={300}>
+      <View className="gauge">
+        <Heading level={2} className="gauge-title">
           Light
         </Heading>
         <GaugeChart
@@ -1227,8 +1344,8 @@ const Home = ({
           percent={Number(lightPercent)}
         />
       </View>
-    </Flex>
-  </Fragment>
-);
+    </div>
+  );
+};
 
 export default withAuthenticator(App);

@@ -1,0 +1,12 @@
+#signout-button {
+    font-size: 1rem;
+    padding: 1rem 2rem;
+    background: none;
+    color: white;
+    &:hover {
+        text-decoration-line: underline;
+    }
+    justify-content: right !important;
+    border-width: 0px;
+    justify-self: right !important;
+  }
